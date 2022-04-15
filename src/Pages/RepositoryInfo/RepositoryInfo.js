@@ -14,14 +14,14 @@ function RepositoryInfo(props){
         });
     } ,[]);
     return (
-        <>
+        <div>
             <p>上面有几个按钮，懒得写了</p>
             <div className="RCDList">
                 {
-                    RCDList.map((RCD) => <RCDOverView RCD={RCD}/>)
+                    RCDList.map((RCD) => <RCDOverView repoName={repoName} RCD={RCD}/>)
                 }
             </div>
-        </>
+        </div>
     )
 }
 export default RepositoryInfo;
