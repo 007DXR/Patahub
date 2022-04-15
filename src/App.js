@@ -1,25 +1,22 @@
-import logo from './logo.svg';
+import React from 'react';
+import NavBar from './NavBar.js';
+import { BrowserRouter, Routes , Route, } from "react-router-dom";
+import AllRepositories from './Pages/AllRepositories/AllRepositories.js'
+import RepositoryInfo from './Pages/RepositoryInfo/RepositoryInfo.js'
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <NavBar />
+                <Routes>
+                    <Route path="/" element={<AllRepositories />} />
+                    <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
