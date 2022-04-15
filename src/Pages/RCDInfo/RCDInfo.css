@@ -1,0 +1,17 @@
+.RCD-CDContainer{
+    display: flex;
+    background-color: azure;
+    width: 800px;
+    margin: auto;
+}
+.RCDCodeInfo{
+    float: left;
+    width: 370px;
+    margin-left:20px;
+    background-color: antiquewhite;
+}
+.RCDDataInfo{
+    width: 370px;
+    margin-left:20px;
+    background-color: antiquewhite;
+}

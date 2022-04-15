@@ -13,7 +13,7 @@ function RepoOverView(props) {
         });
     }, []);
     return repoInfo?(
-        <>
+        <React.Fragment>
             <Link to={'/repositoryInfo/'+props.repoName}>
                 <h1 className="repositoryPaperOverView-title">{repoInfo.paperTitle}</h1>
             </Link>
@@ -25,7 +25,7 @@ function RepoOverView(props) {
                     <p className="repositoryDataOverView-dataset">{repoInfo.dataSetLink[0]}</p>
                 </div>
             </div>
-        </>
+        </React.Fragment>
     ):(
         <></>
     );

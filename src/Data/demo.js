@@ -18,15 +18,22 @@ export async function getRCDList(repoName){
     await sleep(Math.round(Math.random()*2000));
     return [
     {
-        resultLink: 'figure1',
+        resultId:1,
+        resultImage: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
         codeLinks: [`https://www.github.com/${repoName}/xxxxxcode`],
         datasetLinks: [`https://www.github.com/${repoName}/xxxxxdataset`],
     },{
-        resultLink: 'figure2',
+        resultId:2,
+        resultImage: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
         codeLinks: [`https://www.github.com/${repoName}/xyfffyycode`,`https://www.github.com/${repoName}/xyyaqqyycode`],
         datasetLinks: [`https://www.github.com/${repoName}/xxyyyydataset`,`https://www.github.com/${repoName}/xxyfdsafydataset`,`https://www.github.com/${repoName}/xxwwwwydataset`,],
     },];
 }
 
-
-export default {getAllRepositories, getRepositoryInfo};
+export async function getRCD(repoName, Id){
+    return getRCDList(repoName).then((data, err) => {
+        let r = data.filter((RCD) => RCD.resultId == Id);
+        if(r.length)return r[0];
+        else throw 'Cannot find such RCD';
+    });
+}
