@@ -1,8 +1,8 @@
 import React from 'react';
-import './RepoOverView.css';
 import { Link, } from "react-router-dom";
 import { getRepositoryInfo } from '../../Data/demo.js'
 import { useEffect, useState } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 
 function RepoOverView(props) {
     const [repoInfo, setRepoInfo] = useState(null);
@@ -17,14 +17,16 @@ function RepoOverView(props) {
             <Link to={'/repositoryInfo/'+props.repoName}>
                 <h1 className="repositoryPaperOverView-title">{repoInfo.paperTitle}</h1>
             </Link>
-            <div className="repositoryOverView">
-                <div className="repositoryPaperOverView">
-                        <p className="repositoryPaperOverView-abstract">{repoInfo.paperAbstract}</p>
-                </div>
-                <div className="repositoryDataOverView">
-                    <p className="repositoryDataOverView-dataset">{repoInfo.dataSetLink[0]}</p>
-                </div>
-            </div>
+            <Container>
+                <Row>
+                    <Col>
+                        {repoInfo.paperAbstract}
+                    </Col>
+                    <Col>
+                        {repoInfo.dataSetLink[0]}
+                    </Col>
+                </Row>
+            </Container>
         </React.Fragment>
     ):(
         <></>

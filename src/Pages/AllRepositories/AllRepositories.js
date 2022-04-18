@@ -1,5 +1,4 @@
 import React from 'react';
-import './AllRepositories.css';
 import { getAllRepositories } from '../../Data/demo.js'
 import { useEffect, useState } from 'react';
 import RepoOverView from './RepoOverView.js'

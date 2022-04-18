@@ -1,24 +1,25 @@
 import React from 'react';
-import './RCDOverView.css';
+import { Container, Row, Col, Image } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import "./RCDOverView.css";
 
 function RCDOverView(props){
     return (
-        <div className="RCDOverView">
-            <Link to={`/RCDInfo/${props.repoName}/${props.RCD.resultId}`}>
-                <img className="RCDOverView-ResultList" src={props.RCD.resultImage} style={{height: '50px'}} />
-            </Link>
-            <div className="RCDOverView-CodeList">
+        <Row className="RCDOverView">
+            <Col>
+                <Image href={`/RCDInfo/${props.repoName}/${props.RCD.resultId}`} src={props.RCD.resultImage} style={{height: '50px'}} />
+            </Col>
+            <Col>
                 {props.RCD.codeLinks.map((codeLink) => <div>
-                    <Link className="RCDOverView-Code" to={codeLink}>somecode</Link><br />
+                    <Link to={codeLink}>somecode</Link><br />
                 </div>)}
-            </div>
-            <div className="RCDOverView-DatasetList">
+            </Col>
+            <Col>
                 {props.RCD.datasetLinks.map((datasetLink) => <div>
-                    <Link className="RCDOverView-Dataset" to={datasetLink}>somedata</Link><br />
+                    <Link to={datasetLink}>somedata</Link><br />
                 </div>)}
-            </div>
-        </div>
+            </Col>
+        </Row>
     )
 }
 export default RCDOverView;

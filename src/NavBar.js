@@ -1,13 +1,18 @@
 import React from 'react';
-import Logo from "./Logo.js";
+import logo from './logo.png';
 import { Link } from 'react-router-dom';
-import "./NavBar.css";
+import { Navbar, Container} from 'react-bootstrap';
 
 function NavBar(){
     return (
-        <nav className="NavBar-container">
-            <Link to="/"><Logo /></Link>
-        </nav>
+        <Navbar bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand href="/">
+                <img src={logo}></img>
+                Patahub
+            </Navbar.Brand>
+          </Container>
+        </Navbar>
     );
 }
 
