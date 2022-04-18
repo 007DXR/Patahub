@@ -7,7 +7,9 @@ function RCDOverView(props){
     return (
         <Row className="RCDOverView">
             <Col>
-                <Image href={`/RCDInfo/${props.repoName}/${props.RCD.resultId}`} src={props.RCD.resultImage} style={{height: '50px'}} />
+                <Link to={`/RCDInfo/${props.repoName}/${props.RCD.resultId}`}>
+                    <Image src={props.RCD.resultImage} style={{height: '50px'}} />
+                </Link> 
             </Col>
             <Col>
                 {props.RCD.codeLinks.map((codeLink) => <div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRCD } from '../../Data/demo';
+import { getRCD } from '../../Data/demo.js';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 
 function RCDInfo(props){

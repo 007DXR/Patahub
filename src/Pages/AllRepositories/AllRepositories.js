@@ -2,6 +2,7 @@ import React from 'react';
 import { getAllRepositories } from '../../Data/demo.js'
 import { useEffect, useState } from 'react';
 import RepoOverView from './RepoOverView.js'
+import CreateRepo from './CreateRepo.js'
 
 function AllRepositories() {
     const [repoList, setRepoList] = useState([]);
@@ -12,7 +13,10 @@ function AllRepositories() {
         });
     }, []);
     return (
-        repoList.map((repoName) => <RepoOverView repoName={repoName} />)
+        <div>
+            {repoList.map((repoName) => <RepoOverView repoName={repoName} />)}
+            <CreateRepo />
+        </div>
     );
 }
 
