@@ -1,9 +1,9 @@
 import React from 'react';
-import './RepoOverView.css';
 import { Link, } from "react-router-dom";
 import { getRepositoryInfo } from '../../Data/demo.js'
 import { useEffect, useState } from 'react';
-import { Button } from 'bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button'
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function DeteleRepo(id) {
@@ -24,23 +24,25 @@ function RepoOverView(props) {
             <Link to={'/repositoryInfo/' + props.repoName}>
                 <h1 className="repositoryPaperOverView-title">{repoInfo.paperTitle}</h1>
             </Link>
-            <div className="repositoryOverView">
-                <div className="repositoryPaperOverView">
-                    <p className="repositoryPaperOverView-description">{repoInfo.dataSetDescription}</p>
-                </div>
-                <div className="repositoryDataOverView">
-                    <p className="repositoryDataOverView-dataset">{repoInfo.dataSetLink[0]}</p>
-                </div>
-            </div>
-            <button onClick={async function () {
+            <Container>
+                <Row>
+                    <Col>
+                        {repoInfo.dataSetDescription}
+                    </Col>
+                    <Col>
+                        {repoInfo.dataSetLink[0]}
+                    </Col>
+                </Row>
+            </Container>
+            <Button variant="primary" onClick={async function () {
                 const res = await DeteleRepo(repoInfo.id)
                 if (res) {
-                    setRepoInfo(null);
-                    alert('成功删除仓库')
+                    props.onDelete(1)
+                    setRepoInfo(null)
                 }
-                else alert('仓库不存在')
-            }}>Delete</button>
-        </React.Fragment>
+                else props.onDelete(2)
+            }}>Delete</Button>
+        </React.Fragment >
     ) : (
         <></>
     );

@@ -5,6 +5,8 @@ import AllRepositories from './Pages/AllRepositories/AllRepositories.js'
 import RepositoryInfo from './Pages/RepositoryInfo/RepositoryInfo.js'
 import RCDInfo from './Pages/RCDInfo/RCDInfo.js'
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
     return (

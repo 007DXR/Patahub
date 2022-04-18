@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 function CreateRepo() {
     const [isCreating, setIsCreating] = useState(false)
@@ -17,21 +19,25 @@ function CreateRepoButton(props) {
 }
 
 function CreateRepoForm(props) {
+    const [paperName, setPaperName] = useState(""),
+        onPaperNameInput = ({ target: { value } }) => setPaperName(value)
+    const [paperAbstract, setPaperAbstract] = useState(""),
+        onPaperAbstractInput = ({ target: { value } }) => setPaperAbstract(value)
     if (props.isVisible)
         return (
-            <form>
-                <label>
-                    Paper name:
-                    <input type="text" name="paperTitle" />
-                </label>
-                <p />
-                <label>
-                    Dataset Link:
-                    <input type="text" name="dataSetLink" />
-                </label>
-                <p />
-                <input type="submit" value="Submit" />
-            </form >
+            <Form>
+                <Form.Group className="mb-3" controlId="formPaperName">
+                    <Form.Label>Paper Name</Form.Label>
+                    <Form.Control type="text" placeholder="Paper Name" onChange={onPaperNameInput} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formPaperAbstract">
+                    <Form.Label>Paper Abstract</Form.Label>
+                    <Form.Control as="textarea" placeholder="Paper Abstract" onChange={onPaperAbstractInput} />
+                </Form.Group>
+                <Button variant="primary" onClick={() => { }}>
+                    Create
+                </Button>
+            </Form>
         )
     else return (
         <div />

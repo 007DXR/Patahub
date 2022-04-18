@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRCD } from '../../Data/demo';
-import "./RCDInfo.css";
+import { getRCD } from '../../Data/demo.js';
+import { Container, Row, Col, Image } from 'react-bootstrap';
 
 function RCDInfo(props){
     let p = useParams();
@@ -14,13 +14,15 @@ function RCDInfo(props){
         });
     } ,[]);
     return RCD ? (
-        <React.Fragment>
-            <img className="RCDOverView-ResultList" src={RCD.resultImage} />
-            <div className="RCD-CDContainer">
-                <div className="RCDCodeInfo">还没</div>
-                <div className="RCDDataInfo">写好</div>
-            </div>
-        </React.Fragment>
+        <Container>
+            <Row>
+                <Image src={RCD.resultImage} fluid/>
+            </Row>
+            <Row>
+                <Col>左边</Col>
+                <Col>右边</Col>
+            </Row>
+        </Container>
     ) : null;
 }
 
