@@ -12,7 +12,7 @@ function RepoOverView(props) {
             setRepoInfo(data);
             console.log(data);
         });
-    }, []);
+    },);
     return repoInfo?(
         <React.Fragment>
             <Link to={'/repositoryInfo/'+props.repoName}>
@@ -30,7 +30,7 @@ function RepoOverView(props) {
             </Container>
         </React.Fragment>
     ):(
-        <></>
+        <div></div>
     );
 }
 

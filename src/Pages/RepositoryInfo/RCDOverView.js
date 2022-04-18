@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import GithubRepoInfo from "../Utilities/GithubRepoInfo/GithubRepoInfo.js"
 import "./RCDOverView.css";
 
 function RCDOverView(props){
@@ -13,12 +14,12 @@ function RCDOverView(props){
             </Col>
             <Col>
                 {props.RCD.codeLinks.map((codeLink) => <div>
-                    <Link to={codeLink}>somecode</Link><br />
+                    <GithubRepoInfo link={codeLink}>somecode</GithubRepoInfo><br />
                 </div>)}
             </Col>
             <Col>
                 {props.RCD.datasetLinks.map((datasetLink) => <div>
-                    <Link to={datasetLink}>somedata</Link><br />
+                    <GithubRepoInfo link={datasetLink}>somedata</GithubRepoInfo><br />
                 </div>)}
             </Col>
         </Row>
