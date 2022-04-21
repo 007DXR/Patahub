@@ -60,29 +60,6 @@ name: `rcds`
 |2|2|Figure1|2|https://github.com/SYCstudio/OI/blob/master/Practice/2020.7.20/Luogu6619.cpp|
 
 ## API交互接口
-### 获取论文列表
-接口功能：获取某个用户拥有论文的列表  
-支持格式：`json`  
-HTTP 请求方式：`GET`  
-请求地址：`/getpaperlist`  
-请求参数：
-
-|参数|必选|类型|说明|
-|--|--|--|--|
-|version|true|str|api 版本|
-|username|true|str|指定用户名称|
-|cookie|false|str|验证信息|
-
-> 验证信息的具体细节之后再考虑，用户名先假定都为一个确定的 tester
-
-返回参数：
-
-|返回字段|类型|说明|
-|--|--|--|
-|status|int|返回结果状态(0,1)|
-|papers|array|返回论文链接列表|
-
-> 当api版本不支持或指定用户不存在时，返回 `status=0` ，否则 `status=1`
 
 ### 获取论文列表
 接口功能：获取论文列表
@@ -101,7 +78,7 @@ HTTP 请求方式：`GET`
 
 |返回字段|类型|说明|
 |--|--|--|
-|papers|list|返回论文链接列表|
+|papers|list|返回论文元数据列表|
 
 
 
