@@ -17,6 +17,7 @@ function App() {
                     <Route path="/" element={<AllRepositories />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />
+                    <Route path="/search/:op/:content" element={<AllRepositories />} />
                 </Routes>
             </BrowserRouter>
         </div>

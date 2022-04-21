@@ -22,19 +22,19 @@ function RepoOverView(props) {
     }, []);
     return repoInfo ? (
         <React.Fragment>
-            <div style={{display: 'inline-flex'}}>
+            <div style={{display:'inline-flex'}}>
                 <Link to={'/repositoryInfo/' + props.repoName}>
-                    <h1 className="repositoryPaperOverView-title">{repoInfo.paperTitle}</h1>
+                    <h1 className="mt-2">{repoInfo.paperTitle}</h1>
                 </Link>
-                <Button variant="primary" onClick={async function () {
+                <Button variant="primary h-50 align-self-center" onClick={async function () {
                     const res = await DeteleRepo(repoInfo.id)
                     if (res) {
                         props.onDelete(1)
                         setRepoInfo(null)
                     }
                     else props.onDelete(2)
-                }} style={{marginLeft:'20px'}}
-                className="btn-danger">
+                }}
+                className="btn-danger btm-sm ms-2">
                     <GoTrashcan />
                 </Button>
             </div>
