@@ -65,6 +65,7 @@ name: `rcds`
 接口功能：获取论文列表
 支持格式：`json`  
 HTTP 请求方式：`GET`  
+调用函数：get_paper_list
 请求地址：`/paper`  
 请求参数：
 
@@ -72,20 +73,73 @@ HTTP 请求方式：`GET`
 |--|--|--|--|
 |paper_id|false|int|论文id|
 |title|false|str|论文标题|
-|dataset_id|false|int|数据集id|
+|user|false|str|--|
 
 返回参数：
 
 |返回字段|类型|说明|
 |--|--|--|
-|papers|list|返回论文元数据列表|
+|papers|list|返回论文元数据列表[{user,link,id,title}]|
 
+### 获取关于指定数据集的论文列表
+支持格式：`json`  
+HTTP 请求方式：`GET`  
+调用函数：get_paper_of_dataset
+请求地址：`/paperofdataset`  
+请求参数：
 
+|参数|必选|类型|说明|
+|--|--|--|--|
+|dataset_id|true|int|数据集id|
+
+返回参数：
+
+|返回字段|类型|说明|
+|--|--|--|
+|papers|list|返回论文元数据列表[{paperid:,datasetid}]
+
+### 新增论文
+接口功能：
+支持格式：`json`  
+HTTP 请求方式：`POST`  
+请求地址：`/paper`  
+请求参数：
+
+|参数|必选|类型|说明|
+|--|--|--|--|
+|user|true|str|用户名|
+|title|true|str|论文名|
+|link|true|str|论文链接|
+
+返回参数：
+
+|返回字段|类型|说明|
+|--|--|--|
+|user|str|--|
+|title|str|--|
+|link|str|--|
+|id|int|系统生成的论文id|
+
+### 删除论文
+接口功能：
+支持格式：`json`  
+HTTP 请求方式：`DELETE`  
+请求地址：`/{user}/paper`
+请求参数：
+
+|参数|必选|类型|说明|
+|--|--|--|--|
+|paper_id|true|int|论文id|
+
+返回参数：
+
+|返回字段|类型|说明|
+|--|--|--|
 
 ### 获取论文详情
 接口功能：获取论文详情
 支持格式：`json`  
-HTTP 请求方式：`GET`  
+HTTP 请求方式：`POST`  
 请求地址：`/paper/{paper_id}`  
 请求参数：
 
@@ -239,44 +293,9 @@ HTTP 请求方式：`POST`
 |datatype|link/img/csv|--|
 |data|--|--|
 
-### 新增论文
-接口功能：
-支持格式：`json`  
-HTTP 请求方式：`POST`  
-请求地址：`/{user}/paper`  
-请求参数：
 
-|参数|必选|类型|说明|
-|--|--|--|--|
-|user|--|str|用户名|
-|title|--|str|论文名|
-|link|--|str|论文链接|
 
-返回参数：
 
-|返回字段|类型|说明|
-|--|--|--|
-|user|str|--|
-|title|str|--|
-|link|str|--|
-|id|str|--|
-|result_list|list|--|
-
-### 删除论文
-接口功能：
-支持格式：`json`  
-HTTP 请求方式：`DELETE`  
-请求地址：`/{user}/paper`
-请求参数：
-
-|参数|必选|类型|说明|
-|--|--|--|--|
-|paper_id|true|int|论文id|
-
-返回参数：
-
-|返回字段|类型|说明|
-|--|--|--|
 
 
 ### 获取与某数据集关联的论文列表
