@@ -25,12 +25,17 @@ function RepositoryInfo(props){
         }])
     }
 
+    const delRCD = index => {
+        setRCDList([...RCDList.slice(0, index), ...RCDList.slice(index + 1)]);
+    }
+
     return (
         <div>
             <p>上面有几个按钮，懒得写了</p>
             <Container>
                 {
-                    RCDList.map((RCD) => <RCDOverView repoName={repoName} RCD={RCD}/>)
+                    RCDList.map((RCD, index) => <RCDOverView repoName={repoName} RCD={RCD}
+                    onRemove={() => delRCD(index)}/>)
                 }
                 <EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}></EmptyRCDOverView>
             </Container>
