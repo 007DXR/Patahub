@@ -39,12 +39,16 @@ function CreateRepoButton(props) {
 }
 
 async function CreateRepo(paperName, paperLink) {
-    const res = await $.post(`http://sycstudio.com:20729/test/${paperName}`, {
-        "user": "test",
-        "title": paperName,
-        "link": paperLink
-    }).promise();
-    return res;
+    try {
+        const res = await $.post(`api/${paperName}`, {
+            "user": "test",
+            "title": paperName,
+            "link": paperLink
+        });
+        return res;
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 function CreateRepoForm(props) {

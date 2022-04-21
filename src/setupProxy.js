@@ -7,9 +7,9 @@ module.exports = function (app) {
     app.use(
         '/api/',
         createProxyMiddleware({
-            target : 'http://sycstudio.com:20729/',
+            target : 'http://sycstudio.com:20728/',
             changeOrigin : true,
-            pathRewrite : rewriteFn 
+            pathRewrite : rewriteFn
         })
     );
 };
