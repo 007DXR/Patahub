@@ -38,6 +38,7 @@ function RepoOverView(props) {
                 const res = await DeteleRepo(repoInfo.id)
                 if (res) {
                     props.onDelete(1)
+                    //window.location.reload(true)
                     setRepoInfo(null)
                 }
                 else props.onDelete(2)

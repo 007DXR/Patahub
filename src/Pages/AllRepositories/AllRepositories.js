@@ -2,7 +2,7 @@ import React from 'react';
 import { getAllRepositories } from '../../Data/demo.js'
 import { useEffect, useState } from 'react';
 import RepoOverView from './RepoOverView.js'
-import CreateRepo from './CreateRepo.js'
+import CreateRepoComponent from './CreateRepo.js'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
@@ -34,7 +34,7 @@ function AllRepositories() {
     return (
         <div>
             {repoList.map((repoName) => <RepoOverView repoName={repoName} onDelete={(status) => setShowDeleteRepoAlert(status)} />)}
-            <CreateRepo />
+            <CreateRepoComponent />
             <DeleteRepoAlert status={showDeleteRepoAlert} onHide={() => setShowDeleteRepoAlert(0)} />
         </div>
     );
