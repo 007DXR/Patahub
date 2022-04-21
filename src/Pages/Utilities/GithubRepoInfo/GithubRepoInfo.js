@@ -1,20 +1,15 @@
 // import { prependOnceListener } from 'process';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getGithubRepoInfo } from "../../../Data/github.js"
+import { getGithubRepoInfo, parseGithubLink } from "../../../Data/github.js"
 
 function GithubRepoInfo(props){
-    const regex = /https\:\/\/github\.com\/(.*)\/(.*)$/i;
-    const matchInfo = props.link.match(regex);
-    const [ownerName, setOwnerName] = useState();
-    const [repoName, setRepoName] = useState();
+    let [ownername, repoName] = parseGithubLink(props.link);
     const [errInfo, setErrInfo] = useState();
     const [info, setInfo] = useState();
     useEffect( () => {
-        if(matchInfo){
-            setOwnerName(matchInfo[1]);
-            setRepoName(matchInfo[2]);
-            getGithubRepoInfo(matchInfo[1], matchInfo[2]).then((data, err) => {
+        if(ownername){
+            getGithubRepoInfo(ownername, repoName).then((data, err) => {
                 setInfo(data);
                 setErrInfo(err);
             });
