@@ -1,6 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from "react";
 import { Row, Col, Button } from 'react-bootstrap';
+import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
+import { GoX, GoPlus, GoCheck } from 'react-icons/go';
 
 function NewLinkItem(props){
     const [newAddr, setNewAddr] = useState("");
@@ -18,7 +20,7 @@ function NewLinkItem(props){
         <div>
             <input type="text" value={newAddr} 
             onChange={event => setNewAddr(event.target.value)}></input>
-            <Button onClick={saveBtn}>save</Button>
+            <Button onClick={saveBtn} className="btn-sm"><GoCheck/></Button>
         </div>
     );
 }
@@ -27,7 +29,7 @@ function OldLinkItem(props){
     return (
         <div>
             <input type="text" value={props.addrLink} ></input>
-            <Button onClick={props.onRemove}>delete</Button>
+            <Button onClick={props.onRemove} className="btn-sm btn-danger"><BsFillTrashFill/></Button>
         </div>
     );
 }
@@ -116,18 +118,18 @@ function EmptyRCDOverView(props){
                     return <OldLinkItem addrLink={codeLink} onRemove={() => delCodeLink(index)} />;
                 })}
                 {(showEmptyCode||newCodeList.length == 0)?<NewLinkItem sendValueToFa={getCodeItem.bind(this)}></NewLinkItem>:""}
-                <Button onClick={addCodeLinkClick}>add code link</Button>
+                <Button onClick={addCodeLinkClick} className="bs-cyan"><GoPlus/></Button>
             </Col>
             <Col>
                 {newDataList.map((dataLink, index) => {
                     return <OldLinkItem addrLink={dataLink} onRemove={() => delDataLink(index)} />;
                 })}
                 {(showEmptyData||newDataList.length == 0)?<NewLinkItem sendValueToFa={getDataItem.bind(this)}></NewLinkItem>:""}
-                <Button onClick={addDataLinkClick}>add data link</Button> 
+                <Button onClick={addDataLinkClick} className="bs-cyan"><GoPlus/></Button> 
             </Col>
             <Col>
                 <Button onClick={addRCDClick}>
-                    Submit
+                    <GoCheck/>
                 </Button>
             </Col>
         </Row>

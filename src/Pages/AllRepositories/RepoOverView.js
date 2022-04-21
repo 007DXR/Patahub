@@ -4,6 +4,7 @@ import { getRepositoryInfo } from '../../Data/demo.js'
 import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
+import { GoTrashcan } from 'react-icons/go';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function DeteleRepo(id) {
@@ -21,9 +22,22 @@ function RepoOverView(props) {
     }, []);
     return repoInfo ? (
         <React.Fragment>
-            <Link to={'/repositoryInfo/' + props.repoName}>
-                <h1 className="repositoryPaperOverView-title">{repoInfo.paperTitle}</h1>
-            </Link>
+            <div style={{display: 'inline-flex'}}>
+                <Link to={'/repositoryInfo/' + props.repoName}>
+                    <h1 className="repositoryPaperOverView-title">{repoInfo.paperTitle}</h1>
+                </Link>
+                <Button variant="primary" onClick={async function () {
+                    const res = await DeteleRepo(repoInfo.id)
+                    if (res) {
+                        props.onDelete(1)
+                        setRepoInfo(null)
+                    }
+                    else props.onDelete(2)
+                }} style={{marginLeft:'20px'}}
+                className="btn-danger">
+                    <GoTrashcan />
+                </Button>
+            </div>
             <Container>
                 <Row>
                     <Col>
@@ -34,14 +48,6 @@ function RepoOverView(props) {
                     </Col>
                 </Row>
             </Container>
-            <Button variant="primary" onClick={async function () {
-                const res = await DeteleRepo(repoInfo.id)
-                if (res) {
-                    props.onDelete(1)
-                    setRepoInfo(null)
-                }
-                else props.onDelete(2)
-            }}>Delete</Button>
         </React.Fragment >
     ) : (
         <React.Fragment></React.Fragment>
