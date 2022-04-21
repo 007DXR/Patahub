@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { getRepositoryInfo } from '../../Data/demo.js'
 import $ from 'jquery'
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-function CreateRepoAlert(props) {
+function CreateRepoFailureAlert(props) {
     return (
         <Modal show={props.show} onHide={props.onHide}>
             <Modal.Header closeButton>
@@ -27,7 +26,7 @@ function CreateRepoComponent() {
     return (
         <div>
             <CreateRepoButton onClick={() => setIsCreating(true)} />
-            <CreateRepoForm isVisible={isCreating} onHide={() => setIsCreating(false)} />
+            <CreateRepoForm show={isCreating} onHide={() => setIsCreating(false)} />
         </div>
     )
 }
@@ -38,17 +37,22 @@ function CreateRepoButton(props) {
     )
 }
 
-async function CreateRepo(paperName, paperLink) {
-    try {
-        const res = await $.post(`api/${paperName}`, {
-            "user": "test",
-            "title": paperName,
-            "link": paperLink
-        });
-        return res;
-    } catch (err) {
-        console.log(err)
-    }
+function CreateRepo(paperName, paperLink) {
+    let res = null
+    const data = JSON.stringify({
+        user: 'test',
+        title: paperName,
+        link: paperLink
+    })
+    $.ajax({
+        type: "post",
+        url: "api/paper",
+        data: data,
+        contentType: "application/json",
+        async: false,
+        success: (data) => res = data
+    });
+    return res
 }
 
 function CreateRepoForm(props) {
@@ -58,22 +62,24 @@ function CreateRepoForm(props) {
         onPaperLinkInput = ({ target: { value } }) => setPaperLink(value)
     const [paperAbstract, setPaperAbstract] = useState(""),
         onPaperAbstractInput = ({ target: { value } }) => setPaperAbstract(value)
-    const handleSubmit = (event) => {
+    const [createRepoFailure, setCreateRepoFailure] = useState(false)
+    function handleSubmit(event) {
         event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) event.stopPropagation();
         else {
             const res = CreateRepo(paperName, paperLink)
-            console.log(res)
-            //const res = CreateRepo()
-            //if (res) props.showCreateRepoAlert()
-            //const repo = getRepositoryInfo(paperName)
-            //window.open('/repositoryInfo/' + repo.repoName, '_self')
+            if (res) {
+                window.open('/repositoryInfo/' + res.title, '_self')
+            }
+            else {
+                setCreateRepoFailure(true)
+            }
         }
     };
-    if (props.isVisible)
-        return (
-            <Modal show={props.isVisible} onHide={props.onHide}>
+    return (
+        <React.Fragment>
+            <Modal show={props.show} onHide={props.onHide}>
                 <Modal.Header closeButton>
                     <Modal.Title>填写论文信息</Modal.Title>
                 </Modal.Header>
@@ -105,10 +111,9 @@ function CreateRepoForm(props) {
                     </Form>
                 </Modal.Body>
             </Modal>
-        )
-    else return (
-        <div />
-    );
+            <CreateRepoFailureAlert show={createRepoFailure} onHide={() => setCreateRepoFailure(false)} />
+        </React.Fragment>
+    )
 }
 
 export default CreateRepoComponent;
