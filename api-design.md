@@ -154,24 +154,43 @@ HTTP 请求方式：`POST`
 |--|--|--|
 |paper|dict|包含paper_id,title,link,user|
 
+
+### 获取关于指定数据集的数据集列表
+支持格式：`json`  
+HTTP 请求方式：`GET`  
+调用函数：get_dataset_of_paper
+请求地址：`/datasetofpaper`  
+请求参数：
+
+|参数|必选|类型|说明|
+|--|--|--|--|
+|paper_id|true|int|数据集id|
+
+返回参数：
+
+|返回字段|类型|说明|
+|--|--|--|
+|datasets|list|返回数据集元数据列表[{paperid:,datasetid}]
+
 ### 获取数据集列表
 接口功能：获取数据集列表
 支持格式：`json`  
 HTTP 请求方式：`GET`  
 请求地址：`/dataset`  
+请求函数：get_dataset_list
 请求参数：
 
 |参数|必选|类型|说明|
 |--|--|--|--|
 |dataset_id|false|int|数据集id|
 |name|false|str|数据集名称|
-|paper_id|false|int|论文id|
+|user|false|str|用户名称|
 
 返回参数：
 
 |返回字段|类型|说明|
 |--|--|--|
-|datasets|list|返回论文链接列表|
+|datasets|list|返回数据集元数据列表[{user,link,id,title}|
 
 ### 创建数据集
 接口功能：创建数据集
@@ -184,12 +203,16 @@ HTTP 请求方式：`POST`
 |--|--|--|--|
 |dataset_name|true|str|数据集名称|
 |dataset_link|true|str|数据集链接|
+|user|true|str|用户名称|
 
 返回参数：
 
 |返回字段|类型|说明|
 |--|--|--|
-|dataset|dict|包含name,link,id|
+|user|str|--|
+|title|str|--|
+|link|str|--|
+|id|int|系统生成的数据集id|
 
 
 ### 删除数据集
@@ -210,42 +233,42 @@ HTTP 请求方式：`DELETE`
 ||0/1|表示是否删除成功|
 
 
-### 获取RCD详情
+### 获取RCD关系
 接口功能：
 支持格式：`json`  
 HTTP 请求方式：`GET`  
 请求地址：`/rcd`  
+请求函数：get_rcd
 请求参数：
 
 |参数|必选|类型|说明|
 |--|--|--|--|
-|paper_id|true|int|论文id|
-|dataset_id|true|int|数据集id|
+|paper_id|false|int|论文id|
+|dataset_id|false|int|数据集id|
 
 返回参数：
 
 |返回字段|类型|说明|
 |--|--|--|
-|rcds|list|包含paper_id,dataset_id,innerindex,codelink|
+|rcds|list|[{paper_id,dataset_id,innerindex,codelink,result_id}]|
 
 ### 创建rcd关系
 接口功能：
 支持格式：`json`  
 HTTP 请求方式：`POST`  
-请求地址：`/dataset`  
+请求地址：`/rcd`  
 请求参数：
 
 |参数|必选|类型|说明|
 |--|--|--|--|
-|paper_id||int|论文|
-|paper_title||str|论文标题|
-|result_name|||结果标题|
-|result_type||link/img/csv|结果种类|
-|result_link|--|str|结果链接|
-|code_link|--|str|代码链接|
-|data_id|--|int|数据id|
-|data_link|--|str|数据链接|
-|data_name|--|str|数据名称|
+<!--可以由link推导出id，建议省去id，添加rcd_id
+|paper_id|true|int|论文id|
+|result_id|true|int|结果id|
+|dataset_id|true|int|数据集id|
+|result_id||int|结果id| -->
+|result_link|true|str|结果链接|
+|code_link|true|str|代码链接|
+|data_link|true|str|数据链接|
 
 返回参数：
 
@@ -294,24 +317,3 @@ HTTP 请求方式：`POST`
 |data|--|--|
 
 
-
-
-
-
-### 获取与某数据集关联的论文列表
-
-### 获取与某论文关联的 RCD 列表
-
-### 获取与某数据集关联的 RCD 列表
-
-### 新增论文
-
-### 新增数据集
-
-### 新增 RCD 项
-
-### 删除论文
-
-### 删除数据集
-
-### 删除 RCD 项
