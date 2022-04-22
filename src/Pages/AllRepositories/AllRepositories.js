@@ -35,9 +35,8 @@ function AllRepositories() {
         });
     }, []);
     return (
-        <div>
+        <div className='w-75 mx-auto'>
             {repoList.map((repoName) => <RepoOverView repoName={repoName} onDelete={(status) => setShowDeleteRepoAlert(status)} />)}
-            <CreateRepoComponent />
             <DeleteRepoAlert status={showDeleteRepoAlert} onHide={() => setShowDeleteRepoAlert(0)} />
         </div>
     );

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import RCDOverView from './RCDOverView.js'
 import { getRCDList } from '../../Data/demo.js'
-import { Container } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import EmptyRCDOverView from './EmptyRCDOverView.js';
 
 function RepositoryInfo(props){
@@ -30,16 +30,13 @@ function RepositoryInfo(props){
     }
 
     return (
-        <div>
-            <p>上面有几个按钮，懒得写了</p>
-            <Container>
-                {
-                    RCDList.map((RCD, index) => <RCDOverView repoName={repoName} RCD={RCD}
-                    onRemove={() => delRCD(index)}/>)
-                }
-                <EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}></EmptyRCDOverView>
-            </Container>
-        </div>
+        <Container className='pt-5'>
+            {
+                RCDList.map((RCD, index) => <RCDOverView repoName={repoName} RCD={RCD}
+                onRemove={() => delRCD(index)}/>)
+            }
+            <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row>
+        </Container>
     )
 }
 export default RepositoryInfo;
