@@ -5,12 +5,13 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import { GoTrashcan } from 'react-icons/go';
+import DeleteRepoButton from './DeleteRepo.js'
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-async function DeteleRepo(id) {
+/*async function DeteleRepo(id) {
     await sleep(Math.round(Math.random() * 2000));
     return Math.random() < 0.5 ? true : false;
-}
+}*/
 
 function RepoOverView(props) {
     const [repoInfo, setRepoInfo] = useState(null);
