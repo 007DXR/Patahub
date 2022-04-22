@@ -6,8 +6,7 @@ import CreateRepoComponent from './CreateRepo.js'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { useParams } from 'react-router-dom';
-import Card from 'react-bootstrap/Card'
-import Placeholder from 'react-bootstrap/Placeholder'
+import { DeleteRepoAlert } from './DeleteRepo.js'
 
 function AllRepositories() {
     const params = useParams(), op = params.op, content = params.content;
@@ -20,9 +19,9 @@ function AllRepositories() {
         });
     }, []);
     return (
-        <div>
-            {repoList.map((repoName) => <RepoOverView repoName={repoName} />)}
-            <CreateRepoComponent />
+        <div className='w-75 mx-auto'>
+            {repoList.map((repoName) => <RepoOverView repoName={repoName} onDelete={(status) => setShowDeleteRepoAlert(status)} />)}
+            <DeleteRepoAlert status={showDeleteRepoAlert} onHide={() => setShowDeleteRepoAlert(0)} />
         </div>
     );
 }

@@ -6,13 +6,17 @@ import RepositoryInfo from './Pages/RepositoryInfo/RepositoryInfo.js'
 import RCDInfo from './Pages/RCDInfo/RCDInfo.js'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CreateRepoComponent from './Pages/AllRepositories/CreateRepo.js';
 
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
-                <NavBar />
+                <Routes>
+                    <Route path="/" element={<NavBar more={[<CreateRepoComponent />]}/>} />
+                    <Route path="/*" element={<NavBar />} />
+                </Routes>
                 <Routes>
                     <Route path="/" element={<AllRepositories />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />

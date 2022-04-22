@@ -36,7 +36,7 @@ function SearchBar(){
     </Form>
   )
 }
-function NavBar(){
+function NavBar(props){
     return (
         <Navbar bg="primary" variant="dark">
           <Container>
@@ -44,6 +44,7 @@ function NavBar(){
                 {/*<img src={logo}></img>*/}
                 Patahub
             </Navbar.Brand>
+            {props.more}
             <SearchBar />
           </Container>
         </Navbar>

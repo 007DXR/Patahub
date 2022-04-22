@@ -18,9 +18,9 @@ function NewLinkItem(props){
     }
     return (
         <div>
-            <input type="text" value={newAddr} 
+            <input type="text" value={newAddr}
             onChange={event => setNewAddr(event.target.value)}></input>
-            <Button onClick={saveBtn} className="btn-sm"><GoCheck/></Button>
+            <Button onClick={saveBtn} className="ms-1 btn-sm"><GoCheck/></Button>
         </div>
     );
 }
@@ -29,7 +29,16 @@ function OldLinkItem(props){
     return (
         <div>
             <input type="text" value={props.addrLink} ></input>
-            <Button onClick={props.onRemove} className="btn-sm btn-danger"><BsFillTrashFill/></Button>
+            <Button onClick={props.onRemove} className="ms-1 btn-sm btn-danger"><BsFillTrashFill/></Button>
+        </div>
+    );
+}
+
+function FakeNewLinkItem(props){
+    return (
+        <div>
+            <input type="text" placeholder={props.placeholder} disabled></input>
+            <Button onClick={props.newItem} className="ms-1 btn-sm"><GoPlus/></Button>
         </div>
     );
 }
@@ -38,8 +47,8 @@ function EmptyRCDOverView(props){
     const [newResult, setNewResult] = useState("");
     const [newCode, setNewCode] = useState("");
     const [newData, setNewData] = useState("");
-    const [newCodeList, setNewCodeList] = useState([]);
-    const [newDataList, setNewDataList] = useState([]);
+    const [newCodeList, setNewCodeList] = useState(props.codeLinks?props.codeLinks:[]);
+    const [newDataList, setNewDataList] = useState(props.dataLinks?props.dataLinks:[]);
     const [showEmptyCode, setShowEmptyCode] = useState(true);
     const [showEmptyData, setShowEmptyData] = useState(true);
 
@@ -108,31 +117,35 @@ function EmptyRCDOverView(props){
     };
 
     return (
-        <Row className="RCDOverView">
+        <React.Fragment>
+            {props.noInterface?<React.Fragment />:
             <Col>
-                <input type="text" value={newResult}
+                <input type="text" value={newResult} placeholder='Enter your result link'
                 onChange={event => setNewResult(event.target.value)}/>
             </Col>
+            }
             <Col>
                 {newCodeList.map((codeLink, index) => {
                     return <OldLinkItem addrLink={codeLink} onRemove={() => delCodeLink(index)} />;
                 })}
-                {(showEmptyCode||newCodeList.length == 0)?<NewLinkItem sendValueToFa={getCodeItem.bind(this)}></NewLinkItem>:""}
-                <Button onClick={addCodeLinkClick} className="bs-cyan"><GoPlus/></Button>
+                {(showEmptyCode||newCodeList.length == 0)?
+                (<NewLinkItem sendValueToFa={getCodeItem.bind(this)}></NewLinkItem>):
+                (<FakeNewLinkItem placeholder='Add new code link' newItem={addCodeLinkClick}/>)}
             </Col>
             <Col>
                 {newDataList.map((dataLink, index) => {
                     return <OldLinkItem addrLink={dataLink} onRemove={() => delDataLink(index)} />;
                 })}
-                {(showEmptyData||newDataList.length == 0)?<NewLinkItem sendValueToFa={getDataItem.bind(this)}></NewLinkItem>:""}
-                <Button onClick={addDataLinkClick} className="bs-cyan"><GoPlus/></Button> 
+                {(showEmptyData||newDataList.length == 0)?
+                (<NewLinkItem sendValueToFa={getDataItem.bind(this)}></NewLinkItem>):
+                (<FakeNewLinkItem placeholder='Add new data link' newItem={addDataLinkClick}/>)}
             </Col>
             <Col>
-                <Button onClick={addRCDClick}>
+                <Button onClick={props.onFinish?(() => {props.onFinish(newCodeList, newDataList)}) : addRCDClick}>
                     <GoCheck/>
                 </Button>
             </Col>
-        </Row>
+        </React.Fragment>
     )
 }
 

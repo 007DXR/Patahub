@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import $ from 'jquery'
+import { Nav, Navbar } from 'react-bootstrap';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 function CreateRepoFailureAlert(props) {
@@ -22,18 +23,12 @@ function CreateRepoFailureAlert(props) {
 }
 
 function CreateRepoComponent() {
-    const [isCreating, setIsCreating] = useState(false)
+    const [isCreating, setIsCreating] = useState(false);
     return (
-        <div>
-            <CreateRepoButton onClick={() => setIsCreating(true)} />
+        <React.Fragment>
+            <Button className='me-auto' onClick={() => setIsCreating(true)}>Create Repository</Button>
             <CreateRepoForm show={isCreating} onHide={() => setIsCreating(false)} />
-        </div>
-    )
-}
-
-function CreateRepoButton(props) {
-    return (
-        <Button variant="primary" onClick={props.onClick}>Create Repository</Button>
+        </React.Fragment>
     )
 }
 
