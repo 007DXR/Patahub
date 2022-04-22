@@ -29,7 +29,8 @@
 
 |**result_id**|result_name|result_link|result_type|paper_id|
 |--|--|--|--|--|
-|--|--|--|--|--|
+|int|str|str|link/img/csv/other|int|
+
 <!-- |1|1|link|https://arxiv.org/pdf/2204.07123.pdf#page=5|1|
 |2|1|link|https://arxiv.org/pdf/2204.06908.pdf#page=9|1|
 |3|1|img|https://sycstudio.com/gravatar.png|2|
@@ -44,9 +45,9 @@
 
 ### rcds RCD关联表
 
-|rcd_id|result_id|codeset_id|code_link|dataset_id|data_link|
-|--|--|--|--|--|--|
-|--|--|--|--|--|--|
+|rcd_id|result_id|codeset_id|code_link|dataset_id|data_link|paper_id|
+|--|--|--|--|--|--|--|
+|int|int|int|str|int|str|int|
 
 ## API交互接口
 
