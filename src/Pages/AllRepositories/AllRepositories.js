@@ -7,22 +7,6 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { useParams } from 'react-router-dom';
 
-function DeleteRepoAlert(props) {
-    return (
-        <Modal show={props.status > 0} onHide={props.onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>提示</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>{'删除仓库' + (props.status == 1 ? '成功' : "失败")}</Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary " onClick={props.onHide}>
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    )
-}
-
 function AllRepositories() {
     const params = useParams(), op=params.op, content=params.content;
     let searchArgs = [null,null,null]; searchArgs[op]=content;
@@ -38,7 +22,6 @@ function AllRepositories() {
         <div>
             {repoList.map((repoName) => <RepoOverView repoName={repoName} onDelete={(status) => setShowDeleteRepoAlert(status)} />)}
             <CreateRepoComponent />
-            <DeleteRepoAlert status={showDeleteRepoAlert} onHide={() => setShowDeleteRepoAlert(0)} />
         </div>
     );
 }
