@@ -4,34 +4,30 @@
 # API 设计稿
 ## 数据表及其形式
 注：下面中所有的 `xx编号` 后期可考虑替换为 IPFS 生成的识别码或者 DOI 码。
-### 论文表
-name: `papers`
+### papers论文表
 
-|paper_id|paper_name|paper_link|user_id|
+|**paper_id**|paper_name|paper_link|user_id|
 |--|--|--|--|
 |1|Retrospective on the 2021 BASALT Competition on Learning from Human Feedback|https://arxiv.org/abs/2204.07123|000|
 |2|Exact and approximate determination of the Pareto set using minimal correction subsets|https://arxiv.org/abs/2204.06908|001|
 
-### 数据集表
-name: `datasets`
+### datasets数据集表
 
-|dataset_id|dataset_name|dataset_link|user_id|
+|**dataset_id**|dataset_name|dataset_link|user_id|
 |--|--|--|--|
 |1|ImageNet|https://image-net.org/download.php|--|
 |2|ECDIT|https://github.com/SYCstudio/ECDICT|--|
 |3|ChinesXinhua|https://github.com/SYCstudio/chinese-xinhua|--|
 
-### 代码集表
-name: `codesets`
+### codesets代码集表
 
-|codeset_id|codeset_name|codeset_link|user_id|
+|**codeset_id**|codeset_name|codeset_link|user_id|
 |--|--|--|--|
 |--|--|--|--|
 
-### 结果表
-name: `results`
+### results 结果表
 
-|result_id|result_name|result_type|paper_id|
+|**result_id**|result_name|result_type|paper_id|
 |--|--|--|--|
 |1|link|https://arxiv.org/pdf/2204.07123.pdf#page=5|1|
 |2|link|https://arxiv.org/pdf/2204.06908.pdf#page=9|1|
@@ -45,13 +41,11 @@ name: `results`
 * `csv`：指向csv表格数据
 * `other`(`bin`)：其它，默认为二进制流形式
 
-### RCD关联表
-name: `rcds`
+### rcds RCD关联表
 
-|论文编号paperid|数据编号datasetid|论文内结果代号innerindex|结果编号|代码地址codelink|
+|result_id|dataset_id|dataset_index|code_id|code_index|
 |--|--|--|--|--|
-|1|1|Table1|1|https://github.com/SYCstudio/QWordWindow/blob/master/crandomqueue.h|
-|2|2|Figure1|2|https://github.com/SYCstudio/OI/blob/master/Practice/2020.7.20/Luogu6619.cpp|
+|--|--|--|--|--|
 
 ## API交互接口
 
