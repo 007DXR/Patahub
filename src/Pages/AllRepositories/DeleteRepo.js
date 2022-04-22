@@ -41,13 +41,13 @@ function DeleteRepoButton(props) {
     const [deleteRepoFailure, setDeleteRepoFailure] = useState(false)
     return (
         <React.Fragment>
-            <Button variant="primary align-self-center" onClick={function () {
+            <Button variant="primary h-50 align-self-center" onClick={function () {
                 const success = DeleteRepo(props.paperId)
                 if (success) window.location.reload()
                 else setDeleteRepoFailure(true)
             }}
-                className="btn-danger btm-sm ms-2">
-                <GoTrashcan />
+                className="bg-transparent border-0 btm-sm ms-2 p-1">
+                <GoTrashcan color='red'/>
             </Button>
             <DeleteRepoAlert show={deleteRepoFailure} onHide={() => setDeleteRepoFailure(false)} />
         </React.Fragment>

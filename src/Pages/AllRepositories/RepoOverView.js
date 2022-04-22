@@ -22,29 +22,26 @@ function RepoOverView(props) {
         });
     }, []);
     return repoInfo ? (
-        <React.Fragment>
-            <Card>
-                <Card.Body>
-                    <Card.Title>{props.repoName}</Card.Title>
-                    <Container>
-                        <Row>
-                            <Col>
-                                {repoInfo.dataSetDescription}
-                            </Col>
-                            <Col>
-                                {repoInfo.dataSetLink[0]}
-                            </Col>
-                        </Row>
-                    </Container>
-                    <Button variant="primary" onClick={
-                        () => window.open('/repositoryInfo/' + props.repoName, '_self')
-                    }>Enter</Button>
+        <Card className='mt-3'>
+            <Card.Body>
+                <Card.Title className="d-flex">
+                    <Link to={'/repositoryInfo/'+props.repoName} className="h2 mt-2 text-decoration-none" style={{color: 'black'}}>{repoInfo.paperTitle}</Link>
                     <DeleteRepoButton paperId={repoInfo.id} />
-                </Card.Body>
-            </Card>
-        </React.Fragment >
+                </Card.Title>
+                <Container>
+                    <Row>
+                        <Col>
+                            {repoInfo.dataSetDescription}
+                        </Col>
+                        <Col>
+                            {repoInfo.dataSetLink[0]}
+                        </Col>
+                    </Row>
+                </Container>
+            </Card.Body>
+        </Card>
     ) : (
-        <React.Fragment></React.Fragment>
+        <React.Fragment/>
     );
 }
 
