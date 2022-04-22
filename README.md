@@ -27,15 +27,16 @@
 
 ### results 结果表
 
-|**result_id**|result_name|result_type|paper_id|
-|--|--|--|--|
-|1|link|https://arxiv.org/pdf/2204.07123.pdf#page=5|1|
-|2|link|https://arxiv.org/pdf/2204.06908.pdf#page=9|1|
-|3|img|https://sycstudio.com/gravatar.png|2|
-|4|csv|https://github.com/SYCstudio/ECDICT/blob/master/ecdict.mini.csv|2|
+|**result_id**|result_name|result_link|result_type|paper_id|
+|--|--|--|--|--|
+|--|--|--|--|--|
+<!-- |1|1|link|https://arxiv.org/pdf/2204.07123.pdf#page=5|1|
+|2|1|link|https://arxiv.org/pdf/2204.06908.pdf#page=9|1|
+|3|1|img|https://sycstudio.com/gravatar.png|2|
+|4|1|csv|https://github.com/SYCstudio/ECDICT/blob/master/ecdict.mini.csv|2| -->
 
 结果类型与结果数据相适应，计划支持以下几种类型的结果
-
+* result_type可以是
 * `link`：链接，指向pdf的某一页
 * `img`：指向图片地址
 * `csv`：指向csv表格数据
@@ -43,9 +44,9 @@
 
 ### rcds RCD关联表
 
-|result_id|dataset_id|dataset_index|code_id|code_index|
-|--|--|--|--|--|
-|--|--|--|--|--|
+|rcd_id|result_id|codeset_id|code_link|dataset_id|data_link|
+|--|--|--|--|--|--|
+|--|--|--|--|--|--|
 
 ## API交互接口
 
