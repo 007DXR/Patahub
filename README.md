@@ -250,8 +250,6 @@ HTTP 请求方式：`POST`
 
 |参数|必选|类型|说明|
 |--|--|--|--|
-建议添加rcd_id
-
 |result_id|true|int|结果id|
 |dataset_id|true|int|数据集id|
 |code_id||int|代码id|
@@ -293,16 +291,15 @@ HTTP 请求方式：`POST`
 
 |参数|必选|类型|说明|
 |--|--|--|--|
-|paper_id|true|int|论文id|
-|result_id|true|int|结果id|
+|result_id|false|int|结果id|
+|result_name|false|str||
+|result_type|false|img/csv/bin|--|
+|paper_id|false|id|论文id|
 
 返回参数：
 
 |返回字段|类型|说明|
 |--|--|--|
-|paperid|int|--|
-|innerindex|str|--|
-|datatype|link/img/csv|--|
-|data|--|--|
+|results|list|[{result_id:,result_name:,result_type:,result_link:,paper_id]|
 
 
