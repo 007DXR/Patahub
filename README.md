@@ -7,45 +7,36 @@
 ### 论文表
 name: `papers`
 
-|论文编号id|论文标题title|论文链接link|论文作者（用户）user|
+|paper_id|paper_name|paper_link|user_id|
 |--|--|--|--|
-|1|Retrospective on the 2021 BASALT Competition on Learning from Human Feedback|https://arxiv.org/abs/2204.07123|Rohin Shah|
-|2|Exact and approximate determination of the Pareto set using minimal correction subsets|https://arxiv.org/abs/2204.06908|Andreia P. Guerreiro|
+|1|Retrospective on the 2021 BASALT Competition on Learning from Human Feedback|https://arxiv.org/abs/2204.07123|000|
+|2|Exact and approximate determination of the Pareto set using minimal correction subsets|https://arxiv.org/abs/2204.06908|001|
 
 ### 数据集表
 name: `datasets`
 
-|数据集编号id|数据集名称name|数据集地址link|
-|--|--|--|
-|1|ImageNet|https://image-net.org/download.php|
-|2|ECDIT|https://github.com/SYCstudio/ECDICT|
-|3|ChinesXinhua|https://github.com/SYCstudio/chinese-xinhua|
+|dataset_id|dataset_name|dataset_link|user_id|
+|--|--|--|--|
+|1|ImageNet|https://image-net.org/download.php|--|
+|2|ECDIT|https://github.com/SYCstudio/ECDICT|--|
+|3|ChinesXinhua|https://github.com/SYCstudio/chinese-xinhua|--|
 
-### 用户表
-name: `users`
+### 代码集表
+name: `codesets`
 
-**现阶段不考虑**
-
-|用户名称|用户|验证信息（密码）|
-|--|--|--|
-
-### 论文与数据集关系表
-name: `paperdatarelas`
-
-|论文编号paperid|数据集编号datasetid|
-|--|--|
-|1|2|
-|1|3|
+|codeset_id|codeset_name|codeset_link|user_id|
+|--|--|--|--|
+|--|--|--|--|
 
 ### 结果表
 name: `results`
 
-|结果编号id|结果类型datatype|结果数据data|
-|--|--|--|
-|1|link|https://arxiv.org/pdf/2204.07123.pdf#page=5|
-|2|link|https://arxiv.org/pdf/2204.06908.pdf#page=9|
-|3|img|https://sycstudio.com/gravatar.png|
-|4|csv|https://github.com/SYCstudio/ECDICT/blob/master/ecdict.mini.csv|
+|result_id|result_name|result_type|paper_id|
+|--|--|--|--|
+|1|link|https://arxiv.org/pdf/2204.07123.pdf#page=5|1|
+|2|link|https://arxiv.org/pdf/2204.06908.pdf#page=9|1|
+|3|img|https://sycstudio.com/gravatar.png|2|
+|4|csv|https://github.com/SYCstudio/ECDICT/blob/master/ecdict.mini.csv|2|
 
 结果类型与结果数据相适应，计划支持以下几种类型的结果
 
