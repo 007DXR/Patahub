@@ -243,14 +243,14 @@ HTTP 请求方式：`GET`
 
 |参数|必选|类型|说明|
 |--|--|--|--|
-|paper_id|false|int|论文id|
-|dataset_id|false|int|数据集id|
+|paper_id|true|int|论文id|
+
 
 返回参数：
 
 |返回字段|类型|说明|
 |--|--|--|
-|rcds|list|[{paper_id,dataset_id,innerindex,codelink,result_id}]|
+|rcds|list|[{paper_id,dataset_id,result_id,code_link,data_link}]|
 
 ### 创建rcd关系
 接口功能：
@@ -261,12 +261,12 @@ HTTP 请求方式：`POST`
 
 |参数|必选|类型|说明|
 |--|--|--|--|
-<!--可以由link推导出id，建议省去id，添加rcd_id
-|paper_id|true|int|论文id|
+建议添加rcd_id
+
 |result_id|true|int|结果id|
 |dataset_id|true|int|数据集id|
-|result_id||int|结果id| -->
-|result_link|true|str|结果链接|
+|code_id||int|代码id|
+<!-- |result_link|true|str|结果链接| -->
 |code_link|true|str|代码链接|
 |data_link|true|str|数据链接|
 
@@ -274,7 +274,7 @@ HTTP 请求方式：`POST`
 
 |返回字段|类型|说明|
 |--|--|--|
-|dataset|dict|包含name,link,id|
+|--|bool|表示是否创建成功|
 
 ### 获得结果列表
 接口功能：
