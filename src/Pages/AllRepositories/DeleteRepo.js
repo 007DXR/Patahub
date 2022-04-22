@@ -5,7 +5,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import { GoTrashcan } from 'react-icons/go';
 import $ from 'jquery'
 
-export function DeleteRepo(paperId) {
+function DeleteRepo(paperId) {
     let success = false
     const data = JSON.stringify({
         paper_id: paperId
@@ -21,7 +21,7 @@ export function DeleteRepo(paperId) {
     return success
 }
 
-export function DeleteRepoAlert(props) {
+function DeleteRepoAlert(props) {
     return (
         <Modal show={props.show} onHide={props.onHide}>
             <Modal.Header closeButton>
@@ -37,20 +37,16 @@ export function DeleteRepoAlert(props) {
     )
 }
 
-export function DeleteRepoButton(props) {
+function DeleteRepoButton(props) {
     const [deleteRepoFailure, setDeleteRepoFailure] = useState(false)
-    const [isDeleting, setIsDeleting] = useState(false)
     return (
         <React.Fragment>
-            <Spinner className={isDeleting ? "visible" : "invisible"} animation="border" />
             <Button variant="primary align-self-center" onClick={function () {
-                setIsDeleting(true)
                 const success = DeleteRepo(props.paperId)
-                setIsDeleting(false)
                 if (success) window.location.reload()
                 else setDeleteRepoFailure(true)
             }}
-                className={`btn-danger btm-sm ms-2 ${isDeleting ? "invisible" : "visible"}`}>
+                className="btn-danger btm-sm ms-2">
                 <GoTrashcan />
             </Button>
             <DeleteRepoAlert show={deleteRepoFailure} onHide={() => setDeleteRepoFailure(false)} />
@@ -58,4 +54,4 @@ export function DeleteRepoButton(props) {
     )
 }
 
-export default {DeleteRepoButton, DeleteRepoAlert, DeleteRepo};
+export default DeleteRepoButton;

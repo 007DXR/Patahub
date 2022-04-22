@@ -23,32 +23,25 @@ function RepoOverView(props) {
     }, []);
     return repoInfo ? (
         <React.Fragment>
-            <div class="d-flex mt-3">
-                <Link to={'/repositoryInfo/' + props.repoName} className="text-decoration-none">
-                    <h2 className="mt-2" style={{color: 'black'}}>{repoInfo.paperTitle}</h2>
-                </Link>
-                <Button variant="primary h-50 align-self-center" onClick={async function () {
-                    const res = await DeleteRepo(repoInfo.id)
-                    if (res) {
-                        props.onDelete(1)
-                        setRepoInfo(null)
-                    }
-                    else props.onDelete(2)
-                }}
-                className="bg-transparent border-0 btm-sm ms-2 p-1">
-                    <GoTrashcan color='red'/>
-                </Button>
-            </div>
-            <Container>
-                <Row>
-                    <Col>
-                        {repoInfo.dataSetDescription}
-                    </Col>
-                    <Col>
-                        {repoInfo.dataSetLink[0]}
-                    </Col>
-                </Row>
-            </Container>
+            <Card>
+                <Card.Body>
+                    <Card.Title>{props.repoName}</Card.Title>
+                    <Container>
+                        <Row>
+                            <Col>
+                                {repoInfo.dataSetDescription}
+                            </Col>
+                            <Col>
+                                {repoInfo.dataSetLink[0]}
+                            </Col>
+                        </Row>
+                    </Container>
+                    <Button variant="primary" onClick={
+                        () => window.open('/repositoryInfo/' + props.repoName, '_self')
+                    }>Enter</Button>
+                    <DeleteRepoButton paperId={repoInfo.id} />
+                </Card.Body>
+            </Card>
         </React.Fragment >
     ) : (
         <React.Fragment></React.Fragment>
@@ -56,11 +49,3 @@ function RepoOverView(props) {
 }
 
 export default RepoOverView;
-/*
-            <div style={{ display: 'inline-flex' }}>
-                <Link to={'/repositoryInfo/' + props.repoName}>
-                    <h1 className="mt-2">{repoInfo.paperTitle}</h1>
-                </Link>
-                <DeleteRepoButton paperId={repoInfo.id} />
-            </div>
-*/

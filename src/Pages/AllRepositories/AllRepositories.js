@@ -20,24 +20,9 @@ function AllRepositories() {
     }, []);
     return (
         <div className='w-75 mx-auto'>
-            {repoList.map((repoName) => <RepoOverView repoName={repoName} onDelete={(status) => setShowDeleteRepoAlert(status)} />)}
-            <DeleteRepoAlert status={showDeleteRepoAlert} onHide={() => setShowDeleteRepoAlert(0)} />
+            {repoList.map((repoName) => <RepoOverView repoName={repoName} />)}
         </div>
     );
 }
 
 export default AllRepositories;
-/*
-            <Card>
-                <Card.Body>
-                    <Placeholder as={Card.Title} animation="glow">
-                        <Placeholder xs={6} />
-                    </Placeholder>
-                    <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                    </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
-                </Card.Body>
-            </Card>
-*/
