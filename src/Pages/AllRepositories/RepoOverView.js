@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import { GoTrashcan } from 'react-icons/go';
-import DeleteRepoButton from './DeleteRepo.js'
+import DeleteRepoButton, { DeleteRepo } from './DeleteRepo.js'
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /*async function DeteleRepo(id) {
@@ -28,7 +28,7 @@ function RepoOverView(props) {
                     <h2 className="mt-2" style={{color: 'black'}}>{repoInfo.paperTitle}</h2>
                 </Link>
                 <Button variant="primary h-50 align-self-center" onClick={async function () {
-                    const res = await DeteleRepo(repoInfo.id)
+                    const res = await DeleteRepo(repoInfo.id)
                     if (res) {
                         props.onDelete(1)
                         setRepoInfo(null)

@@ -6,6 +6,7 @@ import CreateRepoComponent from './CreateRepo.js'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { useParams } from 'react-router-dom';
+import { DeleteRepoAlert } from './DeleteRepo.js'
 
 function AllRepositories() {
     const params = useParams(), op=params.op, content=params.content;

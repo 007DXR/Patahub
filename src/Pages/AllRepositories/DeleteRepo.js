@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal'
 import { GoTrashcan } from 'react-icons/go';
 import $ from 'jquery'
 
-function DeleteRepo(paperId) {
+export function DeleteRepo(paperId) {
     let success = false
     const data = JSON.stringify({
         paper_id: paperId
@@ -20,7 +20,7 @@ function DeleteRepo(paperId) {
     return success
 }
 
-function DeleteRepoAlert(props) {
+export function DeleteRepoAlert(props) {
     return (
         <Modal show={props.show} onHide={props.onHide}>
             <Modal.Header closeButton>
@@ -36,7 +36,7 @@ function DeleteRepoAlert(props) {
     )
 }
 
-function DeleteRepoButton(props) {
+export function DeleteRepoButton(props) {
     const [deleteRepoFailure, setDeleteRepoFailure] = useState(false)
     return (
         <React.Fragment>
@@ -53,4 +53,4 @@ function DeleteRepoButton(props) {
     )
 }
 
-export default DeleteRepoButton;
+export default {DeleteRepoButton, DeleteRepoAlert, DeleteRepo};
