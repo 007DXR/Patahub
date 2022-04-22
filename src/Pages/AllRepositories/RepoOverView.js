@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, } from "react-router-dom";
 import { getRepositoryInfo } from '../../Data/demo.js'
 import { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import { GoTrashcan } from 'react-icons/go';
 import DeleteRepoButton from './DeleteRepo.js'
@@ -23,22 +23,25 @@ function RepoOverView(props) {
     }, []);
     return repoInfo ? (
         <React.Fragment>
-            <div style={{ display: 'inline-flex' }}>
-                <Link to={'/repositoryInfo/' + props.repoName}>
-                    <h1 className="mt-2">{repoInfo.paperTitle}</h1>
-                </Link>
-                <DeleteRepoButton paperId={repoInfo.id} />
-            </div>
-            <Container>
-                <Row>
-                    <Col>
-                        {repoInfo.dataSetDescription}
-                    </Col>
-                    <Col>
-                        {repoInfo.dataSetLink[0]}
-                    </Col>
-                </Row>
-            </Container>
+            <Card>
+                <Card.Body>
+                    <Card.Title>{props.repoName}</Card.Title>
+                    <Container>
+                        <Row>
+                            <Col>
+                                {repoInfo.dataSetDescription}
+                            </Col>
+                            <Col>
+                                {repoInfo.dataSetLink[0]}
+                            </Col>
+                        </Row>
+                    </Container>
+                    <Button variant="primary" onClick={
+                        () => window.open('/repositoryInfo/' + props.repoName, '_self')
+                    }>Enter</Button>
+                    <DeleteRepoButton paperId={repoInfo.id} />
+                </Card.Body>
+            </Card>
         </React.Fragment >
     ) : (
         <React.Fragment></React.Fragment>
@@ -46,3 +49,11 @@ function RepoOverView(props) {
 }
 
 export default RepoOverView;
+/*
+            <div style={{ display: 'inline-flex' }}>
+                <Link to={'/repositoryInfo/' + props.repoName}>
+                    <h1 className="mt-2">{repoInfo.paperTitle}</h1>
+                </Link>
+                <DeleteRepoButton paperId={repoInfo.id} />
+            </div>
+*/
