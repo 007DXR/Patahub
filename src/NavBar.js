@@ -36,19 +36,31 @@ function SearchBar() {
     </Form>
   )
 }
-function NavBar(props) {
-  return (
-    <Navbar bg="primary" variant="dark">
-      <Container>
-        <Navbar.Brand href="/">
-          {/*<img src={logo}></img>*/}
-          Patahub
-        </Navbar.Brand>
-        {props.more}
-        <SearchBar />
-      </Container>
-    </Navbar>
-  );
+
+function UserAvatar(props){
+    const toUserHomepage = async () =>{
+        window.location.replace(`/UserHomepage/${props.userName}`); 
+    }
+    return (
+        <img className="rounded-circle" src={logo} alt="user"
+        width="30" height="30" onClick={toUserHomepage}></img>
+    )
+}
+
+function NavBar(props){
+    return (
+        <Navbar bg="primary" variant="dark">
+          <Container>
+            <Navbar.Brand href="/">
+                {/*<img src={logo}></img>*/}
+                Patahub
+            </Navbar.Brand>
+            {props.more}
+            <SearchBar />
+            <UserAvatar></UserAvatar>
+          </Container>
+        </Navbar>
+    );
 }
 
 export default NavBar;
