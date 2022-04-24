@@ -44,3 +44,33 @@ function RCDOverView(props){
     )
 }
 export default RCDOverView;
+/*
+        <Row>
+            <Col>
+                <Link to={`/RCDInfo/${props.repoName}/${props.RCD.resultId}`}>
+                    <Image src={props.RCD.resultImage} style={{height: '50px'}} />
+                </Link> 
+            </Col>
+            {onEdit?
+                <EmptyRCDOverView noInterface={true} onFinish={onFinish} codeLinks={props.RCD.codeLinks} dataLinks={props.RCD.datasetLinks} />
+            :(
+                <React.Fragment>
+                    <Col>
+                        {props.RCD.codeLinks.map((codeLink) => <div>
+                            <GithubRepoInfo link={codeLink}>somecode</GithubRepoInfo><br />
+                        </div>)}
+                    </Col>
+                    <Col>
+                        {props.RCD.datasetLinks.map((datasetLink) => <div>
+                            <GithubRepoInfo link={datasetLink}>somedata</GithubRepoInfo><br />
+                        </div>)}
+                    </Col>
+                </React.Fragment>
+            )}
+            {onEdit?
+                <React.Fragment />:
+                <Col><Button className="btn-sm" onClick={() =>{setOnEdit(true)}} ><RiEditFill /></Button></Col>
+            }
+            
+        </Row>
+*/
