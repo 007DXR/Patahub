@@ -45,7 +45,7 @@ function CreateRepoForm(props) {
         else {
             const res = CreateRepo(paperName, paperLink, paperAbstract)
             if (res) {
-                window.open('/repositoryInfo/' + res.title, '_self')
+                window.open('/repositoryInfo/' + res.paper_id, '_self')
             }
             else {
                 setCreateRepoFailure(true)
