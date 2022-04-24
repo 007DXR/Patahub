@@ -14,34 +14,28 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 }*/
 
 function RepoOverView(props) {
-    const [repoInfo, setRepoInfo] = useState(null);
-    useEffect(() => {
-        getRepositoryInfo(props.repoName).then((data, err) => {
-            setRepoInfo(data);
-            console.log(data);
-        });
-    }, []);
+    const repoInfo = props.repoInfo;
     return repoInfo ? (
         <Card className='mt-3'>
             <Card.Body>
                 <Card.Title className="d-flex">
-                    <Link to={'/repositoryInfo/'+props.repoName} className="text-start fw-bold mt-2 text-decoration-none" style={{color: 'black'}}>{repoInfo.paperTitle}</Link>
-                    <DeleteRepoButton paperId={repoInfo.id} />
+                    <Link to={'/repositoryInfo/' + repoInfo.paper_id} className="text-start fw-bold mt-2 text-decoration-none" style={{ color: 'black' }}>{repoInfo.paper_name}</Link>
+                    <DeleteRepoButton paperId={repoInfo.paper_id} />
                 </Card.Title>
                 <Container>
                     <Row>
                         <Col>
-                            {repoInfo.dataSetDescription}
+                            {repoInfo.paper_abstract}
                         </Col>
                         <Col>
-                            {repoInfo.dataSetLink[0]}
+                            {repoInfo.paper_link}
                         </Col>
                     </Row>
                 </Container>
             </Card.Body>
         </Card>
     ) : (
-        <React.Fragment/>
+        <React.Fragment />
     );
 }
 

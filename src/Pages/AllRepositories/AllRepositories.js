@@ -9,18 +9,19 @@ import { useParams } from 'react-router-dom';
 import { DeleteRepoAlert } from './DeleteRepo.js'
 
 function AllRepositories() {
-    const params = useParams(), op = params.op, content = params.content;
-    let searchArgs = [null, null, null]; searchArgs[op] = content;
+    const params = useParams()
+    let options = {}
+    if (params.op) options[params.op] = params.content
     const [repoList, setRepoList] = useState([]);
     useEffect(() => {
-        searchRepositories(...searchArgs).then((data, err) => {
+        searchRepositories(options).then((data, err) => {
             setRepoList(data);
             console.log(data);
         });
     }, []);
     return (
         <div className='w-75 mx-auto'>
-            {repoList.map((repoName) => <RepoOverView repoName={repoName} />)}
+            {repoList.map((repoInfo) => <RepoOverView repoInfo={repoInfo} />)}
         </div>
     );
 }
