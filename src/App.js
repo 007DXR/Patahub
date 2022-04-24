@@ -7,6 +7,7 @@ import RCDInfo from './Pages/RCDInfo/RCDInfo.js'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CreateRepoComponent from './Pages/AllRepositories/CreateRepo.js';
+import UserHomepage from './Pages/UserHomepage/UserHomepage.js';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />
                     <Route path="/search/:op/:content" element={<AllRepositories />} />
+                    <Route path="/UserHomepage/:userName" element={<UserHomepage />} />
                 </Routes>
             </BrowserRouter>
         </div>

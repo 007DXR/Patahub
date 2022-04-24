@@ -1,0 +1,43 @@
+
+
+.scrollmenu {
+    /* background-color: #333; */
+    /* background-color: #333; */
+    overflow: auto;
+    white-space: nowrap;
+    padding: 100px;
+    margin: 10px;
+    border: 1px solid;
+    scrollbar-width: none;
+    /* useful in firefox */
+}
+.scrollmenu::-webkit-scrollbar {
+    /* useful in chrome */
+    /* width: 0 ;
+    height: 0; */
+    display: none;
+}
+.scrollcard {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px;
+    width: 500px;
+    text-decoration: none;
+    margin: 30px;
+
+    /* height: 300px; */
+    white-space: normal;
+}
+
+.cardtext{
+    /* width: 300px;
+    height: 300px; */
+    text-align: center;
+    white-space: normal;
+}
+
+.scrollcard:hover {
+    background-color: rgb(170, 189, 215);
+    
+}
