@@ -17,7 +17,7 @@ function NewLinkItem(props){
         }
     }
     return (
-        <div>
+        <div className="my-2">
             <input type="text" value={newAddr}
             onChange={event => setNewAddr(event.target.value)}></input>
             <Button onClick={saveBtn} className="ms-1 btn-sm"><GoCheck/></Button>
@@ -27,7 +27,7 @@ function NewLinkItem(props){
 
 function OldLinkItem(props){
     return (
-        <div>
+        <div className="my-2">
             <input type="text" value={props.addrLink} ></input>
             <Button onClick={props.onRemove} className="ms-1 btn-sm btn-danger"><BsFillTrashFill/></Button>
         </div>

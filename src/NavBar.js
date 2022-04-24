@@ -36,6 +36,17 @@ function SearchBar(){
     </Form>
   )
 }
+
+function UserAvatar(props){
+    const toUserHomepage = async () =>{
+        window.location.replace(`/UserHomepage/${props.userName}`); 
+    }
+    return (
+        <img className="rounded-circle" src={logo} alt="user"
+        width="30" height="30" onClick={toUserHomepage}></img>
+    )
+}
+
 function NavBar(props){
     return (
         <Navbar bg="primary" variant="dark">
@@ -46,6 +57,7 @@ function NavBar(props){
             </Navbar.Brand>
             {props.more}
             <SearchBar />
+            <UserAvatar></UserAvatar>
           </Container>
         </Navbar>
     );
