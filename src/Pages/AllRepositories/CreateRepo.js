@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import $ from 'jquery'
-import { Nav, Navbar } from 'react-bootstrap';
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+import CreateRepo from '../../Data/CreateRepo.js'
 
 function CreateRepoFailureAlert(props) {
     return (
@@ -32,24 +30,6 @@ function CreateRepoComponent() {
     )
 }
 
-function CreateRepo(paperName, paperLink) {
-    let res = null
-    const data = JSON.stringify({
-        user: 'test',
-        title: paperName,
-        link: paperLink
-    })
-    $.ajax({
-        type: "post",
-        url: "api/paper",
-        data: data,
-        contentType: "application/json",
-        async: false,
-        success: (data) => res = data
-    });
-    return res
-}
-
 function CreateRepoForm(props) {
     const [paperName, setPaperName] = useState(""),
         onPaperNameInput = ({ target: { value } }) => setPaperName(value)
@@ -63,7 +43,7 @@ function CreateRepoForm(props) {
         const form = event.currentTarget;
         if (form.checkValidity() === false) event.stopPropagation();
         else {
-            const res = CreateRepo(paperName, paperLink)
+            const res = CreateRepo(paperName, paperLink, paperAbstract)
             if (res) {
                 window.open('/repositoryInfo/' + res.title, '_self')
             }

@@ -1,25 +1,8 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import Spinner from 'react-bootstrap/Spinner'
+import DeleteRepo from '../../Data/DeleteRepo.js'
 import { GoTrashcan } from 'react-icons/go';
-import $ from 'jquery'
-
-function DeleteRepo(paperId) {
-    let success = false
-    const data = JSON.stringify({
-        paper_id: paperId
-    })
-    $.ajax({
-        type: "delete",
-        url: "api/paper",
-        data: data,
-        contentType: "application/json",
-        async: false,
-        success: () => success = true
-    });
-    return success
-}
 
 function DeleteRepoAlert(props) {
     return (
@@ -47,7 +30,7 @@ function DeleteRepoButton(props) {
                 else setDeleteRepoFailure(true)
             }}
                 className="bg-transparent border-0 btm-sm ms-2 p-1">
-                <GoTrashcan color='red'/>
+                <GoTrashcan color='red' />
             </Button>
             <DeleteRepoAlert show={deleteRepoFailure} onHide={() => setDeleteRepoFailure(false)} />
         </React.Fragment>
