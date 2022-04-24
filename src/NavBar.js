@@ -25,6 +25,7 @@ function SearchBar() {
         placeholder="Search"
         className="me-1"
         aria-label="Search"
+        maxlength="200"
         value={content}
         onChange={(event) => { setContent(event.target.value); }}
       />
