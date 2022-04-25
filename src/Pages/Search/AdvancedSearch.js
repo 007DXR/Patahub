@@ -27,7 +27,7 @@ function AdvancedSearch(props){
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        window.location.replace(`/search/${searchType}/?`+Object.entries(searchArgs).map((kv)=>`${kv[0]}=${kv[1]}`).join('&'));
+        window.location.replace(`/search/${searchType}/?`+Object.entries(searchArgs).filter((kv)=>kv[1].length>0).map((kv)=>(`${kv[0]}=${kv[1]}`)).join('&'));
     }
     return (<Form className="w-50 mx-auto pt-5" onSubmit={handleSubmit}>
         <Container className='d-flex'>
