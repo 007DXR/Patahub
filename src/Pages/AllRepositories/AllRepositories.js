@@ -8,10 +8,9 @@ import Button from 'react-bootstrap/Button'
 import { useParams } from 'react-router-dom';
 import { DeleteRepoAlert } from './DeleteRepo.js'
 
-function AllRepositories() {
-    const params = useParams()
-    let options = {}
-    if (params.op) options[params.op] = params.content
+function AllRepositories(props) {
+    let options = {};
+    if (props.op) options[props.op] = props.content;
     const [repoList, setRepoList] = useState([]);
     useEffect(() => {
         searchRepositories(options).then((data, err) => {

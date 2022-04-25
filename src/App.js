@@ -8,22 +8,25 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CreateRepoComponent from './Pages/AllRepositories/CreateRepo.js';
 import UserHomepage from './Pages/UserHomepage/UserHomepage.js';
-
+import Search from './Pages/Search/Search.js'
+import AdvancedSearch from './Pages/Search/AdvancedSearch.js'
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<NavBar more={[<CreateRepoComponent />]}/>} />
+                    <Route path="/advancedSearch" element={<NavBar disableSearchbar/>} />
+                    <Route path="/" element={<NavBar more={[<CreateRepoComponent/>]}/>} />
                     <Route path="/*" element={<NavBar />} />
                 </Routes>
                 <Routes>
                     <Route path="/" element={<AllRepositories />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />
-                    <Route path="/search/:op/:content" element={<AllRepositories />} />
+                    <Route path="/search/:op/:by/:content" element={<Search />} />
                     <Route path="/UserHomepage/:userName" element={<UserHomepage />} />
+                    <Route path="/advancedSearch" element={<AdvancedSearch />} />
                 </Routes>
             </BrowserRouter>
         </div>

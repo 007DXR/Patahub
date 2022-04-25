@@ -8,5 +8,5 @@ export function parseGithubLink(src){
     const regex = /https\:\/\/github\.com\/(.*?)\/(.*)$/i;
     const matchInfo = src.match(regex);
     if(matchInfo) return [matchInfo[1],matchInfo[2].split('/')[0]];
-    else return [null, null];
+    else throw 'Invalid link';
 }

@@ -5,12 +5,18 @@ import { Link } from 'react-router-dom';
 import { getGithubRepoInfo, parseGithubLink } from "../../../Data/github.js"
 
 function GithubRepoInfo(props){
-    let [ownername, repoName] = parseGithubLink(props.link);
     const [errInfo, setErrInfo] = useState();
     const [info, setInfo] = useState();
+    let ownerName, repoName;
+    if(!errInfo)
+        try{
+            [ownerName, repoName] = parseGithubLink(props.link);
+        }catch(err){
+            setErrInfo(err);
+        }
     useEffect( () => {
-        if(ownername){
-            getGithubRepoInfo(ownername, repoName).then((data, err) => {
+        if(ownerName && !errInfo){
+            getGithubRepoInfo(ownerName, repoName).then((data, err) => {
                 setInfo(data);
                 setErrInfo(err);
             });

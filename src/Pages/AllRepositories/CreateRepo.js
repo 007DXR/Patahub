@@ -24,7 +24,7 @@ function CreateRepoComponent() {
     const [isCreating, setIsCreating] = useState(false);
     return (
         <React.Fragment>
-            <Button className='me-auto' onClick={() => setIsCreating(true)}>Create Repository</Button>
+            <Button onClick={() => setIsCreating(true)}>Create Repository</Button>
             <CreateRepoForm show={isCreating} onHide={() => setIsCreating(false)} />
         </React.Fragment>
     )

@@ -1,8 +1,11 @@
 import $ from 'jquery';
 
 
+export async function searchAll(api_name, options) {
+    return $.get('/api/'+api_name, options);
+}
+
 export async function searchRepositories(options) {
-    //return require('./demo').getAllRepositories();
     return $.get('/api/paper', options);
 }
 
