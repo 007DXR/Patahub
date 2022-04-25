@@ -8,7 +8,7 @@ import { Card, CardGroup, Container, Row } from 'react-bootstrap';
 function GithubRepos(props){
     const [links, setLinks] = useState([]);
     useEffect(()=>{
-        searchAll(props.op,Object.fromEntries([[props.by,props.content]])).then((data,err) => {
+        searchAll(props.op,props.params).then((data,err) => {
             if(data)setLinks(data);
         });
     },[]);

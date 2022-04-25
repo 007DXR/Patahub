@@ -1,5 +1,15 @@
 import $ from 'jquery';
+import { useLocation } from 'react-router-dom';
 
+
+export function useQuery() {
+    const { search } = useLocation();
+    return Object.fromEntries(
+        search.slice(1).split('&').map((kv)=>{
+            let arr=kv.split('=');
+            return [arr[0], decodeURIComponent(arr[1])];
+        }))
+}
 
 export async function searchAll(api_name, options) {
     return $.get('/api/'+api_name, options);

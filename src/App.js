@@ -24,7 +24,7 @@ function App() {
                     <Route path="/" element={<AllRepositories />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />
-                    <Route path="/search/:op/:by/:content" element={<Search />} />
+                    <Route path="/search/:op" element={<Search />} />
                     <Route path="/UserHomepage/:userName" element={<UserHomepage />} />
                     <Route path="/advancedSearch" element={<AdvancedSearch />} />
                 </Routes>

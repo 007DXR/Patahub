@@ -11,7 +11,7 @@ function SearchBar() {
     const disabled = !(op!="none" && content.length > 0);
     const getSearchInfo = (event) => {
         event.preventDefault();
-        if(!disabled)window.location.replace(`/search/${placeholder}/${op}/${content}`);
+        if(!disabled)window.location.replace(`/search/${placeholder}/?${op}=${content}`);
     }
     return (
         <Form className="d-flex" onSubmit={getSearchInfo} onKeyDown={()=>{}}>
@@ -29,15 +29,14 @@ function SearchBar() {
         <FormControl
             type="text" 
             placeholder={'Search '+placeholder+'...'}
-            className="me-1"
             value={content}
             onChange={(event) => { setContent(event.target.value); }}
         />
         {disabled ?
-            (<Button type="submit" variant="gray" disabled><GoSearch /></Button>)
-            : (<Button type="submit" variant="info"><GoSearch /></Button>)
+            (<Button type="submit" variant="gray" className="ms-1" disabled><GoSearch /></Button>)
+            : (<Button type="submit" variant="info"className="ms-1" ><GoSearch /></Button>)
         }
-        <Button type="button" variant="info" title="Advanced Search"
+        <Button type="button" variant="info" title="Advanced Search" className="ms-1"
             onClick={() => window.location.replace(`/advancedSearch/`)}>
             <AiOutlineFileSearch />
         </Button>

@@ -9,13 +9,11 @@ import { useParams } from 'react-router-dom';
 import { DeleteRepoAlert } from './DeleteRepo.js'
 
 function AllRepositories(props) {
-    let options = {};
-    if (props.op) options[props.op] = props.content;
     const [repoList, setRepoList] = useState([]);
+    console.log(props.params);
     useEffect(() => {
-        searchRepositories(options).then((data, err) => {
+        searchRepositories(props.params ).then((data, err) => {
             setRepoList(data);
-            console.log(data);
         });
     }, []);
     return (
