@@ -62,21 +62,21 @@ function CreateRepoForm(props) {
                     <Form id="formPaperInfo" onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="formPaperName">
                             <Form.Label>Paper Name</Form.Label>
-                            <Form.Control type="text" placeholder="Paper Name" onChange={onPaperNameInput} required />
+                            <Form.Control type="text" placeholder="Paper Name" maxlength="200" onChange={onPaperNameInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid name.
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formPaperLink">
                             <Form.Label>Paper Link</Form.Label>
-                            <Form.Control type="text" placeholder="Paper Link" onChange={onPaperLinkInput} required />
+                            <Form.Control type="text" placeholder="Paper Link" maxlength="200" onChange={onPaperLinkInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid link.
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formPaperAbstract">
                             <Form.Label>Paper Abstract</Form.Label>
-                            <Form.Control as="textarea" placeholder="Paper Abstract" onChange={onPaperAbstractInput} required />
+                            <Form.Control as="textarea" placeholder="Paper Abstract" maxlength="1000" onChange={onPaperAbstractInput} required />
                         </Form.Group>
                         <div className="d-grid gap-2">
                             <Button variant="primary" type="submit">
