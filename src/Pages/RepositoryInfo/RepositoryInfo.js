@@ -37,15 +37,11 @@ function RepositoryInfo(props){
                 };
             })
             await Promise.all(data).then((newData) => {data = newData;});
+            console.log("rcd list?", data)
             setRCDList(data);
             setIsDeleting(false);
         });
-    } ,[isCreating, isEditing, isDeleting]);
-    //     getRCDList(repoId).then((data, err) => {
-    //         console.log("data", data)
-    //         setRCDList(data);
-    //     });
-    // } ,[]);
+    }, [isCreating, isEditing, isDeleting]);
 
     const delRCD = rcdID => {
         const res = DelRCD(rcdID);
@@ -69,7 +65,7 @@ function RepositoryInfo(props){
             }
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
             <Button onClick={() => setIsCreating(true)}>add</Button>
-            <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId}></PostRCDForm>
+            <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId} userID={1}></PostRCDForm>
         </Container>
     )
 }
