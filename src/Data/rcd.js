@@ -1,134 +1,94 @@
-import { json } from 'body-parser';
 import $ from 'jquery';
 import { parseGithubLink } from "./github.js"
 
-export async function getRCDListByID(paperID) {
-    await sleep(Math.round(Math.random() * 2000));
-    // return [
-    // {
-    //     resultId:1,
-    //     resultImage: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
-    //     codeLinks: [`https://github.com/007DXR/Patahub`],
-    //     datasetLinks: [`https://github.com/facebook/react`],
-    // },{
-    //     resultId:2,
-    //     resultImage: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-    //     codeLinks: [`https://github.com/typescript-cheatsheets/react`,`https://github.com/discountry/react`],
-    //     datasetLinks: [`https://github.com/vnotex/vnote`,`https://www.github.com/${repoName}/xxyfdsafydataset`,`https://www.github.com/${repoName}/xxwwwwydataset`,],
-    // },];
-
-    const data = JSON.stringify({
-        paper_id: paperID,
-    })
-    $.ajax({
-        type: "get",
-        url: "api/rcd",
-        data: data,
-        contentType: "application/json",
-        async: false,
-        success: (data) => res = data,
-        error: function (XMLHttpRequest, texterror) {
-            console.log("请求失败，无法获取RCD列表");
-        }
-    });
-    return res
-}
-
-function getSetID(link, setType){
-    let setName = parseGithubLink(link)[1];
-    let setID = null;
-    let data = null;
-    if (setType == "dataset"){
-        data = JSON.stringify({
-            dataset_name: setName,
-        })
-    }else{
-        data = JSON.stringify({
-            codeset_name: setName,
-        })
+export async function getResult(resultID){
+    const data = {
+        result_id: resultID
     }
-    
-    $.ajax({
-        type: "get",
-        url: `api/${setType}`,
-        data: data,
-        contentType: "application/json",
-        async: false,
-        success: (res) => setID = res,
-        error: function (XMLHttpRequest, texterror) {
-            console.log("请求失败，无法创建RCD");
-        }
-    });
-    return setID
+    return $.get('/api/result', data);
 }
 
-export function CreateRCD(resultLink, codeLink, dataLink, paperID){
-    let res = null;
-    const codesetID = getSetID(codeLink);
-    const datasetID = getSetID(dataLink);
-    const resultID = getResultID(resultLink);
-    const data = JSON.stringify({
-        paper_id: paperID,
-        result_id: resultID,
-        codeset_id: codesetID,
-        dataset_id: datasetID,
-        code_link: codeLink,
-        data_link: dataLink,
-        rcd_id: 0,
+export async function getResultLink(resultID){
+    let res;
+    getResult(resultID).then((data, err)=>{
+        // console.log("result link", data, typeof(data), typeof(data[0]),data[0],data[0].result_link)
+        res = data[0].result_link
     })
-    $.ajax({
-        type: "post",
-        url: "api/rcd",
-        data: data,
-        contentType: "application/json",
-        async: false,
-        success: (data) => res = data,
-        error: function (XMLHttpRequest, texterror) {
-            console.log("请求失败，无法创建RCD");
-        }
-    });
+    // console.log("link", res)
     return res
 }
 
-export function EditRCD(paperID, resultID, codeLink, dataLink, rcdID){
-    const codesetID = getSetID(codeLink);
-    const datasetID = getSetID(dataLink);
-    const data = JSON.stringify({
+export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, rcdID){
+    let res = null;
+    // let succ = true;
+    let data;
+    if(rcdID===null){
+        data = {
+        user_id: 1,
         paper_id: paperID,
         result_id: resultID,
         codeset_id: codesetID,
         dataset_id: datasetID,
         code_link: codeLink,
-        data_link: dataLink,
-        rcd_id: rcdID,
-    })
+        data_link: dataLink
+    }}else{
+        data = {
+            user_id: 1,
+            paper_id: paperID,
+            result_id: resultID,
+            codeset_id: codesetID,
+            dataset_id: datasetID,
+            code_link: codeLink,
+            data_link: dataLink,
+            rcd_id: rcdID
+    }}
+    
+    console.log("post data",data);
     $.ajax({
         type: "post",
-        url: "api/rcd",
-        data: data,
+        url: "/api/rcd",
+        data: JSON.stringify(data),
         contentType: "application/json",
-        async: false,
-        success: (data) => res = data,
+        async: true,
+        success: (data) => {res = data},//succ=true;
         error: function (XMLHttpRequest, texterror) {
-            console.log("请求失败，无法修改RCD");
+            // console.log("请求失败，无法post RCD", XMLHttpRequest.responseText, texterror);
+            // succ = false;
+            // res = XMLHttpRequest.responseText;
+            alert(XMLHttpRequest.responseText);
         }
     });
+    console.log("post data", res)
+    // return $.post('/api/rcd',data);
+    return res//[succ, res]
 }
 
 export function DelRCD(rcdID){
+    let success = false
     const data = JSON.stringify({
-        rcd_id: rcdID,
+        rcd_id: rcdID
     })
     $.ajax({
         type: "delete",
-        url: "api/rcd",
-        data: data,
+        url: `/api/rcd?rcd_id=${rcdID}`,
         contentType: "application/json",
         async: false,
-        success: (data) => res = data,
-        error: function (XMLHttpRequest, texterror) {
-            console.log("请求失败，无法删除RCD");
-        }
+        success: () => success = true
     });
-    return res
+    return success
+}
+
+async function searchRepositories(options) {
+    return $.get('/api/paper', options);
+}
+
+export async function searchRCD(options) {
+    return $.get('/api/rcd', options);
+}
+
+export async function getRCDByRepoID(repoID) {
+    const data = {
+        paper_id: repoID
+    }
+    return $.get('/api/rcd',data);
 }

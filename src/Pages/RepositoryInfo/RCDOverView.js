@@ -1,76 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import GithubRepoInfo from "../Utilities/GithubRepoInfo/GithubRepoInfo.js"
-import EmptyRCDOverView from './EmptyRCDOverView.js';
-import { RiEditFill } from 'react-icons/ri'
-import { GoCheck } from 'react-icons/go';
+// import "./RCDOverView.css";
+import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
+import { GoX, GoPlus, GoCheck } from 'react-icons/go';
+import { RiEditFill } from 'react-icons/ri';
 
 function RCDOverView(props){
-    const [onEdit, setOnEdit] = useState(false);
-    const onFinish = (newCodeList, newDataList) => {
-        setOnEdit(false);
-        //调用api修改
+    const delRCD = () => {
+        props.onRemove(props.RCD.rcdId);
     }
+    
     return (
-        <Row>
+        <Row className="RCDOverView">
             <Col>
                 <Link to={`/RCDInfo/${props.repoName}/${props.RCD.resultId}`}>
                     <Image src={props.RCD.resultImage} style={{height: '50px'}} />
                 </Link> 
             </Col>
-            {onEdit?
-                <EmptyRCDOverView noInterface={true} onFinish={onFinish} codeLinks={props.RCD.codeLinks} dataLinks={props.RCD.datasetLinks} />
-            :(
-                <React.Fragment>
-                    <Col>
-                        {props.RCD.codeLinks.map((codeLink) => <div>
-                            <GithubRepoInfo link={codeLink}>somecode</GithubRepoInfo><br />
-                        </div>)}
-                    </Col>
-                    <Col>
-                        {props.RCD.datasetLinks.map((datasetLink) => <div>
-                            <GithubRepoInfo link={datasetLink}>somedata</GithubRepoInfo><br />
-                        </div>)}
-                    </Col>
-                </React.Fragment>
-            )}
-            {onEdit?
-                <React.Fragment />:
-                <Col><Button className="btn-sm" onClick={() =>{setOnEdit(true)}} ><RiEditFill /></Button></Col>
-            }
-            
+            <Col>
+                <GithubRepoInfo link={props.RCD.codeLink}>somecode</GithubRepoInfo>
+            </Col>
+            <Col>
+                    <GithubRepoInfo link={props.RCD.dataLink}>somedata</GithubRepoInfo>                
+            </Col>
+            <Col>
+                <Button onClick={()=>props.onEdit(props.RCD)} className="btn-sm"><RiEditFill /></Button>
+                <Button onClick={delRCD} className="btn-sm btn-danger"><BsFillTrashFill/></Button>
+            </Col>
         </Row>
     )
 }
 export default RCDOverView;
-/*
-        <Row>
-            <Col>
-                <Link to={`/RCDInfo/${props.repoName}/${props.RCD.resultId}`}>
-                    <Image src={props.RCD.resultImage} style={{height: '50px'}} />
-                </Link> 
-            </Col>
-            {onEdit?
-                <EmptyRCDOverView noInterface={true} onFinish={onFinish} codeLinks={props.RCD.codeLinks} dataLinks={props.RCD.datasetLinks} />
-            :(
-                <React.Fragment>
-                    <Col>
-                        {props.RCD.codeLinks.map((codeLink) => <div>
-                            <GithubRepoInfo link={codeLink}>somecode</GithubRepoInfo><br />
-                        </div>)}
-                    </Col>
-                    <Col>
-                        {props.RCD.datasetLinks.map((datasetLink) => <div>
-                            <GithubRepoInfo link={datasetLink}>somedata</GithubRepoInfo><br />
-                        </div>)}
-                    </Col>
-                </React.Fragment>
-            )}
-            {onEdit?
-                <React.Fragment />:
-                <Col><Button className="btn-sm" onClick={() =>{setOnEdit(true)}} ><RiEditFill /></Button></Col>
-            }
-            
-        </Row>
-*/
