@@ -17,16 +17,18 @@ function RepositoryInfo(props){
     const [editingRCD, setEditingRCD] = useState({});
 
     useEffect( () => {
-        console.log("paper id", repoId, typeof(repoId), typeof(parseInt(repoId)))
-        getRCDByRepoID(parseInt(repoId)).then((data, err) => {
-            console.log("data",data, typeof(data));
-            data = data.map((RCD)=>{
-                const res = getResultLink(RCD.result_id);
-
+        getRCDByRepoID(parseInt(repoId)).then(async (data, err) => {
+            console.log(data);
+            data = data.map(async (RCD)=>{
+                let resultImage;
+                await getResultLink(RCD.result_id).then((data, err) => {
+                    if(err)throw err;
+                    resultImage = data;
+                });
                 return {
                     paperId: RCD.paper_id,
                     resultId: RCD.result_id,
-                    resultImage: res,
+                    resultImage,
                     codesetId: RCD.codeset_id,
                     datasetId: RCD.dataset_id,
                     codeLink: RCD.code_link,
@@ -34,9 +36,9 @@ function RepositoryInfo(props){
                     rcdId: RCD.rcd_id
                 };
             })
+            await Promise.all(data).then((newData) => {data = newData;});
             setRCDList(data);
             setIsDeleting(false);
-            console.log("data2",data, typeof(data));
         });
     } ,[isCreating, isEditing, isDeleting]);
     //     getRCDList(repoId).then((data, err) => {

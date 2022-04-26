@@ -9,13 +9,10 @@ export async function getResult(resultID){
 }
 
 export async function getResultLink(resultID){
-    let res;
-    getResult(resultID).then((data, err)=>{
-        // console.log("result link", data, typeof(data), typeof(data[0]),data[0],data[0].result_link)
-        res = data[0].result_link
+    return await getResult(resultID).then((data, err)=>{
+        if(err)throw err;
+        return data[0].result_link;
     })
-    // console.log("link", res)
-    return res
 }
 
 export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, rcdID){
