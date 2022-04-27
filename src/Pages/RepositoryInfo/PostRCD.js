@@ -139,7 +139,7 @@ function PostRCDForm(props) {
                             }
                         </Form.Group>
 
-                        <Form.Group className="mb-3" hidden={props.onEdit}>
+                        <Form.Group className="mb-3" hidden={!props.onCreate}>
                             <Form.Label>Result<Button onClick={() => setResultCreating(true)} ><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
@@ -173,7 +173,7 @@ function PostRCDForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" hidden={props.onEdit}>
+                        <Form.Group className="mb-3" hidden={!props.onCreate}>
                             <Form.Label>Codeset<Button onClick={() => setCodesetCreating(true)}><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
@@ -208,7 +208,7 @@ function PostRCDForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" hidden={props.onEdit}>
+                        <Form.Group className="mb-3" hidden={!props.onCreate}>
                             <Form.Label>Dataset<Button onClick={() => setDatasetCreating(true)}><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
