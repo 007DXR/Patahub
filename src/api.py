@@ -131,7 +131,7 @@ async def get_rcd_list(
 async def post_paper(
     paper_in: Paper
 ):
-    if not paper_in.paper_id:
+    if paper_in.paper_id == None:
         # 新建
         if (not paper_in.paper_name) or (not paper_in.paper_link) or (not paper_in.paper_abstract):
             raise HTTPException(status_code=422)
@@ -147,7 +147,7 @@ async def post_paper(
 async def post_dataset(
     dataset_in: Dataset
 ):
-    if not dataset_in.dataset_id:
+    if dataset_in.dataset_id == None:
         # 新建
         if (not dataset_in.dataset_name) or (not dataset_in.dataset_link):
             raise HTTPException(status_code=422)
@@ -163,7 +163,7 @@ async def post_dataset(
 async def post_code(
     codeset_in: Codeset
 ):
-    if not codeset_in.codeset_id:
+    if codeset_in.codeset_id == None:
         # 新建
         if (not codeset_in.codeset_name) or (not codeset_in.codeset_link) or (not codeset_in.user_id):
             raise HTTPException(status_code=422)
@@ -179,7 +179,7 @@ async def post_code(
 async def post_result(
     result_in: Result
 ):
-    if not result_in.result_id:
+    if result_in.result_id == None:
         # 新建
         if (not result_in.result_name) or (not result_in.result_link) \
             or (not result_in.result_type) or (not result_in.paper_id):
@@ -198,7 +198,7 @@ async def post_result(
 async def post_rcd(
     rcd: RCD
 ):
-    if not rcd.rcd_id:
+    if rcd.rcd_id == None:
         # 新建
         if (not rcd.result_id) or (not rcd.paper_id) or (not rcd.dataset_id) \
             or (not rcd.codeset_id) or (not rcd.data_link) or (not rcd.code_link) or (not rcd.user_id):
@@ -217,7 +217,7 @@ async def post_rcd(
     else:
         # 更新
         if len(dbop.dbGetRCDList(db, rcd_id=rcd.rcd_id, result_id=rcd.result_id,
-            codeset_id=rcd.codeset_id, dataset_id=rcd.dataset_id, paper_id=rcd.paper_id)) == 0:
+            codeset_id=rcd.codeset_id, dataset_id=rcd.dataset_id, paper_id=rcd.paper_id, user_id=rcd.user_id)) == 0:
             raise HTTPException(status_code=404, detail="rcd not found")
         dbop.dbUpdateRCD(db, rcd.rcd_id, result_id=rcd.result_id,
             codeset_id=rcd.codeset_id, code_link=rcd.code_link,

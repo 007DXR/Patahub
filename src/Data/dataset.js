@@ -5,6 +5,18 @@ export async function getAllDataset(){
     return $.get('/api/dataset', data);
 }
 
+export async function getDataset(data){
+    return $.get('/api/dataset', data);
+}
+
+export async function getDatasetLinkByID(datasetID){
+    const data = {dataset_id: datasetID}
+    return await getDataset(data).then((data, err)=>{
+        if(err)throw err;
+        return data[0].dataset_link;
+    })
+}
+
 export async function getAllDatasetByUser(userID){
     const data = {
         user_id: userID

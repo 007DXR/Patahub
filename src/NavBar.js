@@ -8,13 +8,14 @@ import { getAllRepositories, searchRepositories } from './Data/link';
 import SearchBar from './SearchBar.js';
 import { CreateRepoButton } from './Pages/AllRepositories/CreateRepo.js'
 import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
+import avatar from './Avatar.svg';
 
 function UserAvatar(props) {
     const toUserHomepage = async () => {
         window.location.replace(`/UserHomepage/${props.userName}`);
     }
     return (
-        <img className="rounded-circle" src={logo} alt="user"
+        <img className="rounded-circle" src={avatar} alt="user"
             width="30" height="30" onClick={toUserHomepage}></img>
     )
 }
@@ -24,14 +25,13 @@ function NavBar(props) {
         <Navbar bg="primary" variant="dark">
             <Container>
                 <Navbar.Brand href="/">
-                    {/*<img src={logo}></img>*/}
                     Patahub
                 </Navbar.Brand>
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
                 <CreateRepoButton />
                 {props.deleteRepoButton ? <DeleteRepoButton /> : <React.Fragment />}
                 <div className='ms-auto me-auto'></div>
-                <UserAvatar></UserAvatar>
+                <UserAvatar userName="user"></UserAvatar>
             </Container>
         </Navbar>
     );
