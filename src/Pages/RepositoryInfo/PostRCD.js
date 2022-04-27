@@ -57,9 +57,10 @@ function PostRCDForm(props) {
             if (props.onEdit) {
                 res = await CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcd_id);
             }
-            props.onHide();
-            console.log('res=' + res)
-            if (res) window.location.reload();
+            if (res) {
+                props.onHide();
+                window.location.reload();
+            }
         }
     };
     useEffect(() => {

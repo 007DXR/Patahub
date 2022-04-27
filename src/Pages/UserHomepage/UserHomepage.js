@@ -24,7 +24,8 @@ function CodesetCard(props) {
                 <Card.Body>
                     {props.codeset.codeset_link}
                     <p />
-                    <Button onClick={function () {
+                    <Button onClick={function (event) {
+                        event.stopPropagation()
                         console.log(props.codeset.codeset_id)
                         const res = DeleteCodeset(props.codeset.codeset_id)
                         if (res) window.location.reload();
@@ -49,7 +50,8 @@ function DatasetCard(props) {
                 <Card.Body>
                     {props.dataset.dataset_link}
                     <p />
-                    <Button onClick={function () {
+                    <Button onClick={function (event) {
+                        event.stopPropagation()
                         console.log(props.dataset.dataset)
                         const res = DeleteDataset(props.dataset.dataset_id)
                         if (res) window.location.reload();
@@ -102,8 +104,8 @@ function UserHomepage(props) {
 
             <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
             <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
-            <EditCodesetForm show={codesetEditing} onHide={()=>setCodesetEditing(false)} codeset={editingCodeset}></EditCodesetForm>
-            <EditDatasetForm show={datasetEditing} onHide={()=>setDatasetEditing(false)} dataset={editingDataset}></EditDatasetForm>
+            <EditCodesetForm show={codesetEditing} onHide={() => setCodesetEditing(false)} codeset={editingCodeset}></EditCodesetForm>
+            <EditDatasetForm show={datasetEditing} onHide={() => setDatasetEditing(false)} dataset={editingDataset}></EditDatasetForm>
         </>
     )
 }

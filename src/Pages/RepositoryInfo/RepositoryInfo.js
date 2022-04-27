@@ -27,7 +27,7 @@ function RepositoryInfo(props) {
     const delRCD = rcdID => {
         const res = DelRCD(rcdID);
         setIsDeleting(true);
-        window.location.reload();
+        if (res) window.location.reload();
     }
     const hideForm = () => {
         if (isCreating) {

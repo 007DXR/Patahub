@@ -1,34 +1,35 @@
 import $ from 'jquery';
 import { parseGithubLink } from "./github.js"
 
-export async function getResult(resultID){
+export async function getResult(resultID) {
     const data = {
         result_id: resultID
     }
     return $.get('/api/result', data);
 }
 
-export async function getResultLink(resultID){
-    return await getResult(resultID).then((data, err)=>{
-        if(err)throw err;
+export async function getResultLink(resultID) {
+    return await getResult(resultID).then((data, err) => {
+        if (err) throw err;
         return data[0].result_link;
     })
 }
 
-export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, rcdID){
+export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, rcdID) {
     let res = null;
     // let succ = true;
     let data;
-    if(rcdID===null){
+    if (rcdID === null) {
         data = {
-        user_id: 1,
-        paper_id: paperID,
-        result_id: resultID,
-        codeset_id: codesetID,
-        dataset_id: datasetID,
-        code_link: codeLink,
-        data_link: dataLink
-    }}else{
+            user_id: 1,
+            paper_id: paperID,
+            result_id: resultID,
+            codeset_id: codesetID,
+            dataset_id: datasetID,
+            code_link: codeLink,
+            data_link: dataLink
+        }
+    } else {
         data = {
             user_id: 1,
             paper_id: paperID,
@@ -38,8 +39,9 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
             code_link: codeLink,
             data_link: dataLink,
             rcd_id: rcdID
-    }}
-    
+        }
+    }
+
     //console.log("post data",data);
     $.ajax({
         type: "post",
@@ -47,7 +49,7 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
         data: JSON.stringify(data),
         contentType: "application/json",
         async: true,
-        success: (data) => {res = data},//succ=true;
+        success: (data) => { res = data },//succ=true;
         error: function (XMLHttpRequest, texterror) {
             // console.log("请求失败，无法post RCD", XMLHttpRequest.responseText, texterror);
             // succ = false;
@@ -60,7 +62,7 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
     return res//[succ, res]
 }
 
-export function DelRCD(rcdID){
+export function DelRCD(rcdID) {
     let success = false
     const data = JSON.stringify({
         rcd_id: rcdID
@@ -70,7 +72,10 @@ export function DelRCD(rcdID){
         url: `/api/rcd?rcd_id=${rcdID}`,
         contentType: "application/json",
         async: false,
-        success: () => success = true
+        success: () => success = true,
+        error: function (XMLHttpRequest, texterror) {
+            alert(XMLHttpRequest.responseText);
+        }
     });
     return success
 }
@@ -80,6 +85,6 @@ export async function searchRCD(options) {
 }
 
 export async function getRCDByRepoID(repoID) {
-    return searchRCD({paper_id: repoID});
+    return searchRCD({ paper_id: repoID });
 }
 
