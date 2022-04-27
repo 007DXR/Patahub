@@ -1,22 +1,22 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRCD } from '../../Data/demo.js';
+import { getResultLink } from '../../Data/rcd.js';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 
-function RCDInfo(props){
+function RCDInfo(props) {
     let p = useParams();
     const [repoName, RCDId] = [p.repoName, p.RCDId];
     const [RCD, setRCD] = useState(null);
     useEffect(() => {
-        getRCD(repoName, RCDId).then((data, err) => {
+        getResultLink(RCDId).then((data, err) => {
             setRCD(data);
         });
-    } ,[]);
+    }, []);
     return RCD ? (
         <Container>
             <Row>
-                <Image src={RCD.resultImage} fluid/>
+                <Image src={RCD} fluid />
             </Row>
             <Row>
                 <Col>左边</Col>
