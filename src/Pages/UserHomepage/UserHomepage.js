@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Image, Button, Table, Card } from 'react-bootstrap';
 import { Link, useParams } from "react-router-dom";
-import { getAllCodesetByUser } from '../../Data/codeset';
-import { getAllDatasetByUser } from '../../Data/dataset';
+import { getAllCodesetByUser, DeleteCodeset } from '../../Data/codeset';
+import { getAllDatasetByUser, DeleteDataset } from '../../Data/dataset';
 import './scroll.css';
 import CreateCodesetForm from '../RepositoryInfo/CreateCodeset';
 import CreateDatasetForm from '../RepositoryInfo/CreateDataset';
 import EditCodesetForm from '../RepositoryInfo/EditCodeset';
+import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
 
 function CodesetCard(props) {
     const [showEdit, setShowEdit] = useState(false);
@@ -19,7 +20,14 @@ function CodesetCard(props) {
         <>
             <Card className="scrollcard" onClick={editCodeset}>
                 <Card.Title>{props.codeset.codeset_name}</Card.Title>
-                <Card.Body>{props.codeset.codeset_link}
+                <Card.Body>
+                    {props.codeset.codeset_link}
+                    <p />
+                    <Button onClick={function () {
+                        console.log(props.codeset.codeset_id)
+                        const res = DeleteCodeset(props.codeset.codeset_id)
+                        if (res) window.location.reload();
+                    }} className="btn-sm btn-danger"><BsFillTrashFill /></Button>
                 </Card.Body>
             </Card>
         </>
@@ -31,7 +39,14 @@ function DatasetCard(props) {
         <>
             <Card className="scrollcard">
                 <Card.Title>{props.dataset.dataset_name}</Card.Title>
-                <Card.Body>{props.dataset.dataset_link}
+                <Card.Body>
+                    {props.dataset.dataset_link}
+                    <p />
+                    <Button onClick={function () {
+                        console.log(props.dataset.dataset)
+                        const res = DeleteDataset(props.dataset.dataset_id)
+                        if (res) window.location.reload();
+                    }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button>
                 </Card.Body>
             </Card>
         </>
