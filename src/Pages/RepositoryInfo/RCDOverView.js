@@ -24,7 +24,7 @@ function RCDOverView(props){
                 <GithubRepoInfo link={props.RCD.codeLink}>somecode</GithubRepoInfo>
             </Col>
             <Col>
-                    <GithubRepoInfo link={props.RCD.dataLink}>somedata</GithubRepoInfo>              
+                <GithubRepoInfo link={props.RCD.dataLink}>somedata</GithubRepoInfo>              
             </Col>
             <Col>
                 <Button onClick={()=>props.onEdit(props.RCD)} className="btn-sm"><RiEditFill /></Button>

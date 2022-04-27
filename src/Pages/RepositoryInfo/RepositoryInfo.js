@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import RCDOverView from './RCDOverView.js'
 import { getRCDList } from '../../Data/demo.js'
-import { Card, Container, Row, Button } from 'react-bootstrap';
+import { Card, Container, Row, Button, Col } from 'react-bootstrap';
 // import EmptyRCDOverView from './EmptyRCDOverView.js';
 import { CreateRCD, DelRCD, getRCDByRepoID, getRCDByRepoName, getResultLink } from '../../Data/rcd.js';
 import PostRCDForm from './PostRCD.js';
@@ -63,6 +63,12 @@ function RepositoryInfo(props) {
 
     return (
         <Container className='pt-5'>
+            <Row>
+                <Col>Result</Col>
+                <Col>Code</Col>
+                <Col>Data</Col>
+                <Col></Col>
+            </Row>
             {
                 RCDList.map((RCD) => <Card className="m-3 p-3"><RCDOverView repoName={repoId} RCD={RCD}
                     onRemove={(rcdID) => delRCD(rcdID)} onEdit={(RCD) => { setIsEditing(true); setEditingRCD(RCD) }} /></Card>)
