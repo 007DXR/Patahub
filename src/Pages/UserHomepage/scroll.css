@@ -1,32 +1,32 @@
-
-
 .scrollmenu {
     /* background-color: #333; */
     /* background-color: #333; */
     overflow: auto;
     white-space: nowrap;
-    padding: 100px;
-    margin: 10px;
+    padding: 40px;
+    margin: 40px;
     border: 1px solid;
     scrollbar-width: none;
     /* useful in firefox */
 }
+
 .scrollmenu::-webkit-scrollbar {
     /* useful in chrome */
     /* width: 0 ;
     height: 0; */
     display: none;
 }
+
 .scrollcard {
     display: inline-block;
     color: black;
     text-align: center;
     padding: 14px;
-    width: 500px;
+    width: 300px;
     text-decoration: none;
     margin: 30px;
 
-    /* height: 300px; */
+    height: 200px;
     white-space: normal;
 }
 

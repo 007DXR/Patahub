@@ -1,57 +1,108 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Image, Button, Table, Card } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { getAllCodesetByUser } from '../../Data/codeset';
+import { getAllDatasetByUser } from '../../Data/dataset';
 import './scroll.css';
+import CreateCodesetForm from '../RepositoryInfo/CreateCodeset';
+import CreateDatasetForm from '../RepositoryInfo/CreateDataset';
+import EditCodesetForm from '../RepositoryInfo/EditCodeset';
 
-function UserHomepage(props){
+function CodesetCard(props) {
+    const [showEdit, setShowEdit] = useState(false);
+    const editCodeset = () => {
+        props.onEdit();
+        setShowEdit(true);
+    };
+
     return (
         <>
-        <div>datasets</div>
-        <div className="scrollmenu">
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card>
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card>
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card>
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card></div>
-        {/* <Card className="scrollcard">1</Card>
-        <Card className="scrollcard">1</Card>
-        <Card className="scrollcard">1</Card> */}
-        <div>datasets</div>
-        <div className="scrollmenu">
-        {/* <div className="scrollcard">
-            <div className='cardtext'>爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑</div>
-        </div>
-        <div className="scrollcard">
-            <div className='cardtext'>爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑</div>
-        </div>
-        <div className="scrollcard">
-            <div className='cardtext'>爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑</div>
-        </div>
-        <div className="scrollcard">
-            <div className='cardtext'>爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑</div>
-        </div> */}
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card>
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card>
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card>
-        <Card className="scrollcard">
-            <Card.Body>那么， 爱迪生在不经意间这样说过，失败也是我需要的，它和成功对我一样有价值。这似乎解答了我的疑惑。 就我个人来说，软件工程对我的意义，不能不说非常重大。 一般来说， 黑塞在不经意间这样说过，有勇气承担命运这才是英雄好汉。我希望诸位也能好好地体会这句话。 从这个角度来看， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如何， 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 吉格·金克拉说过一句富有哲理的话，如果你能做梦，你就能实现它。我希望诸位也能好好地体会这句话。 软件工程因何而发生？ 了解清楚软件工程到底是一种怎么样的存在，是解决一切问题的关键。 既然如何， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。
-        </Card.Body></Card></div>
-    
-    {/* </div>  */}
-    </>
+            <Card className="scrollcard" onClick={editCodeset}>
+                <Card.Title>{props.codeset.codeset_name}</Card.Title>
+                <Card.Body>{props.codeset.codeset_link}
+                </Card.Body>
+            </Card>
+        </>
+    )
+}
+
+function DatasetCard(props) {
+    return (
+        <>
+            <Card className="scrollcard">
+                <Card.Title>{props.dataset.dataset_name}</Card.Title>
+                <Card.Body>{props.dataset.dataset_link}
+                </Card.Body>
+            </Card>
+        </>
+    )
+}
+
+function UserHomepage(props) {
+    const userName = useParams().userName;
+    const userID = 1;
+    const [datasetList, setDatasetList] = useState([]);
+    const [codesetList, setCodesetList] = useState([]);
+    const [codesetCreating, setCodesetCreating] = useState(false);
+    const [codesetEditing, setCodesetEditing] = useState(false);
+    const [datasetCreating, setDatasetCreating] = useState(false);
+    const [datasetEditing, setDatasetEditing] = useState(false);
+    const [editingCodeset, setEditingCodeset] = useState(null);
+    const [editingDataset, setEditingDataset] = useState(null);
+
+    useEffect(() => {
+        getAllCodesetByUser(userID).then((data, err) => {
+            setCodesetList(data);
+            console.log("codesetlist", data)
+        })
+        getAllDatasetByUser(userID).then((data, err) => {
+            setDatasetList(data);
+            console.log("datasetlist", data)
+        })
+    }, []);
+
+    // const hideForm = () => {
+    //     if (isCreating) {
+    //         setIsCreating(false);
+    //         window.location.reload();
+    //     }
+    //     if (isEditing) {
+    //         setIsEditing(false);
+    //         setEditingRCD({});
+    //         window.location.reload();
+    //     }
+    // }
+
+    const delCodeset = () => {
+        return;
+    }
+    const delDataset = () => {
+        return;
+    }
+
+    return (
+        <>
+            <div>Codesets</div>
+            <div className="scrollmenu">
+                {
+                    codesetList.map((codeset) => <CodesetCard codeset={codeset}
+                        onRemove={(cID) => delCodeset(cID)} onEdit={() => { setCodesetEditing(true); setEditingCodeset(codeset) }}></CodesetCard>
+                    )
+                }
+            </div>
+            <div>Datasets</div>
+            <div className="scrollmenu">
+                {
+                    datasetList.map((dataset) => <DatasetCard dataset={dataset}
+                        onRemove={(dID) => delDataset(dID)} onEdit={(dataset) => { setDatasetEditing(true); setEditingDataset(dataset) }}></DatasetCard>
+                    )
+                }
+            </div>
+
+            <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
+            <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
+            {/* <EditCodesetForm show={codesetEditing} onHide={()=>setCodesetEditing(false)}></EditCodesetForm> */}
+        </>
     )
 }
 

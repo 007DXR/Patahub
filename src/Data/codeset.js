@@ -48,3 +48,27 @@ export function CreateCodeset(codesetName, codesetLink){
     console.log("post data", res)
     return res
 }
+
+export function EditCodeset(codesetID, codesetName, codesetLink){
+    let res = null;
+    const data = {
+        user_id: 1,
+        codeset_name: codesetName,
+        codeset_link: codesetLink,
+        codeset_id: codesetID
+    }
+
+    $.ajax({
+        type: "post",
+        url: "/api/codeset",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        async: false,
+        success: (data) => {res = data},
+        error: function (XMLHttpRequest, texterror) {
+            alert(XMLHttpRequest.responseText);
+        }
+    });
+    console.log("post data", res)
+    return res
+}
