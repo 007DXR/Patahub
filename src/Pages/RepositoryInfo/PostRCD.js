@@ -57,6 +57,7 @@ function PostRCDForm(props) {
                 res = CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcdId);
             }
             props.onHide();
+            window.location.reload();
         }
     };
     useEffect(() => {
@@ -75,15 +76,15 @@ function PostRCDForm(props) {
         setPaperID(props.fixedPaperID ? props.fixedPaperID : null);
         getResultListByPaper(props.fixedPaperID).then((data, err) => {
             setResultList(data);
-            console.log("resultlist", data)
+            //console.log("resultlist", data)
         })
         getAllCodesetByUser(props.userID).then((data, err) => {
             setCodesetList(data);
-            console.log("codesetlist", data)
+            //console.log("codesetlist", data)
         })
         getAllDatasetByUser(props.userID).then((data, err) => {
             setDatasetList(data);
-            console.log("datasetlist", data)
+            //console.log("datasetlist", data)
         })
     }, [props.onEdit, props.onCreate, resultCreating, codesetCreating, datasetCreating])
 

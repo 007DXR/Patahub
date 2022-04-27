@@ -1,5 +1,9 @@
 import $ from 'jquery';
 
+export async function getResultList(options){
+    return $.get('/api/result', options);
+}
+
 export async function getResultListByPaper(paperID){
     const data = {
         paper_id: paperID
@@ -17,7 +21,6 @@ export function CreateResult(resultType, resultName, resultLink, paperID){
         paper_id: paperID
     }
     
-    console.log("post result", data);
 
     $.ajax({
         type: "post",
@@ -30,6 +33,5 @@ export function CreateResult(resultType, resultName, resultLink, paperID){
             alert(XMLHttpRequest.responseText);
         }
     });
-    console.log("post result after", res)
     return res
 }

@@ -24,6 +24,10 @@ export async function getAllDatasetByUser(userID){
     return $.get('/api/dataset', data);
 }
 
+export async function getDatasetById(dataset_id){
+    return $.get('/api/dataset', {dataset_id});
+}
+
 export function CreateDataset(datasetName, datasetLink){
     let res = null;
     const data = {

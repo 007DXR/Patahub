@@ -40,7 +40,7 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
             rcd_id: rcdID
     }}
     
-    console.log("post data",data);
+    //console.log("post data",data);
     $.ajax({
         type: "post",
         url: "/api/rcd",
@@ -55,7 +55,7 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
             alert(XMLHttpRequest.responseText);
         }
     });
-    console.log("post data", res)
+    //console.log("post data", res)
     // return $.post('/api/rcd',data);
     return res//[succ, res]
 }
@@ -75,17 +75,11 @@ export function DelRCD(rcdID){
     return success
 }
 
-async function searchRepositories(options) {
-    return $.get('/api/paper', options);
-}
-
 export async function searchRCD(options) {
     return $.get('/api/rcd', options);
 }
 
 export async function getRCDByRepoID(repoID) {
-    const data = {
-        paper_id: repoID
-    }
-    return $.get('/api/rcd',data);
+    return searchRCD({paper_id: repoID});
 }
+
