@@ -37,7 +37,7 @@ function CreateCodesetForm(props) {
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" >
                             <Form.Label>Codeset name</Form.Label>
-                            <Form.Control type="text" onChange={onCodesetNameInput} required />
+                            <Form.Control type="text" maxLength="200" onChange={onCodesetNameInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid name.
                             </Form.Control.Feedback>
@@ -45,7 +45,7 @@ function CreateCodesetForm(props) {
 
                         <Form.Group className="mb-3" >
                             <Form.Label>Codeset link</Form.Label>
-                            <Form.Control type="text" onChange={onCodesetLinkInput} required />
+                            <Form.Control type="text" maxLength="200" onChange={onCodesetLinkInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid link.
                             </Form.Control.Feedback>

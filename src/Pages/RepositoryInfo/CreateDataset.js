@@ -37,7 +37,7 @@ function CreateDatasetForm(props) {
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" >
                             <Form.Label>Dataset name</Form.Label>
-                            <Form.Control type="text" onChange={onDatasetNameInput} required />
+                            <Form.Control type="text" maxLength="200" onChange={onDatasetNameInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid name.
                             </Form.Control.Feedback>
@@ -45,7 +45,7 @@ function CreateDatasetForm(props) {
 
                         <Form.Group className="mb-3" >
                             <Form.Label>Dataset link</Form.Label>
-                            <Form.Control type="text" onChange={onDatasetLinkInput} required />
+                            <Form.Control type="text" maxLength="200" onChange={onDatasetLinkInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid link.
                             </Form.Control.Feedback>

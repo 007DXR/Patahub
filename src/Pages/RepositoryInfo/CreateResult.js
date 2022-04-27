@@ -39,7 +39,7 @@ function CreateResultForm(props) {
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" >
                             <Form.Label>result name</Form.Label>
-                            <Form.Control type="text" onChange={onResultNameInput} required />
+                            <Form.Control type="text" maxLength="200" onChange={onResultNameInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid name.
                             </Form.Control.Feedback>
@@ -47,7 +47,7 @@ function CreateResultForm(props) {
 
                         <Form.Group className="mb-3" >
                             <Form.Label>result link</Form.Label>
-                            <Form.Control type="text" onChange={onResultLinkInput} required />
+                            <Form.Control type="text" maxLength="200" onChange={onResultLinkInput} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid link.
                             </Form.Control.Feedback>

@@ -186,7 +186,7 @@ function PostRCDForm(props) {
 
                         <Form.Group className="mb-3">
                             <Form.Label>code link</Form.Label>
-                            <Form.Control type="text" value={codeLink} onChange={onCodeLinkInput} required />
+                            <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
@@ -215,7 +215,7 @@ function PostRCDForm(props) {
 
                         <Form.Group className="mb-3">
                             <Form.Label>data link</Form.Label>
-                            <Form.Control type="text" value={dataLink} onChange={onDataLinkInput} required />
+                            <Form.Control type="text" maxLength="200" value={dataLink} onChange={onDataLinkInput} required />
                         </Form.Group>
 
                         <div className="d-grid gap-2">
