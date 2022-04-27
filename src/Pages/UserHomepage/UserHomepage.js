@@ -7,6 +7,7 @@ import './scroll.css';
 import CreateCodesetForm from '../RepositoryInfo/CreateCodeset';
 import CreateDatasetForm from '../RepositoryInfo/CreateDataset';
 import EditCodesetForm from '../RepositoryInfo/EditCodeset';
+import EditDatasetForm from '../RepositoryInfo/EditDataset';
 
 function CodesetCard(props) {
     const [showEdit, setShowEdit] = useState(false);
@@ -27,9 +28,15 @@ function CodesetCard(props) {
 }
 
 function DatasetCard(props) {
+    const [showEdit, setShowEdit] = useState(false);
+    const editDataset = () => {
+        props.onEdit();
+        setShowEdit(true);
+    };
+
     return (
         <>
-            <Card className="scrollcard">
+            <Card className="scrollcard" onClick={editDataset}>
                 <Card.Title>{props.dataset.dataset_name}</Card.Title>
                 <Card.Body>{props.dataset.dataset_link}
                 </Card.Body>
@@ -47,38 +54,17 @@ function UserHomepage(props) {
     const [codesetEditing, setCodesetEditing] = useState(false);
     const [datasetCreating, setDatasetCreating] = useState(false);
     const [datasetEditing, setDatasetEditing] = useState(false);
-    const [editingCodeset, setEditingCodeset] = useState(null);
-    const [editingDataset, setEditingDataset] = useState(null);
+    const [editingCodeset, setEditingCodeset] = useState({});
+    const [editingDataset, setEditingDataset] = useState({});
 
     useEffect(() => {
         getAllCodesetByUser(userID).then((data, err) => {
             setCodesetList(data);
-            console.log("codesetlist", data)
         })
         getAllDatasetByUser(userID).then((data, err) => {
             setDatasetList(data);
-            console.log("datasetlist", data)
         })
     }, []);
-
-    // const hideForm = () => {
-    //     if (isCreating) {
-    //         setIsCreating(false);
-    //         window.location.reload();
-    //     }
-    //     if (isEditing) {
-    //         setIsEditing(false);
-    //         setEditingRCD({});
-    //         window.location.reload();
-    //     }
-    // }
-
-    const delCodeset = () => {
-        return;
-    }
-    const delDataset = () => {
-        return;
-    }
 
     return (
         <>
@@ -86,7 +72,7 @@ function UserHomepage(props) {
             <div className="scrollmenu">
                 {
                     codesetList.map((codeset) => <CodesetCard codeset={codeset}
-                        onRemove={(cID) => delCodeset(cID)} onEdit={() => { setCodesetEditing(true); setEditingCodeset(codeset) }}></CodesetCard>
+                        onEdit={() => { setCodesetEditing(true); setEditingCodeset(codeset) }}></CodesetCard>
                     )
                 }
             </div>
@@ -94,14 +80,15 @@ function UserHomepage(props) {
             <div className="scrollmenu">
                 {
                     datasetList.map((dataset) => <DatasetCard dataset={dataset}
-                        onRemove={(dID) => delDataset(dID)} onEdit={(dataset) => { setDatasetEditing(true); setEditingDataset(dataset) }}></DatasetCard>
+                        onEdit={() => { setDatasetEditing(true); setEditingDataset(dataset) }}></DatasetCard>
                     )
                 }
             </div>
 
             <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
             <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
-            {/* <EditCodesetForm show={codesetEditing} onHide={()=>setCodesetEditing(false)}></EditCodesetForm> */}
+            <EditCodesetForm show={codesetEditing} onHide={()=>setCodesetEditing(false)} codeset={editingCodeset}></EditCodesetForm>
+            <EditDatasetForm show={datasetEditing} onHide={()=>setDatasetEditing(false)} dataset={editingDataset}></EditDatasetForm>
         </>
     )
 }

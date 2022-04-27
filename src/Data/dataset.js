@@ -52,3 +52,26 @@ export function CreateDataset(datasetName, datasetLink){
     console.log("post data", res)
     return res
 }
+
+export function EditDataset(datasetID, datasetName, datasetLink){
+    let res = false;
+    const data = {
+        user_id: 1,
+        dataset_name: datasetName,
+        dataset_link: datasetLink,
+        dataset_id: datasetID
+    }
+
+    $.ajax({
+        type: "post",
+        url: "/api/dataset",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        async: false,
+        success: () => {res = true},
+        error: function (XMLHttpRequest, texterror) {
+            alert(XMLHttpRequest.responseText);
+        }
+    });
+    return res
+}

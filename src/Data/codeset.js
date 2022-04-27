@@ -54,7 +54,7 @@ export function CreateCodeset(codesetName, codesetLink){
 }
 
 export function EditCodeset(codesetID, codesetName, codesetLink){
-    let res = null;
+    let res = false;
     const data = {
         user_id: 1,
         codeset_name: codesetName,
@@ -68,11 +68,10 @@ export function EditCodeset(codesetID, codesetName, codesetLink){
         data: JSON.stringify(data),
         contentType: "application/json",
         async: false,
-        success: (data) => {res = data},
+        success: () => {res = true},
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
         }
     });
-    console.log("post data", res)
     return res
 }
