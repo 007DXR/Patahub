@@ -6,8 +6,8 @@ function CreateCodesetForm(props) {
     const [validated, setValidated] = useState(false);
     const [CodesetName, setCodesetName] = useState("");
     const [CodesetLink, setCodesetLink] = useState("");
-    const onCodesetNameInput = event => { setCodesetName(event.target.value); setValidated(false); }
-    const onCodesetLinkInput = event => { setCodesetLink(event.target.value); setValidated(false); }
+    const onCodesetNameInput = event => setCodesetName(event.target.value);
+    const onCodesetLinkInput = event => setCodesetLink(event.target.value);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -39,7 +39,7 @@ function CreateCodesetForm(props) {
                             <Form.Label>Codeset name</Form.Label>
                             <Form.Control type="text" maxLength="200" onChange={onCodesetNameInput} required />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a valid name.
+                                Please provide a name.
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -47,7 +47,7 @@ function CreateCodesetForm(props) {
                             <Form.Label>Codeset link</Form.Label>
                             <Form.Control type="text" maxLength="200" onChange={onCodesetLinkInput} required />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a valid link.
+                                Please provide a link.
                             </Form.Control.Feedback>
                         </Form.Group>
 

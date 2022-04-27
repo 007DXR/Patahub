@@ -8,9 +8,9 @@ function CreateResultForm(props) {
     const [resultLink, setResultLink] = useState("");
     const [resultType, setResultType] = useState("");
     const [createResultFailure, setCreateResultFailure] = useState(false)
-    const onResultNameInput = event => { setResultName(event.target.value); setValidated(false); }
-    const onResultLinkInput = event => { setResultLink(event.target.value); setValidated(false); }
-    const onResultTypeInput = event => { setResultType(event.target.value); setValidated(false); }
+    const onResultNameInput = event => setResultName(event.target.value);
+    const onResultLinkInput = event => setResultLink(event.target.value);
+    const onResultTypeInput = event => setResultType(event.target.value);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -41,7 +41,7 @@ function CreateResultForm(props) {
                             <Form.Label>result name</Form.Label>
                             <Form.Control type="text" maxLength="200" onChange={onResultNameInput} required />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a valid name.
+                                Please provide a name.
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -49,7 +49,7 @@ function CreateResultForm(props) {
                             <Form.Label>result link</Form.Label>
                             <Form.Control type="text" maxLength="200" onChange={onResultLinkInput} required />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a valid link.
+                                Please provide a link.
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -57,7 +57,7 @@ function CreateResultForm(props) {
                             <Form.Label>result type</Form.Label>
                             <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                 onChange={onResultTypeInput}>
-                                {/*<option selected>choose a result type</option>*/}
+                                <option value="">choose a result type</option>
                                 <option value="link">link</option>
                                 <option value="img">img</option>
                                 <option value="csv">csv</option>

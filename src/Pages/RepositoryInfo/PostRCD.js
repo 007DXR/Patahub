@@ -37,16 +37,24 @@ function PostRCDForm(props) {
     const [datasetList, setDatasetList] = useState([]);
     const [datasetName, setDatasetName] = useState("");
 
+    const [validated, setValidated] = useState(false)
+
     function handleSubmit(event) {
         event.preventDefault();
-        let res;
-        if (props.onCreate) {
-            res = CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, null);
+        const form = event.currentTarget;
+        let valid = form.checkValidity();
+        if (!valid) event.stopPropagation();
+        else {
+            let res;
+            if (props.onCreate) {
+                res = CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, null);
+            }
+            if (props.onEdit) {
+                res = CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcdId);
+            }
+            props.onHide();
         }
-        if (props.onEdit) {
-            res = CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcdId);
-        }
-        props.onHide();
+        setValidated(true)
     };
     useEffect(() => {
         // setPaperID(props.fixedPaperID?props.RCD.paperId:null);       
@@ -114,12 +122,12 @@ function PostRCDForm(props) {
 
     return (
         <React.Fragment>
-            <Modal show={props.onCreate || props.onEdit} onHide={props.onHide}>
+            <Modal show={props.onCreate || props.onEdit} onHide={() => { props.onHide(); setValidated(false); }}>
                 <Modal.Header closeButton>
                     <Modal.Title>{props.onCreate ? "新建RCD" : "修改RCD"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
+                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Paper ID</Form.Label>
                             {props.fixedPaperID ?
@@ -132,13 +140,13 @@ function PostRCDForm(props) {
                             <Form.Label>Result<Button onClick={() => setResultCreating(true)} ><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                         onChange={onResultIDInput}>
-                                        <option selected>choose a result</option>
+                                        <option value="">choose a result</option>
                                         {resultList.map((result) => <option value={result.result_id}>{result.result_name}</option>)}
                                     </Form.Select>
                                 ) : (props.onEdit && resultID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                         onChange={onResultIDInput}>
                                         {/*
                                             <option selected value={resultID}>{resultName}</option>
@@ -157,20 +165,22 @@ function PostRCDForm(props) {
                                     </Form.Select>) : ""
                                 )
                             }
-                            {/* <Form.Control type="text" value={resultID}  onChange={onResultIDInput} required /> */}
+                            <Form.Control.Feedback type="invalid">
+                                Please choose a result.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Codeset<Button onClick={() => setCodesetCreating(true)}><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                         onChange={onCodesetIDInput}>
-                                        <option selected>choose a codeset</option>
+                                        <option value="">choose a codeset</option>
                                         {codesetList.map((codeset) => <option value={codeset.codeset_id}>{codeset.codeset_name}</option>)}
                                     </Form.Select>
                                 ) : (props.onEdit && codesetID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                         onChange={onCodesetIDInput}>
                                         {codesetList.map((codeset) => {
                                             if (codeset.codeset_id == codesetID) {
@@ -182,24 +192,30 @@ function PostRCDForm(props) {
                                     </Form.Select>) : ""
                                 )
                             }
+                            <Form.Control.Feedback type="invalid">
+                                Please choose a codeset.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>code link</Form.Label>
                             <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a code link.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Dataset<Button onClick={() => setDatasetCreating(true)}><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                         onChange={onDatasetIDInput}>
-                                        <option selected>choose a dataset</option>
+                                        <option value="">choose a dataset</option>
                                         {datasetList.map((dataset) => <option value={dataset.dataset_id}>{dataset.dataset_name}</option>)}
                                     </Form.Select>
                                 ) : (props.onEdit && datasetID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                         onChange={onDatasetIDInput}>
                                         {datasetList.map((dataset) => {
                                             if (dataset.dataset_id == datasetID) {
@@ -211,11 +227,17 @@ function PostRCDForm(props) {
                                     </Form.Select>) : ""
                                 )
                             }
+                            <Form.Control.Feedback type="invalid">
+                                Please choose a dataset.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>data link</Form.Label>
                             <Form.Control type="text" maxLength="200" value={dataLink} onChange={onDataLinkInput} required />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a data link.
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <div className="d-grid gap-2">

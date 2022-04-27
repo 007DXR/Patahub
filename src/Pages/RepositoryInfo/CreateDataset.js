@@ -6,8 +6,8 @@ function CreateDatasetForm(props) {
     const [validated, setValidated] = useState(false);
     const [DatasetName, setDatasetName] = useState("");
     const [DatasetLink, setDatasetLink] = useState("");
-    const onDatasetNameInput = event => { setDatasetName(event.target.value); setValidated(false); }
-    const onDatasetLinkInput = event => { setDatasetLink(event.target.value); setValidated(false); }
+    const onDatasetNameInput = event => setDatasetName(event.target.value);
+    const onDatasetLinkInput = event => setDatasetLink(event.target.value);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -39,7 +39,7 @@ function CreateDatasetForm(props) {
                             <Form.Label>Dataset name</Form.Label>
                             <Form.Control type="text" maxLength="200" onChange={onDatasetNameInput} required />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a valid name.
+                                Please provide a name.
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -47,7 +47,7 @@ function CreateDatasetForm(props) {
                             <Form.Label>Dataset link</Form.Label>
                             <Form.Control type="text" maxLength="200" onChange={onDatasetLinkInput} required />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a valid link.
+                                Please provide a link.
                             </Form.Control.Feedback>
                         </Form.Group>
 

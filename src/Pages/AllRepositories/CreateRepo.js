@@ -61,11 +61,11 @@ function FormExample() {
 export function CreateRepoForm(props) {
     const [validated, setValidated] = useState(false)
     const [paperName, setPaperName] = useState(""),
-        onPaperNameInput = ({ target: { value } }) => { setPaperName(value); setValidated(false); }
+        onPaperNameInput = ({ target: { value } }) => setPaperName(value);
     const [paperLink, setPaperLink] = useState(""),
-        onPaperLinkInput = ({ target: { value } }) => { setPaperLink(value); setValidated(false); }
+        onPaperLinkInput = ({ target: { value } }) => setPaperLink(value);
     const [paperAbstract, setPaperAbstract] = useState(""),
-        onPaperAbstractInput = ({ target: { value } }) => { setPaperAbstract(value); setValidated(false); }
+        onPaperAbstractInput = ({ target: { value } }) => setPaperAbstract(value);
     const [createRepoFailure, setCreateRepoFailure] = useState(false)
     async function handleSubmit(event) {
         event.preventDefault();
@@ -90,14 +90,14 @@ export function CreateRepoForm(props) {
                     <Form.Label>Paper Name</Form.Label>
                     <Form.Control type="text" placeholder="Paper Name" maxLength="200" onChange={onPaperNameInput} required />
                     <Form.Control.Feedback type="invalid">
-                        Please provide a valid name.
+                        Please provide a name.
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formPaperLink">
                     <Form.Label>Paper Link</Form.Label>
                     <Form.Control type="text" placeholder="Paper Link" maxLength="200" onChange={onPaperLinkInput} required />
                     <Form.Control.Feedback type="invalid">
-                        Please provide a valid link.
+                        Please provide a link.
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formPaperAbstract">
