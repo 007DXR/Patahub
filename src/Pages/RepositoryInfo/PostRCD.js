@@ -57,6 +57,7 @@ function PostRCDForm(props) {
                 res = CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcdId);
             }
             props.onHide();
+            window.location.reload();
         }
     };
     useEffect(() => {

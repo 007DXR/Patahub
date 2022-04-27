@@ -52,12 +52,12 @@ function RepositoryInfo(props) {
     const hideForm = () => {
         if (isCreating) {
             setIsCreating(false);
-            window.location.reload();
+            //window.location.reload();
         }
         if (isEditing) {
             setIsEditing(false);
             setEditingRCD({});
-            window.location.reload();
+            //window.location.reload();
         }
     }
 
