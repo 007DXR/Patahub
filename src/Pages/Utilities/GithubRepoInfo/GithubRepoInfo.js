@@ -21,7 +21,7 @@ function GithubRepoInfo(props){
                 setErrInfo(err);
             });
         }
-    }, []);
+    }, [])
     return errInfo ? (
         <p>
         {errInfo}
