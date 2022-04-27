@@ -7,21 +7,26 @@ import { getGithubRepoInfo, parseGithubLink } from "../../../Data/github.js"
 function GithubRepoInfo(props){
     const [errInfo, setErrInfo] = useState();
     const [info, setInfo] = useState();
-    let ownerName, repoName;
-    if(!errInfo)
+    const [linkInfo, setLinkInfo] = useState({});
+    const onLinkChange = () => {
+        setErrInfo('');
         try{
-            [ownerName, repoName] = parseGithubLink(props.link);
+            let [ownerName, repoName] = parseGithubLink(props.link);
+            setLinkInfo({ownerName, repoName});
         }catch(err){
             setErrInfo(err);
         }
-    useEffect( () => {
-        if(ownerName && !errInfo){
-            getGithubRepoInfo(ownerName, repoName).then((data, err) => {
+    }
+    useEffect( onLinkChange , []);
+    useEffect( onLinkChange , [props.link]);
+    useEffect(() => {
+        if(linkInfo.ownerName && !errInfo){
+            getGithubRepoInfo(linkInfo.ownerName, linkInfo.repoName).then((data, err) => {
                 setInfo(data);
                 setErrInfo(err);
             });
         }
-    }, [])
+    }, [linkInfo, errInfo]);
     return errInfo ? (
         <p>
         {errInfo}

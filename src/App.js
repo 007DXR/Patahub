@@ -10,6 +10,8 @@ import { CreateRepoButton, CreateRepoForm } from './Pages/AllRepositories/Create
 import UserHomepage from './Pages/UserHomepage/UserHomepage.js';
 import Search from './Pages/Search/Search.js'
 import AdvancedSearch from './Pages/Search/AdvancedSearch.js'
+import ReactMarkdown from 'react-markdown'
+import 'highlight.js/styles/default.css';
 
 function App() {
     return (

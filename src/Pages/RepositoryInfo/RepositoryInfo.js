@@ -19,26 +19,6 @@ function RepositoryInfo(props) {
 
     useEffect(() => {
         getRCDByRepoID(parseInt(repoId)).then(async (data, err) => {
-            console.log(data);
-            data = data.map(async (RCD) => {
-                let resultImage;
-                await getResultLink(RCD.result_id).then((data, err) => {
-                    if (err) throw err;
-                    resultImage = data;
-                });
-                return {
-                    paperId: RCD.paper_id,
-                    resultId: RCD.result_id,
-                    resultImage,
-                    codesetId: RCD.codeset_id,
-                    datasetId: RCD.dataset_id,
-                    codeLink: RCD.code_link,
-                    dataLink: RCD.data_link,
-                    rcdId: RCD.rcd_id
-                };
-            })
-            await Promise.all(data).then((newData) => { data = newData; });
-            console.log("rcd list?", data)
             setRCDList(data);
             setIsDeleting(false);
         });
@@ -70,7 +50,7 @@ function RepositoryInfo(props) {
                 <Col></Col>
             </Row>
             {
-                RCDList.map((RCD) => <Card className="m-3 p-3"><RCDOverView repoName={repoId} RCD={RCD}
+                RCDList.map((RCD) => <Card className="m-3 p-3"><RCDOverView repoName={repoId} RCD={RCD} needEdit={true}
                     onRemove={(rcdID) => delRCD(rcdID)} onEdit={(RCD) => { setIsEditing(true); setEditingRCD(RCD) }} /></Card>)
             }
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
