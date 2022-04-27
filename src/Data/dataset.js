@@ -73,5 +73,20 @@ export function EditDataset(datasetID, datasetName, datasetLink){
             alert(XMLHttpRequest.responseText);
         }
     });
+    console.log("post data", res)
+    return res
+}
+export function DeleteDataset(datasetID) {
+    let res = null;
+    $.ajax({
+        type: "delete",
+        url: `/api/dataset?dataset_id=${datasetID}`,
+        async: false,
+        success: (data) => { res = data },
+        error: function (XMLHttpRequest, texterror) {
+            alert(XMLHttpRequest.responseText);
+        }
+    });
+    console.log("post data", res)
     return res
 }
