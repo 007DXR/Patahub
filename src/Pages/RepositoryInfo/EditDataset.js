@@ -45,6 +45,11 @@ function EditDatasetForm(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Dataset ID</Form.Label>
+                            <Form.Control type="text" value={props.dataset.dataset_id} disabled />
+                        </Form.Group>
+
                         <Form.Group className="mb-3" >
                             <Form.Label>Dataset name</Form.Label>
                             <Form.Control type="text" maxLength="200" value={datasetName} onChange={onDatasetNameInput} required />

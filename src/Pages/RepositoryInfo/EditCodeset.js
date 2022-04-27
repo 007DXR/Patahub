@@ -45,6 +45,11 @@ function EditCodesetForm(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Codeset ID</Form.Label>
+                            <Form.Control type="text" value={props.codeset.codeset_id} disabled />
+                        </Form.Group>
+
                         <Form.Group className="mb-3" >
                             <Form.Label>Codeset name</Form.Label>
                             <Form.Control type="text" maxLength="200" value={codesetName} onChange={onCodesetNameInput} required />

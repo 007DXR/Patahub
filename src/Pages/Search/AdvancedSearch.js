@@ -37,7 +37,7 @@ function AdvancedSearch(props){
                 <option value="paper">paper</option>
                 <option value="result">result</option>
                 <option value="dataset">dataset</option>
-                <option value="codeset">code</option>
+                <option value="codeset">codeset</option>
                 <option value="rcd">RCD</option>
             </Form.Select>
         </Container>
