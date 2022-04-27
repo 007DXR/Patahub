@@ -3,7 +3,7 @@ import unittest
 import os
 import random
 import string
-
+from pymysql.converters import escape_string 
 
 def dbClear(database_filename):
     conn = sqlite3.connect(database_filename, check_same_thread=False)
@@ -82,15 +82,17 @@ def dbInsertPaper(db, title, link, user_id, abstract):
 # 综合检索论文
 def dbGetPaperList(db, paper_id=None, paper_name=None, user_id=None):
     exec = """SELECT * FROM papers WHERE true """
-    # db.execute("""SELECT * FROM papers WHERE true and true""")
+    args=[]
     if paper_id:
-        exec += """and (paper_id = %d) """ % (paper_id)
+        exec += """and (paper_id = ?) """ 
+        args.append(paper_id)
     if paper_name:
-        exec += """and  (paper_name = '%s') """ % (paper_name)
+        exec += """and (paper_name = ?) """ 
+        args.append(paper_name)
     if user_id:
-        exec += """and  (user_id = %d) """ % (user_id)
-    result = db.execute(exec)
-
+        exec += """and  (user_id = ?) """ 
+        args.append(user_id)
+    result = db.execute(exec,tuple(args))
     return [{'paper_id': row[0], 'paper_name':row[1], 'paper_link':row[2], 'user_id':row[3], 'paper_abstract':row[4]} for row in result]
 
 # 更新papers表的paper_name,paper_link
@@ -122,14 +124,17 @@ def dbInsertDataset(db, dataset_name, dataset_link, user_id):
 # 综合检索数据集
 def dbGetDatasetList(db, dataset_id=None, dataset_name=None, user_id=None):
     exec = """SELECT * FROM datasets where true """
-
+    args=[]
     if dataset_id:
-        exec += """and (dataset_id = %d) """ % (dataset_id)
+        exec += """and (dataset_id =?) """ 
+        args.append(dataset_id)
     if dataset_name:
-        exec += """and  (dataset_name = '%s') """ % (dataset_name)
+        exec += """and  (dataset_name = ?) """
+        args.append(dataset_name)
     if user_id:
-        exec += """and  (user_id = %d) """ % (user_id)
-    result = db.execute(exec)
+        exec += """and  (user_id = ?) """
+        args.append(user_id)
+    result = db.execute(exec,tuple(args))
 
     return [{'dataset_id': row[0], 'dataset_name':row[1], 'dataset_link':row[2], 'user_id':row[3]} for row in result]
 
@@ -160,13 +165,17 @@ def dbInsertCodeset(db, codeset_name, codeset_link, user_id):
 # 综合查询codesets列表
 def dbGetCodesetList(db, codeset_id=None, codeset_name=None, user_id=None):
     exec="""SELECT * FROM codesets WHERE true """
+    args=[]
     if codeset_id:
-        exec+="""and (codeset_id = %d) """%(codeset_id)
+        exec+="""and (codeset_id = ?) """
+        args.append(codeset_id)
     if codeset_name:
-        exec+="""and  (codeset_name = '%s') """%(codeset_name)
+        exec+="""and  (codeset_name = ?) """
+        args.append(codeset_name)
     if user_id:
-        exec+="""and  (user_id = %d) """%(user_id)
-    result=db.execute(exec)
+        exec+="""and  (user_id = ?) """
+        args.append(user_id)
+    result=db.execute(exec,tuple(args))
     return [{'codeset_id': row[0], 'codeset_name':row[1], 'codeset_link':row[2], 'user_id':row[3]} for row in result]
 
 # 更新codesets表的codeset_name,codeset_link
@@ -199,18 +208,23 @@ def dbInsertResult(db, result_type, result_name, result_link, paper_id, user_id)
 # 综合查询result列表
 def dbGetResultList(db, result_id=None, result_name=None, result_type=None,paper_id=None, user_id=None):
     exec="""SELECT * FROM results where true """
-
+    args=[]
     if result_id:
-        exec+="""and (result_id = %d) """%(result_id)
+        exec+="""and (result_id =?) """
+        args.append(result_id)
     if result_type:
-        exec+="""and (result_type = '%s') """%(result_type)
+        exec+="""and (result_type = ?) """
+        args.append(result_type)
     if result_name:
-        exec+="""and (result_name = '%s') """%(result_name)
+        exec+="""and (result_name = ?) """
+        args.append(result_name)
     if paper_id:
-        exec+="""and (paper_id = %d) """%(paper_id)
+        exec+="""and (paper_id = ?) """
+        args.append(paper_id)
     if user_id:
-        exec+="""and (user_id = %d) """%(user_id)
-    ret=db.execute(exec)
+        exec+="""and (user_id = ?) """
+        args.append(user_id)
+    ret=db.execute(exec,tuple(args))
     return [{'result_id': row[0], 'result_name':row[1], 'result_link':row[2],'result_type':row[3], 'paper_id':row[4], 'user_id':row[5]} for row in ret]
 
 # 删除 result
@@ -242,48 +256,64 @@ def dbInsertRCD(db, result_id, codeset_id,  code_link,dataset_id, data_link,pape
 # 综合查询RCD列表
 def dbGetRCDList(db, rcd_id=None, result_id=None, codeset_id=None,dataset_id=None ,paper_id=None, user_id=None):
     exec = """SELECT * FROM rcds WHERE true """
+    args=[]
     if rcd_id:
-        exec += """and (rcd_id = %d)"""%(rcd_id)
+        exec += """and (rcd_id =?)"""
+        args.append(rcd_id)
     if paper_id:
-        exec += """and (paper_id = %d)"""%(paper_id)
+        exec += """and (paper_id = ?)"""
+        args.append(paper_id)
     if result_id:
-        exec += """and (result_id = %d) """%(result_id)
+        exec += """and (result_id = ?) """
+        args.append(result_id)
     if dataset_id:
-        exec += """and (dataset_id = %d)"""%(dataset_id)
+        exec += """and (dataset_id = ?)"""
+        args.append(dataset_id)
     if codeset_id:
-        exec += """and (codeset_id = %d)"""%(codeset_id)
+        exec += """and (codeset_id = ?)"""
+        args.append(codeset_id)
     if user_id:
-        exec += """and (user_id = %d)"""%(user_id)
-    result = db.execute(exec)
+        exec += """and (user_id = ?)"""
+        args.append(user_id)
+    result = db.execute(exec,tuple(args))
 
     return [{'rcd_id': row[0], 'result_id': row[1], 'codeset_id':row[2], 'code_link':row[3], 'dataset_id':row[4], 'data_link':row[5],'paper_id':row[6], 'user_id':row[7]} for row in result]
 
 # 删除 RCD
 def dbDeleteRCD(db, rcd_id=None, result_id=None, codeset_id=None, dataset_id=None, paper_id=None):
     exec="""DELETE FROM rcds WHERE false """
+    args=[]
     if rcd_id:
-        exec+=""" or (rcd_id = %d) """%(rcd_id)
+        exec+=""" or (rcd_id = ?) """
+        args.append(rcd_id)
     if result_id:
-        exec+=""" or (result_id = %d) """%(result_id)
+        exec+=""" or (result_id = ?) """
+        args.append(result_id)
     if codeset_id:
-        exec+=""" or (codeset_id = %d) """%(codeset_id)
+        exec+=""" or (codeset_id = ?) """
+        args.append(codeset_id)
     if dataset_id:
-        exec+=""" or (dataset_id = %d) """%(dataset_id)
+        exec+=""" or (dataset_id = ?) """
+        args.append(dataset_id)
     if paper_id:
-        exec+=""" or (paper_id = %d) """%(paper_id)
-    result = db.execute(exec)
+        exec+=""" or (paper_id = ?) """
+        args.append(paper_id)
+    result = db.execute(exec,tuple(args))
     return result
 
 # 更新 rcd 表
 def dbUpdateRCD(db, rcd_id, result_id = None, codeset_id = None,  code_link = None , dataset_id = None, data_link = None, paper_id = None):
     exec = []
+    args=[]
     if code_link:
-        exec.append("""code_link = '%s'""" % (code_link))
+        exec.append("""code_link = ?""" )
+        args.append(code_link)
     if data_link:
-        exec.append("""data_link = '%s'""" % (data_link))
+        exec.append("""data_link = ?""" )
+        args.append(data_link)
     if exec != []:
-        exec = "UPDATE rcds SET " + ",".join(exec) + " WHERE rcd_id = %d;" % (rcd_id)
-        print(exec)
-        result = db.execute(exec)
+        exec = "UPDATE rcds SET " + ",".join(exec) + " WHERE rcd_id = ?;"
+        args.append(rcd_id)
+        result = db.execute(exec,tuple(args))
         return result
     return None
