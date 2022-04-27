@@ -13,8 +13,12 @@ function CreateCodesetForm(props) {
         event.preventDefault();
         const form = event.currentTarget;
         let valid = form.checkValidity();
-        if (!valid) event.stopPropagation();
+        if (!valid) {
+            setValidated(true)
+            event.stopPropagation();
+        }
         else {
+            setValidated(false)
             const res = CreateCodeset(CodesetName, CodesetLink);
             if (res) {
                 props.onHide();
@@ -24,7 +28,6 @@ function CreateCodesetForm(props) {
                 alert("error");
             }
         }
-        setValidated(true)
     };
 
     return (

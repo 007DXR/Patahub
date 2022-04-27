@@ -16,8 +16,12 @@ function CreateResultForm(props) {
         event.preventDefault();
         const form = event.currentTarget;
         let valid = form.checkValidity();
-        if (!valid) event.stopPropagation();
+        if (!valid) {
+            setValidated(true)
+            event.stopPropagation();
+        }
         else {
+            setValidated(false)
             const res = CreateResult(resultType, resultName, resultLink, props.paperID);
             if (res) {
                 props.onHide();
@@ -26,7 +30,6 @@ function CreateResultForm(props) {
                 alert("error");
             }
         }
-        setValidated(true)
     };
 
     return (

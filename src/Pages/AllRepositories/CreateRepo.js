@@ -31,32 +31,6 @@ export function CreateRepoButton() {
     )
 }
 
-function FormExample() {
-    const [validated, setValidated] = useState(false);
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-        }
-        //setValidated(true);
-    };
-
-    return (
-        <Form noValidate validated={true} onSubmit={handleSubmit}>
-            <Form.Group>
-                <Form.Label>City</Form.Label>
-                <Form.Control type="text" placeholder="City" required />
-                <Form.Control.Feedback type="invalid">
-                    Please provide a valid city.
-                </Form.Control.Feedback>
-            </Form.Group>
-            <Button type="submit">Submit form</Button>
-        </Form>
-    );
-}
-
 
 export function CreateRepoForm(props) {
     const [validated, setValidated] = useState(false)
@@ -71,8 +45,12 @@ export function CreateRepoForm(props) {
         event.preventDefault();
         const form = event.currentTarget;
         let valid = form.checkValidity();
-        if (!valid) event.stopPropagation();
+        if (!valid) {
+            setValidated(true)
+            event.stopPropagation();
+        }
         else {
+            setValidated(false)
             const res = await CreateRepo(paperName, paperLink, paperAbstract)
             if (res) {
                 window.location.replace('/repositoryInfo/' + res.paper_id)
@@ -81,7 +59,6 @@ export function CreateRepoForm(props) {
                 setCreateRepoFailure(true)
             }
         }
-        setValidated(true)
     };
     return (
         <React.Fragment>

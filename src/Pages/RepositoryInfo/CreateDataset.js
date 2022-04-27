@@ -13,8 +13,12 @@ function CreateDatasetForm(props) {
         event.preventDefault();
         const form = event.currentTarget;
         let valid = form.checkValidity();
-        if (!valid) event.stopPropagation();
+        if (!valid) {
+            setValidated(true)
+            event.stopPropagation();
+        }
         else {
+            setValidated(false)
             const res = CreateDataset(DatasetName, DatasetLink);
             if (res) {
                 props.onHide();
@@ -24,7 +28,6 @@ function CreateDatasetForm(props) {
                 alert("error");
             }
         }
-        setValidated(true)
     };
 
     return (
