@@ -140,17 +140,20 @@ function PostRCDForm(props) {
                             }
                         </Form.Group>
 
-                        <Form.Group className="mb-3" hidden={!props.onCreate}>
-                            <Form.Label>Result<Button onClick={() => setResultCreating(true)} ><GoPlus /></Button></Form.Label>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Result</Form.Label>
                             {
                                 props.onCreate ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
-                                        onChange={onResultIDInput}>
-                                        <option value="">choose a result</option>
-                                        {resultList.map((result) => <option value={result.result_id}>{result.result_name}</option>)}
-                                    </Form.Select>
+                                    <React.Fragment>
+                                        <Button onClick={() => setResultCreating(true)} ><GoPlus /></Button>
+                                        <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
+                                            onChange={onResultIDInput}>
+                                            <option value="">choose a result</option>
+                                            {resultList.map((result) => <option value={result.result_id}>{result.result_name}</option>)}
+                                        </Form.Select>
+                                    </React.Fragment>
                                 ) : (props.onEdit && resultID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required disabled
                                         onChange={onResultIDInput}>
                                         {/*
                                             <option selected value={resultID}>{resultName}</option>
@@ -174,17 +177,20 @@ function PostRCDForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" hidden={!props.onCreate}>
-                            <Form.Label>Codeset<Button onClick={() => setCodesetCreating(true)}><GoPlus /></Button></Form.Label>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Codeset</Form.Label>
                             {
                                 props.onCreate ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
-                                        onChange={onCodesetIDInput}>
-                                        <option value="">choose a codeset</option>
-                                        {codesetList.map((codeset) => <option value={codeset.codeset_id}>{codeset.codeset_name}</option>)}
-                                    </Form.Select>
+                                    <React.Fragment>
+                                        <Button onClick={() => setCodesetCreating(true)}><GoPlus /></Button>
+                                        <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
+                                            onChange={onCodesetIDInput}>
+                                            <option value="">choose a codeset</option>
+                                            {codesetList.map((codeset) => <option value={codeset.codeset_id}>{codeset.codeset_name}</option>)}
+                                        </Form.Select>
+                                    </React.Fragment>
                                 ) : (props.onEdit && codesetID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required disabled
                                         onChange={onCodesetIDInput}>
                                         {codesetList.map((codeset) => {
                                             if (codeset.codeset_id == codesetID) {
@@ -209,17 +215,20 @@ function PostRCDForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" hidden={!props.onCreate}>
-                            <Form.Label>Dataset<Button onClick={() => setDatasetCreating(true)}><GoPlus /></Button></Form.Label>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Dataset</Form.Label>
                             {
                                 props.onCreate ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
-                                        onChange={onDatasetIDInput}>
-                                        <option value="">choose a dataset</option>
-                                        {datasetList.map((dataset) => <option value={dataset.dataset_id}>{dataset.dataset_name}</option>)}
-                                    </Form.Select>
+                                    <React.Fragment>
+                                        <Button onClick={() => setDatasetCreating(true)}><GoPlus /></Button>
+                                        <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
+                                            onChange={onDatasetIDInput}>
+                                            <option value="">choose a dataset</option>
+                                            {datasetList.map((dataset) => <option value={dataset.dataset_id}>{dataset.dataset_name}</option>)}
+                                        </Form.Select>
+                                    </React.Fragment>
                                 ) : (props.onEdit && datasetID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required disabled
                                         onChange={onDatasetIDInput}>
                                         {datasetList.map((dataset) => {
                                             if (dataset.dataset_id == datasetID) {
