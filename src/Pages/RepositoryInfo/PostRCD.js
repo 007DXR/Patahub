@@ -43,8 +43,12 @@ function PostRCDForm(props) {
         event.preventDefault();
         const form = event.currentTarget;
         let valid = form.checkValidity();
-        if (!valid) event.stopPropagation();
+        if (!valid) {
+            setValidated(true)
+            event.stopPropagation();
+        }
         else {
+            setValidated(false)
             let res;
             if (props.onCreate) {
                 res = CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, null);
@@ -54,7 +58,6 @@ function PostRCDForm(props) {
             }
             props.onHide();
         }
-        setValidated(true)
     };
     useEffect(() => {
         // setPaperID(props.fixedPaperID?props.RCD.paperId:null);       
