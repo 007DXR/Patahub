@@ -38,9 +38,9 @@ function PostRCDForm(props) {
     const [datasetName, setDatasetName] = useState("");
 
     const [validated, setValidated] = useState(false)
-    
 
-    function handleSubmit(event) {
+
+    async function handleSubmit(event) {
         event.preventDefault();
         const form = event.currentTarget;
         let valid = form.checkValidity();
@@ -52,13 +52,14 @@ function PostRCDForm(props) {
             setValidated(false)
             let res;
             if (props.onCreate) {
-                res = CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, null);
+                res = await CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, null);
             }
             if (props.onEdit) {
-                res = CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcd_id);
+                res = await CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcd_id);
             }
             props.onHide();
-            window.location.reload();
+            console.log('res=' + res)
+            if (res) window.location.reload();
         }
     };
     useEffect(() => {

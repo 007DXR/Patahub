@@ -13,7 +13,10 @@ async function CreateRepo(paperName, paperLink, paperAbstract) {
         url: "/api/paper",
         data: data,
         contentType: "application/json",
-        success: (data) => res = data
+        success: (data) => res = data,
+        error: function (XMLHttpRequest, texterror) {
+            alert(XMLHttpRequest.responseText);
+        }
     });
     return res
 }

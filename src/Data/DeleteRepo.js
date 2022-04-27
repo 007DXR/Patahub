@@ -9,7 +9,10 @@ async function DeleteRepo(paperId) {
         type: "delete",
         url: `/api/paper?paper_id=${paperId}`,
         contentType: "application/json",
-        success: () => success = true
+        success: () => success = true,
+        error: function (XMLHttpRequest, texterror) {
+            alert(XMLHttpRequest.responseText);
+        }
     });
     return success
 }
