@@ -9,6 +9,8 @@ import SearchBar from './SearchBar.js';
 import { CreateRepoButton } from './Pages/AllRepositories/CreateRepo.js'
 import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
 import avatar from './Avatar.svg';
+import { CreateCodesetButton } from './Pages/RepositoryInfo/CreateCodesetPage';
+import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
 
 function UserAvatar(props) {
     const toUserHomepage = async () => {
@@ -30,6 +32,8 @@ function NavBar(props) {
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
                 <CreateRepoButton />
                 {props.deleteRepoButton ? <DeleteRepoButton /> : <React.Fragment />}
+                <CreateCodesetButton />
+                <CreateDatasetButton />
                 <div className='ms-auto me-auto'></div>
                 <UserAvatar userName="user"></UserAvatar>
             </Container>
