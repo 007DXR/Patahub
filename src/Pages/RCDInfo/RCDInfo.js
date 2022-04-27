@@ -5,16 +5,20 @@ import { searchRCD } from '../../Data/rcd.js';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { getResultList } from '../../Data/result.js'
 import { getGithubRawContent } from '../../Data/github.js';
-import { getDatasetById } from '../../Data/dataset.js';
+import { getDatasetLinkByID } from '../../Data/dataset.js';
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
+import SetInfo from './SetInfo.js';
+import { getCodesetLinkByID } from '../../Data/codeset.js';
 
 function RCDInfo(props) {
     let p = useParams();
     const [repoName, RCDId] = [p.repoName, p.RCDId];
-    const [RCD, setRCD] = useState(null);
+    const [RCD, setRCD] = useState({});
     const [resultImg, setResultImg] = useState(null);
-    const [code, setCode] = useState('');
+    const [datasetLink, setDatasetLink] = useState(null);
+    const [codesetLink, setCodesetLink] = useState(null);
+
     useEffect(() => {
         let rcd;
         searchRCD({rcd_id: RCDId}).then((data, err) => {
@@ -28,13 +32,8 @@ function RCDInfo(props) {
                 });
             }else throw 'data.length<=0'
         }).then((data, err) => {
-            if(err)throw err;
-            return getDatasetById(rcd.dataset_id)
-        }).then((data, err) => {
-            if(err)throw err;
-            return getGithubRawContent(data[0].dataset_link, rcd.data_link);
-        }).then((data, err) => {
-            setCode(data);
+            getDatasetLinkByID(rcd.dataset_id).then((data, err) => {setDatasetLink(data)});
+            getCodesetLinkByID(rcd.codeset_id).then((data, err) => {setCodesetLink(data)});
         })
     }, []);
     return (
@@ -45,16 +44,12 @@ function RCDInfo(props) {
                 ): <p>Loading</p>}
             </Row>
             <Row>
-                <Col className='text-start'>
-                <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                    {"```" + 
-                        ((code && RCD) ? RCD.data_link.substring(RCD.data_link.lastIndexOf(".")+1) +"\n" + 
-                        code + "\n" : "\nLoading...\n") 
-                    + "```"
-                    }
-                </ReactMarkdown>
+                <Col className='text-start w-50'>
+                    <SetInfo RCD={RCD} setLink={datasetLink} link={RCD.data_link}/>
                 </Col>
-                <Col>右边</Col>
+                <Col className='text-start w-50'>
+                    <SetInfo RCD={RCD} setLink={codesetLink} link={RCD.code_link}/>
+                </Col>
             </Row>
         </Container>
     )
