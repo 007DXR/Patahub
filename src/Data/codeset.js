@@ -5,6 +5,18 @@ export async function getAllCodeset(){
     return $.get('/api/codeset', data);
 }
 
+export async function getCodeset(data){
+    return $.get('/api/codeset', data);
+}
+
+export async function getCodesetLinkByID(codesetID){
+    const data = {codeset_id: codesetID}
+    return await getCodeset(data).then((data, err)=>{
+        if(err)throw err;
+        return data[0].codeset_link;
+    })
+}
+
 export async function getAllCodesetByUser(userID){
     const data = {
         user_id: userID
