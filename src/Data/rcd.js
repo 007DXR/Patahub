@@ -16,8 +16,7 @@ export async function getResultLink(resultID) {
 }
 
 export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, rcdID) {
-    let res = null;
-    // let succ = true;
+    let succ = false;
     let data;
     if (rcdID === null) {
         data = {
@@ -43,13 +42,13 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
     }
 
     //console.log("post data",data);
-    $.ajax({
+    await $.ajax({
         type: "post",
         url: "/api/rcd",
         data: JSON.stringify(data),
         contentType: "application/json",
         async: true,
-        success: (data) => { res = data },//succ=true;
+        success: (data) => succ = true,//succ=true;
         error: function (XMLHttpRequest, texterror) {
             // console.log("请求失败，无法post RCD", XMLHttpRequest.responseText, texterror);
             // succ = false;
@@ -59,7 +58,7 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
     });
     //console.log("post data", res)
     // return $.post('/api/rcd',data);
-    return res//[succ, res]
+    return succ//[succ, res]
 }
 
 export function DelRCD(rcdID) {
