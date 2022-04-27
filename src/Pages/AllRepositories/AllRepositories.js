@@ -10,7 +10,7 @@ import { DeleteRepoAlert } from './DeleteRepo.js'
 
 function AllRepositories(props) {
     const [repoList, setRepoList] = useState([]);
-    console.log(props.params);
+    //console.log(props.params);
     useEffect(() => {
         searchRepositories(props.params ).then((data, err) => {
             setRepoList(data);

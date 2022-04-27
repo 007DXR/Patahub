@@ -11,6 +11,10 @@ export async function getAllCodesetByUser(userID){
     }
     return $.get('/api/codeset', data);
 }
+export async function getCodesetById(codeset_id){
+    return $.get('/api/codeset', {codeset_id});
+}
+
 
 export function CreateCodeset(codesetName, codesetLink){
     let res = null;
@@ -20,7 +24,7 @@ export function CreateCodeset(codesetName, codesetLink){
         codeset_link: codesetLink
     }
     
-    console.log("post data", data);
+    //console.log("post data", data);
 
     $.ajax({
         type: "post",
@@ -33,6 +37,6 @@ export function CreateCodeset(codesetName, codesetLink){
             alert(XMLHttpRequest.responseText);
         }
     });
-    console.log("post data", res)
+    //console.log("post data", res)
     return res
 }
