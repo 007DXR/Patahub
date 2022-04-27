@@ -55,7 +55,7 @@ function PostRCDForm(props) {
                 res = CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, null);
             }
             if (props.onEdit) {
-                res = CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcdId);
+                res = CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcd_id);
             }
             props.onHide();
             window.location.reload();
