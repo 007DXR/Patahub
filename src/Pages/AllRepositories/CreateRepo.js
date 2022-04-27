@@ -23,13 +23,11 @@ function CreateRepoFailureAlert(props) {
     )
 }
 
-function CreateRepoComponent() {
-    const [isCreating, setIsCreating] = useState(false);
+export function CreateRepoButton() {
     return (
-        <React.Fragment>
-            <Button onClick={() => setIsCreating(true)} className="ms-1"><GoPlus /></Button>
-            <CreateRepoForm show={isCreating} onHide={() => setIsCreating(false)} />
-        </React.Fragment>
+        <Button onClick={() => window.location.replace(`/createRepo/`)}>
+            <GoPlus />
+        </Button>
     )
 }
 
@@ -60,7 +58,7 @@ function FormExample() {
 }
 
 
-function CreateRepoForm(props) {
+export function CreateRepoForm(props) {
     const [validated, setValidated] = useState(false)
     const [paperName, setPaperName] = useState(""),
         onPaperNameInput = ({ target: { value } }) => { setPaperName(value); setValidated(false); }
@@ -69,15 +67,15 @@ function CreateRepoForm(props) {
     const [paperAbstract, setPaperAbstract] = useState(""),
         onPaperAbstractInput = ({ target: { value } }) => { setPaperAbstract(value); setValidated(false); }
     const [createRepoFailure, setCreateRepoFailure] = useState(false)
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         const form = event.currentTarget;
         let valid = form.checkValidity();
         if (!valid) event.stopPropagation();
         else {
-            const res = CreateRepo(paperName, paperLink, paperAbstract)
+            const res = await CreateRepo(paperName, paperLink, paperAbstract)
             if (res) {
-                window.open('/repositoryInfo/' + res.paper_id, '_self')
+                window.location.replace('/repositoryInfo/' + res.paper_id)
             }
             else {
                 setCreateRepoFailure(true)
@@ -87,47 +85,35 @@ function CreateRepoForm(props) {
     };
     return (
         <React.Fragment>
-            <Modal show={props.show} onHide={function () {
-                props.onHide()
-                setValidated(false)
-            }}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Create a new repository</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form noValidate validated={validated} id="formPaperInfo" onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="formPaperName">
-                            <Form.Label>Paper Name</Form.Label>
-                            <Form.Control type="text" placeholder="Paper Name" maxLength="200" onChange={onPaperNameInput} required />
-                            <Form.Control.Feedback type="invalid">
-                                Please provide a valid name.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formPaperLink">
-                            <Form.Label>Paper Link</Form.Label>
-                            <Form.Control type="text" placeholder="Paper Link" maxLength="200" onChange={onPaperLinkInput} required />
-                            <Form.Control.Feedback type="invalid">
-                                Please provide a valid link.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formPaperAbstract">
-                            <Form.Label>Paper Abstract</Form.Label>
-                            <Form.Control as="textarea" placeholder="Paper Abstract" maxLength="1000" onChange={onPaperAbstractInput} required />
-                            <Form.Control.Feedback type="invalid">
-                                Please fill in the paper abstract.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <div className="d-grid gap-2">
-                            <Button variant="primary" type="submit">
-                                Create
-                            </Button>
-                        </div>
-                    </Form>
-                </Modal.Body>
-            </Modal>
+            <Form className="w-50 mx-auto pt-5" noValidate validated={validated} id="formPaperInfo" onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formPaperName">
+                    <Form.Label>Paper Name</Form.Label>
+                    <Form.Control type="text" placeholder="Paper Name" maxLength="200" onChange={onPaperNameInput} required />
+                    <Form.Control.Feedback type="invalid">
+                        Please provide a valid name.
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formPaperLink">
+                    <Form.Label>Paper Link</Form.Label>
+                    <Form.Control type="text" placeholder="Paper Link" maxLength="200" onChange={onPaperLinkInput} required />
+                    <Form.Control.Feedback type="invalid">
+                        Please provide a valid link.
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formPaperAbstract">
+                    <Form.Label>Paper Abstract</Form.Label>
+                    <Form.Control as="textarea" placeholder="Paper Abstract" maxLength="1000" onChange={onPaperAbstractInput} required />
+                    <Form.Control.Feedback type="invalid">
+                        Please fill in the paper abstract.
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <div className="d-grid gap-2">
+                    <Button variant="primary" type="submit">
+                        Create
+                    </Button>
+                </div>
+            </Form>
             <CreateRepoFailureAlert show={createRepoFailure} onHide={() => setCreateRepoFailure(false)} />
         </React.Fragment>
     )
 }
-
-export default CreateRepoComponent;

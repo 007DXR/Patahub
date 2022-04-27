@@ -7,6 +7,7 @@ import CreateCodesetForm from './CreateCodeset';
 import { getAllCodesetByUser } from '../../Data/codeset';
 import { getAllDatasetByUser } from '../../Data/dataset';
 import CreateDatasetForm from './CreateDataset';
+import { GoPlus } from 'react-icons/go';
 
 function PostRCDForm(props) {
     // console.log("debug", props.RCD.paperId, props.fixedPaperID)
@@ -78,7 +79,7 @@ function PostRCDForm(props) {
     useEffect(() => {
         if (resultID) {
             const match = resultList.find(result => result.result_id == resultID);
-            if(match === undefined)
+            if (match === undefined)
                 setResultName("");
             else
                 setResultName(match.result_name);
@@ -90,7 +91,7 @@ function PostRCDForm(props) {
     useEffect(() => {
         if (codesetID) {
             const match = codesetList.find(codeset => codeset.codeset_id == codesetID);
-            if(match === undefined)
+            if (match === undefined)
                 setCodesetName("");
             else
                 setCodesetName(match.codeset_name);
@@ -102,7 +103,7 @@ function PostRCDForm(props) {
     useEffect(() => {
         if (datasetID) {
             const match = datasetList.find(dataset => dataset.dataset_id == datasetID);
-            if( match === undefined)
+            if (match === undefined)
                 setDatasetName("");
             else
                 setDatasetName(match.dataset_name);
@@ -128,7 +129,7 @@ function PostRCDForm(props) {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Result<Button onClick={() => setResultCreating(true)}>new</Button></Form.Label>
+                            <Form.Label>Result<Button onClick={() => setResultCreating(true)} ><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
                                     <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
@@ -160,7 +161,7 @@ function PostRCDForm(props) {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Codeset<Button onClick={() => setCodesetCreating(true)}>new</Button></Form.Label>
+                            <Form.Label>Codeset<Button onClick={() => setCodesetCreating(true)}><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
                                     <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
@@ -189,7 +190,7 @@ function PostRCDForm(props) {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Dataset<Button onClick={() => setDatasetCreating(true)}>new</Button></Form.Label>
+                            <Form.Label>Dataset<Button onClick={() => setDatasetCreating(true)}><GoPlus /></Button></Form.Label>
                             {
                                 props.onCreate ? (
                                     <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"

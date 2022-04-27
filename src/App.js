@@ -1,12 +1,12 @@
 import React from 'react';
 import NavBar from './NavBar.js';
-import { BrowserRouter, Routes , Route, } from "react-router-dom";
+import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import AllRepositories from './Pages/AllRepositories/AllRepositories.js'
 import RepositoryInfo from './Pages/RepositoryInfo/RepositoryInfo.js'
 import RCDInfo from './Pages/RCDInfo/RCDInfo.js'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CreateRepoComponent from './Pages/AllRepositories/CreateRepo.js';
+import { CreateRepoButton, CreateRepoForm } from './Pages/AllRepositories/CreateRepo.js';
 import UserHomepage from './Pages/UserHomepage/UserHomepage.js';
 import Search from './Pages/Search/Search.js'
 import AdvancedSearch from './Pages/Search/AdvancedSearch.js'
@@ -16,12 +16,13 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path="/advancedSearch" element={<NavBar disableSearchbar/>} />
-                    <Route path="/" element={<NavBar more={[<CreateRepoComponent/>]}/>} />
+                    <Route path="/advancedSearch" element={<NavBar disableSearchbar />} />
                     <Route path="/*" element={<NavBar />} />
+                    <Route path="/repositoryInfo/:repoName" element={<NavBar deleteRepoButton />} />
                 </Routes>
                 <Routes>
                     <Route path="/" element={<AllRepositories />} />
+                    <Route path="/createRepo" element={<CreateRepoForm />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />
                     <Route path="/search/:op" element={<Search />} />

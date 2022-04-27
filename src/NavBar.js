@@ -6,30 +6,33 @@ import { GoSearch } from 'react-icons/go';
 import { GrSearchAdvanced } from 'react-icons/gr';
 import { getAllRepositories, searchRepositories } from './Data/link';
 import SearchBar from './SearchBar.js';
+import { CreateRepoButton } from './Pages/AllRepositories/CreateRepo.js'
+import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
 
-function UserAvatar(props){
-    const toUserHomepage = async () =>{
-        window.location.replace(`/UserHomepage/${props.userName}`); 
+function UserAvatar(props) {
+    const toUserHomepage = async () => {
+        window.location.replace(`/UserHomepage/${props.userName}`);
     }
     return (
         <img className="rounded-circle" src={logo} alt="user"
-        width="30" height="30" onClick={toUserHomepage}></img>
+            width="30" height="30" onClick={toUserHomepage}></img>
     )
 }
 
-function NavBar(props){
+function NavBar(props) {
     return (
         <Navbar bg="primary" variant="dark">
-          <Container>
-            <Navbar.Brand href="/">
-                {/*<img src={logo}></img>*/}
-                Patahub
-            </Navbar.Brand>
-            {props.disableSearchbar?<React.Fragment/>:<SearchBar/>}
-            {props.more}
-            <div className='ms-auto me-auto'></div>
-            <UserAvatar></UserAvatar>
-          </Container>
+            <Container>
+                <Navbar.Brand href="/">
+                    {/*<img src={logo}></img>*/}
+                    Patahub
+                </Navbar.Brand>
+                {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
+                <CreateRepoButton />
+                {props.deleteRepoButton ? <DeleteRepoButton /> : <React.Fragment />}
+                <div className='ms-auto me-auto'></div>
+                <UserAvatar></UserAvatar>
+            </Container>
         </Navbar>
     );
 }

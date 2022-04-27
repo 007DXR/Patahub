@@ -14,7 +14,6 @@ function RepoOverView(props) {
             <Card.Body>
                 <Card.Title className="d-flex" style={{wordBreak: 'break-all'}}>
                     <Link to={'/repositoryInfo/' + repoInfo.paper_id} className="text-start fw-bold mt-2 text-decoration-none" style={{ color: 'black' }}>{repoInfo.paper_name}</Link>
-                    <DeleteRepoButton paperId={repoInfo.paper_id} />
                 </Card.Title>
                 <Container>
                     <Row>

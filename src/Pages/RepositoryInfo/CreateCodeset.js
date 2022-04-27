@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateCodeset } from '../../Data/codeset';
 
-function CreateCodesetForm(props){
+function CreateCodesetForm(props) {
     const [validated, setValidated] = useState(false);
     const [CodesetName, setCodesetName] = useState("");
     const [CodesetLink, setCodesetLink] = useState("");
-    const onCodesetNameInput = event => setCodesetName(event.target.value);
-    const onCodesetLinkInput = event => setCodesetLink(event.target.value);
+    const onCodesetNameInput = event => { setCodesetName(event.target.value); setValidated(false); }
+    const onCodesetLinkInput = event => { setCodesetLink(event.target.value); setValidated(false); }
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -29,13 +29,13 @@ function CreateCodesetForm(props){
 
     return (
         <React.Fragment>
-            <Modal show={props.show} onHide={props.onHide}>
+            <Modal show={props.show} onHide={() => { props.onHide(); setValidated(false); }}>
                 <Modal.Header closeButton>
                     <Modal.Title>新建Codeset</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group>
+                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" >
                             <Form.Label>Codeset name</Form.Label>
                             <Form.Control type="text" onChange={onCodesetNameInput} required />
                             <Form.Control.Feedback type="invalid">
@@ -43,7 +43,7 @@ function CreateCodesetForm(props){
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group>
+                        <Form.Group className="mb-3" >
                             <Form.Label>Codeset link</Form.Label>
                             <Form.Control type="text" onChange={onCodesetLinkInput} required />
                             <Form.Control.Feedback type="invalid">
@@ -56,7 +56,7 @@ function CreateCodesetForm(props){
                 </Modal.Body>
             </Modal>
         </React.Fragment>
-        
+
     )
 }
 

@@ -7,8 +7,9 @@ import { Card, Container, Row, Button } from 'react-bootstrap';
 // import EmptyRCDOverView from './EmptyRCDOverView.js';
 import { CreateRCD, DelRCD, getRCDByRepoID, getRCDByRepoName, getResultLink } from '../../Data/rcd.js';
 import PostRCDForm from './PostRCD.js';
+import { GoPlus } from 'react-icons/go';
 
-function RepositoryInfo(props){
+function RepositoryInfo(props) {
     const repoId = useParams().repoName;
     const [RCDList, setRCDList] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
@@ -16,13 +17,13 @@ function RepositoryInfo(props){
     const [isDeleting, setIsDeleting] = useState(false);
     const [editingRCD, setEditingRCD] = useState({});
 
-    useEffect( () => {
+    useEffect(() => {
         getRCDByRepoID(parseInt(repoId)).then(async (data, err) => {
             console.log(data);
-            data = data.map(async (RCD)=>{
+            data = data.map(async (RCD) => {
                 let resultImage;
                 await getResultLink(RCD.result_id).then((data, err) => {
-                    if(err)throw err;
+                    if (err) throw err;
                     resultImage = data;
                 });
                 return {
@@ -36,7 +37,7 @@ function RepositoryInfo(props){
                     rcdId: RCD.rcd_id
                 };
             })
-            await Promise.all(data).then((newData) => {data = newData;});
+            await Promise.all(data).then((newData) => { data = newData; });
             console.log("rcd list?", data)
             setRCDList(data);
             setIsDeleting(false);
@@ -48,10 +49,10 @@ function RepositoryInfo(props){
         setIsDeleting(true);
     }
     const hideForm = () => {
-        if(isCreating){
+        if (isCreating) {
             setIsCreating(false);
         }
-        if(isEditing){
+        if (isEditing) {
             setIsEditing(false);
             setEditingRCD({});
         }
@@ -61,12 +62,12 @@ function RepositoryInfo(props){
         <Container className='pt-5'>
             {
                 RCDList.map((RCD) => <Card className="m-3 p-3"><RCDOverView repoName={repoId} RCD={RCD}
-                onRemove={(rcdID) => delRCD(rcdID)} onEdit={(RCD)=>{setIsEditing(true);setEditingRCD(RCD)}}/></Card>)
+                    onRemove={(rcdID) => delRCD(rcdID)} onEdit={(RCD) => { setIsEditing(true); setEditingRCD(RCD) }} /></Card>)
             }
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
-            <Button onClick={() => setIsCreating(true)}>add</Button>
+            <Button onClick={() => setIsCreating(true)}><GoPlus /></Button>
             <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId} userID={1}></PostRCDForm>
-        </Container>
+        </Container >
     )
 }
 export default RepositoryInfo;

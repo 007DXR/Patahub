@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import DeleteRepo from '../../Data/DeleteRepo.js'
@@ -22,11 +23,12 @@ function DeleteRepoAlert(props) {
 
 function DeleteRepoButton(props) {
     const [deleteRepoFailure, setDeleteRepoFailure] = useState(false)
+    const params = useParams()
     return (
         <React.Fragment>
-            <Button variant="primary h-50 align-self-center" onClick={function () {
-                const success = DeleteRepo(props.paperId)
-                if (success) window.location.reload()
+            <Button variant="primary h-50 align-self-center" onClick={async function () {
+                const success = await DeleteRepo(params.repoName)
+                if (success) window.location.replace('/')
                 else setDeleteRepoFailure(true)
             }}
                 className="bg-transparent border-0 btm-sm ms-2 p-1">
