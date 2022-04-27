@@ -38,6 +38,7 @@ function PostRCDForm(props) {
     const [datasetName, setDatasetName] = useState("");
 
     const [validated, setValidated] = useState(false)
+    
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -62,11 +63,12 @@ function PostRCDForm(props) {
     };
     useEffect(() => {
         // setPaperID(props.fixedPaperID?props.RCD.paperId:null);       
-        setResultID(props.onEdit ? props.RCD.resultId : null);
-        setDatasetID(props.onEdit ? props.RCD.datasetId : null);
-        setCodesetID(props.onEdit ? props.RCD.codesetId : null);
-        setDataLink(props.onEdit ? props.RCD.dataLink : "");
-        setCodeLink(props.onEdit ? props.RCD.codeLink : "");
+        setResultID(props.onEdit ? props.RCD.result_id : null);
+        setDatasetID(props.onEdit ? props.RCD.dataset_id : null);
+        setCodesetID(props.onEdit ? props.RCD.codeset_id : null);
+        setDataLink(props.onEdit ? props.RCD.data_link : "");
+        setCodeLink(props.onEdit ? props.RCD.code_link : "");
+        //if (props.onEdit) console.log(props.RCD.resultId)
     }, [props.onEdit])
     // useEffect(()=>{
     //     setPaperID(props.fixedPaperID?props.fixedPaperID:null);
