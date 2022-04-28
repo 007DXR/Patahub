@@ -11,6 +11,7 @@ import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
 import avatar from './Avatar.svg';
 import { CreateCodesetButton } from './Pages/RepositoryInfo/CreateCodesetPage';
 import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
+import CreateButton from './Create.js'
 
 function UserAvatar(props) {
     const toUserHomepage = async () => {
@@ -30,10 +31,8 @@ function NavBar(props) {
                     Patahub
                 </Navbar.Brand>
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
-                <CreateRepoButton />
+                <CreateButton />
                 {props.deleteRepoButton ? <DeleteRepoButton /> : <React.Fragment />}
-                <CreateCodesetButton />
-                <CreateDatasetButton />
                 <div className='ms-auto me-auto'></div>
                 <UserAvatar userName="user"></UserAvatar>
             </Container>
