@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { CreateRepo, UpdateRepo } from '../../Data/CreateRepo.js'
 import { GoPlus } from 'react-icons/go';
+import { FaRegEdit } from 'react-icons/fa';
 import { Row, Col } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useParams } from 'react-router-dom';
@@ -36,8 +37,9 @@ export function CreateRepoButton() {
 
 export function UpdateRepoButton(props) {
     return (
-        <Button onClick={() => window.location.replace(`/updateRepo/` + props.paper_id)}>
-            <GoPlus />Paper
+        <Button onClick={() => window.location.replace(`/updateRepo/` + props.paper_id)}
+            className="bg-transparent border-0 btm-sm ms-2 p-1 btn btn-primary h-50 align-self-center">
+            <FaRegEdit color="black"/>
         </Button>
     )
 }
