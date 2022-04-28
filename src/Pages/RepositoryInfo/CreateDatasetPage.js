@@ -59,7 +59,7 @@ function CreateDatasetPage(props) {
 
     return (
         <React.Fragment>
-            <h3>新建Dataset</h3>
+            {/* <h3>新建Dataset</h3> */}
             <Form className="w-50 mx-auto pt-5" noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" >
                     <Form.Label>Dataset name</Form.Label>

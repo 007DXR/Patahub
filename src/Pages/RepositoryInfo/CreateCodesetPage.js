@@ -59,7 +59,7 @@ function CreateCodesetPage(props) {
 
     return (
         <React.Fragment>
-            <h3>新建Codeset</h3>
+            {/* <h3>新建Codeset</h3> */}
             <Form className="w-50 mx-auto pt-5" noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" >
                     <Form.Label>Codeset name</Form.Label>
