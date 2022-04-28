@@ -8,7 +8,7 @@ import { getAllRepositories, searchRepositories } from './Data/link';
 import SearchBar from './SearchBar.js';
 import { CreateRepoButton } from './Pages/AllRepositories/CreateRepo.js'
 import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
-import avatar from './Avatar.svg';
+import avatar from './logo.png';
 import { CreateCodesetButton } from './Pages/RepositoryInfo/CreateCodesetPage';
 import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
 import CreateButton from './Create.js'
