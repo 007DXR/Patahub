@@ -32,7 +32,6 @@ function NavBar(props) {
                 </Navbar.Brand>
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
                 <CreateButton />
-                {props.deleteRepoButton ? <DeleteRepoButton /> : <React.Fragment />}
                 <div className='ms-auto me-auto'></div>
                 <UserAvatar userName="user"></UserAvatar>
             </Container>

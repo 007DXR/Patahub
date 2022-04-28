@@ -214,7 +214,7 @@ function PostRCDForm(props) {
 
                         <Form.Group className="mb-3">
                             <Form.Label>code link</Form.Label>
-                            <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required />
+                            <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required placeholder="/blob/main/code.py"/>
                             <Form.Control.Feedback type="invalid">
                                 Please provide a code link.
                             </Form.Control.Feedback>
@@ -252,7 +252,7 @@ function PostRCDForm(props) {
 
                         <Form.Group className="mb-3">
                             <Form.Label>data link</Form.Label>
-                            <Form.Control type="text" maxLength="200" value={dataLink} onChange={onDataLinkInput} required />
+                            <Form.Control type="text" maxLength="200" value={dataLink} onChange={onDataLinkInput} required  placeholder="/tree/main/folder_name"/>
                             <Form.Control.Feedback type="invalid">
                                 Please provide a data link.
                             </Form.Control.Feedback>
