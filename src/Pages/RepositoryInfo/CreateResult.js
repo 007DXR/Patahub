@@ -6,7 +6,7 @@ function CreateResultForm(props) {
     const [validated, setValidated] = useState(false);
     const [resultName, setResultName] = useState("");
     const [resultLink, setResultLink] = useState("");
-    const [resultType, setResultType] = useState("");
+    const [resultType, setResultType] = useState("img");
     const [createResultFailure, setCreateResultFailure] = useState(false)
     const onResultNameInput = event => setResultName(event.target.value);
     const onResultLinkInput = event => setResultLink(event.target.value);
@@ -58,7 +58,7 @@ function CreateResultForm(props) {
 
                         <Form.Group className="mb-3" >
                             <Form.Label>result type</Form.Label>
-                            <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
+                            <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required value={resultType} disabled
                                 onChange={onResultTypeInput}>
                                 <option value="">choose a result type</option>
                                 <option value="link">link</option>
