@@ -27,6 +27,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<AllRepositories />} />
                     <Route path="/createRepo" element={<CreateRepoForm />} />
+                    <Route path="/updateRepo/:paper_id" element={<CreateRepoForm update={true} />} />
                     <Route path="/createCodeset" element={<CreateCodesetPage />} />
                     <Route path="/createDataset" element={<CreateDatasetPage />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />

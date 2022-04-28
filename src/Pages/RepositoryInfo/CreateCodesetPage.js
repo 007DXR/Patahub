@@ -22,7 +22,7 @@ function CreateCodesetAlert(props) {
 export function CreateCodesetButton() {
     return (
         <Button onClick={() => window.location.replace(`/createCodeset/`)}>
-            <GoPlus />
+            <GoPlus />Codeset
         </Button>
     )
 }

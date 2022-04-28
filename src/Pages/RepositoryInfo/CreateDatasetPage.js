@@ -22,7 +22,7 @@ function CreateDatasetAlert(props) {
 export function CreateDatasetButton() {
     return (
         <Button onClick={() => window.location.replace(`/createDataset/`)}>
-            <GoPlus />
+            <GoPlus /> Dataset
         </Button>
     )
 }
