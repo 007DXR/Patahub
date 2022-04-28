@@ -6,6 +6,7 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import { GoTrashcan } from 'react-icons/go';
 import DeleteRepoButton, { DeleteRepo } from './DeleteRepo.js'
+import { UpdateRepoButton } from './CreateRepo.js';
 
 function RepoOverView(props) {
     const repoInfo = props.repoInfo;
@@ -14,6 +15,7 @@ function RepoOverView(props) {
             <Card.Body>
                 <Card.Title className="d-flex" style={{wordBreak: 'break-all'}}>
                     <Link to={'/repositoryInfo/' + repoInfo.paper_id} className="text-start fw-bold mt-2 text-decoration-none" style={{ color: 'black' }}>{repoInfo.paper_name}</Link>
+                    <UpdateRepoButton paper_id={repoInfo.paper_id}/>
                 </Card.Title>
                 <Container>
                     <Row>

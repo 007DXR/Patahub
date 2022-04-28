@@ -20,7 +20,11 @@ export async function searchRepositories(options) {
 }
 
 export async function getAllRepositories() {
-    return searchRepositories(null, null, null);
+    return searchRepositories(null);
+}
+
+export async function getRepositorieById(paper_id) {
+    return searchRepositories({paper_id});
 }
 
 export async function getRepositoryInfo() {
