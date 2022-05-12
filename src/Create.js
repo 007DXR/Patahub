@@ -13,6 +13,7 @@ import { CreateCodesetButton } from './Pages/RepositoryInfo/CreateCodesetPage';
 import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
+import { GoPlus } from 'react-icons/go';
 
 
 export function CreateButton() {

@@ -9,6 +9,9 @@ import CreateDatasetForm from '../RepositoryInfo/CreateDataset';
 import EditCodesetForm from '../RepositoryInfo/EditCodeset';
 import EditDatasetForm from '../RepositoryInfo/EditDataset';
 import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
+import { UserAvatar } from '../../User.js'
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
 
 function CodesetCard(props) {
     const [showEdit, setShowEdit] = useState(false);
@@ -19,7 +22,7 @@ function CodesetCard(props) {
 
     return (
         <>
-            <Card className="scrollcard" onClick={editCodeset}>
+            <Card className="mt-3" onClick={editCodeset}>
                 <Card.Title>{props.codeset.codeset_name}</Card.Title>
                 <Card.Body>
                     {props.codeset.codeset_link}
@@ -36,6 +39,27 @@ function CodesetCard(props) {
     )
 }
 
+function CodesetCardList(props) {
+    const [codesetList, setCodesetList] = useState([]);
+    const [codesetCreating, setCodesetCreating] = useState(false);
+    const [codesetEditing, setCodesetEditing] = useState(false);
+    const [editingCodeset, setEditingCodeset] = useState({});
+    useEffect(() => {
+        getAllCodesetByUser(props.userID).then((data, err) => {
+            setCodesetList(data);
+        })
+    }, []);
+    return (
+        <React.Fragment>
+            {codesetList.map((codeset) => <CodesetCard codeset={codeset}
+                onEdit={() => { setCodesetEditing(true); setEditingCodeset(codeset) }}></CodesetCard>
+            )}
+            <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
+            <EditCodesetForm show={codesetEditing} onHide={() => setCodesetEditing(false)} codeset={editingCodeset}></EditCodesetForm>
+        </React.Fragment>
+    )
+}
+
 function DatasetCard(props) {
     const [showEdit, setShowEdit] = useState(false);
     const editDataset = () => {
@@ -45,7 +69,7 @@ function DatasetCard(props) {
 
     return (
         <>
-            <Card className="scrollcard" onClick={editDataset}>
+            <Card className="mt-3" onClick={editDataset}>
                 <Card.Title>{props.dataset.dataset_name}</Card.Title>
                 <Card.Body>
                     {props.dataset.dataset_link}
@@ -62,51 +86,57 @@ function DatasetCard(props) {
     )
 }
 
-function UserHomepage(props) {
-    const userName = useParams().userName;
-    const userID = 1;
+function DatasetCardList(props) {
     const [datasetList, setDatasetList] = useState([]);
-    const [codesetList, setCodesetList] = useState([]);
-    const [codesetCreating, setCodesetCreating] = useState(false);
-    const [codesetEditing, setCodesetEditing] = useState(false);
     const [datasetCreating, setDatasetCreating] = useState(false);
     const [datasetEditing, setDatasetEditing] = useState(false);
-    const [editingCodeset, setEditingCodeset] = useState({});
     const [editingDataset, setEditingDataset] = useState({});
-
     useEffect(() => {
-        getAllCodesetByUser(userID).then((data, err) => {
-            setCodesetList(data);
-        })
-        getAllDatasetByUser(userID).then((data, err) => {
+        getAllDatasetByUser(props.userID).then((data, err) => {
             setDatasetList(data);
         })
     }, []);
+    return (
+        <React.Fragment>
+            {datasetList.map((dataset) => <DatasetCard dataset={dataset}
+                onEdit={() => { setDatasetEditing(true); setEditingDataset(dataset) }}></DatasetCard>
+            )}
+            <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
+            <EditDatasetForm show={datasetEditing} onHide={() => setDatasetEditing(false)} dataset={editingDataset}></EditDatasetForm>
+        </React.Fragment>
+    )
+}
+
+function UserProfile(props) {
+    return (
+        <UserAvatar userName="user"></UserAvatar>
+    )
+}
+
+function UserOverview(props) {
+    return (
+        <Tabs defaultActiveKey="Codesets" className="mb-3">
+            <Tab eventKey="Codesets" title="Codesets">
+                <CodesetCardList userID={props.userID} />
+            </Tab>
+            <Tab eventKey="Datasets" title="Datasets">
+                <DatasetCardList userID={props.userID} />
+            </Tab>
+        </Tabs>
+    )
+}
+
+function UserHomepage(props) {
+    const userName = useParams().userName;
+    const userID = 1;
 
     return (
-        <>
-            <div>Codesets</div>
-            <div className="scrollmenu">
-                {
-                    codesetList.map((codeset) => <CodesetCard codeset={codeset}
-                        onEdit={() => { setCodesetEditing(true); setEditingCodeset(codeset) }}></CodesetCard>
-                    )
-                }
-            </div>
-            <div>Datasets</div>
-            <div className="scrollmenu">
-                {
-                    datasetList.map((dataset) => <DatasetCard dataset={dataset}
-                        onEdit={() => { setDatasetEditing(true); setEditingDataset(dataset) }}></DatasetCard>
-                    )
-                }
-            </div>
-
-            <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
-            <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
-            <EditCodesetForm show={codesetEditing} onHide={() => setCodesetEditing(false)} codeset={editingCodeset}></EditCodesetForm>
-            <EditDatasetForm show={datasetEditing} onHide={() => setDatasetEditing(false)} dataset={editingDataset}></EditDatasetForm>
-        </>
+        <Container>
+            <Row>
+                <Col xs={4}><UserProfile /></Col>
+                <Col xs={8}><UserOverview userID={userID} /></Col>
+            </Row>
+        </Container>
     )
 }
 

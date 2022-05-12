@@ -8,20 +8,10 @@ import { getAllRepositories, searchRepositories } from './Data/link';
 import SearchBar from './SearchBar.js';
 import { CreateRepoButton } from './Pages/AllRepositories/CreateRepo.js'
 import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
-import avatar from './logo.png';
 import { CreateCodesetButton } from './Pages/RepositoryInfo/CreateCodesetPage';
 import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
 import CreateButton from './Create.js'
-
-function UserAvatar(props) {
-    const toUserHomepage = async () => {
-        window.location.replace(`/UserHomepage/${props.userName}`);
-    }
-    return (
-        <img className="rounded-circle" src={avatar} alt="user"
-            width="30" height="30" onClick={toUserHomepage}></img>
-    )
-}
+import User from './User.js'
 
 function NavBar(props) {
     return (
@@ -33,7 +23,7 @@ function NavBar(props) {
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
                 <CreateButton />
                 <div className='ms-auto me-auto'></div>
-                <UserAvatar userName="user"></UserAvatar>
+                <User />
             </Container>
         </Navbar>
     );
