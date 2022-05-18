@@ -15,14 +15,16 @@ function PostRCDForm(props) {
     const [resultID, setResultID] = useState(null);
     const [datasetID, setDatasetID] = useState(null);
     const [codesetID, setCodesetID] = useState(null);
-    const [dataLink, setDataLink] = useState("");
-    const [codeLink, setCodeLink] = useState("");
+    // const [dataLink, setDataLink] = useState("");
+    // const [codeLink, setCodeLink] = useState("");
+    const [makefile, setMakefile] = useState("");
     const onPaperIDInput = event => setPaperID(event.target.value);
     const onResultIDInput = event => setResultID(event.target.value);
     const onDatasetIDInput = event => setDatasetID(event.target.value);
     const onCodesetIDInput = event => setCodesetID(event.target.value);
-    const onDataLinkInput = event => setDataLink(event.target.value);
-    const onCodeLinkInput = event => setCodeLink(event.target.value);
+    // const onDataLinkInput = event => setDataLink(event.target.value);
+    // const onCodeLinkInput = event => setCodeLink(event.target.value);
+    const onMakefileInput = event => setMakefile(event.target.value);
 
     const [resultCreating, setResultCreating] = useState(false);
     const [codesetCreating, setCodesetCreating] = useState(false);
@@ -52,10 +54,12 @@ function PostRCDForm(props) {
             setValidated(false)
             let res;
             if (props.onCreate) {
-                res = await CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, null);
+                // res = await CreateRCD(paperID, resultID, datasetID, codesetID, makefile, null);
+                res = await CreateRCD(props.userID, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, null);
             }
             if (props.onEdit) {
-                res = await CreateRCD(parseInt(paperID), parseInt(resultID), datasetID, parseInt(codesetID), dataLink, codeLink, props.RCD.rcd_id);
+                console.log('edit', resultID)
+                res = await CreateRCD(props.userID, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, props.RCD.rcd_id);
             }
             //console.log(res)
             if (res) {
@@ -65,12 +69,13 @@ function PostRCDForm(props) {
         }
     };
     useEffect(() => {
-        // setPaperID(props.fixedPaperID?props.RCD.paperId:null);       
+        // setPaperID(props.fixedPaperID?props.RCD.paperId:null);
         setResultID(props.onEdit ? props.RCD.result_id : null);
         setDatasetID(props.onEdit ? props.RCD.dataset_id : null);
         setCodesetID(props.onEdit ? props.RCD.codeset_id : null);
-        setDataLink(props.onEdit ? props.RCD.data_link : "");
-        setCodeLink(props.onEdit ? props.RCD.code_link : "");
+        // setDataLink(props.onEdit ? props.RCD.data_link : "");
+        // setCodeLink(props.onEdit ? props.RCD.code_link : "");
+        setMakefile(props.onEdit ? props.RCD.makefile : "");
         //if (props.onEdit) console.log(props.RCD.resultId)
     }, [props.onEdit])
     // useEffect(()=>{
@@ -158,15 +163,8 @@ function PostRCDForm(props) {
                                         </Form.Select>
                                     </React.Fragment>
                                 ) : (props.onEdit && resultID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required disabled
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required //disabled
                                         onChange={onResultIDInput}>
-                                        {/*
-                                            <option selected value={resultID}>{resultName}</option>
-                                            {resultList.filter(result => result.result_name != resultName)
-                                            .map((result)=>{
-                                                // (result.result_id==resultID)?"":
-                                                <option value={result.result_id}>{result.result_name}</option>
-                                            })} */}
                                         {resultList.map((result) => {
                                             if (result.result_id == resultID) {
                                                 return (<option selected value={resultID}>{resultName}</option>);
@@ -195,7 +193,7 @@ function PostRCDForm(props) {
                                         </Form.Select>
                                     </React.Fragment>
                                 ) : (props.onEdit && codesetID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required disabled
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required //disabled
                                         onChange={onCodesetIDInput}>
                                         {codesetList.map((codeset) => {
                                             if (codeset.codeset_id == codesetID) {
@@ -212,13 +210,13 @@ function PostRCDForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
+                        {/* <Form.Group className="mb-3">
                             <Form.Label>code link</Form.Label>
                             <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required placeholder="/blob/main/code.py"/>
                             <Form.Control.Feedback type="invalid">
                                 Please provide a code link.
                             </Form.Control.Feedback>
-                        </Form.Group>
+                        </Form.Group> */}
 
                         <Form.Group className="mb-3">
                             <Form.Label>Dataset</Form.Label>
@@ -233,7 +231,7 @@ function PostRCDForm(props) {
                                         </Form.Select>
                                     </React.Fragment>
                                 ) : (props.onEdit && datasetID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required disabled
+                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required //disabled
                                         onChange={onDatasetIDInput}>
                                         {datasetList.map((dataset) => {
                                             if (dataset.dataset_id == datasetID) {
@@ -251,10 +249,10 @@ function PostRCDForm(props) {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>data link</Form.Label>
-                            <Form.Control type="text" maxLength="200" value={dataLink} onChange={onDataLinkInput} required  placeholder="/tree/main/folder_name"/>
+                            <Form.Label>makefile</Form.Label>
+                            <Form.Control type="text" maxLength="200" value={makefile} onChange={onMakefileInput} required  placeholder="makefile"/>
                             <Form.Control.Feedback type="invalid">
-                                Please provide a data link.
+                                Please provide a makefile.
                             </Form.Control.Feedback>
                         </Form.Group>
 

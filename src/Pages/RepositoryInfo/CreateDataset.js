@@ -3,6 +3,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateDataset } from '../../Data/dataset';
 
 function CreateDatasetForm(props) {
+    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [DatasetName, setDatasetName] = useState("");
     const [DatasetLink, setDatasetLink] = useState("");
@@ -19,7 +20,7 @@ function CreateDatasetForm(props) {
         }
         else {
             setValidated(false)
-            const res = CreateDataset(DatasetName, DatasetLink);
+            const res = CreateDataset(userID, DatasetName, DatasetLink);
             if (res) {
                 props.onHide();
             }

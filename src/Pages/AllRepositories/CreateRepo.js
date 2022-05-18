@@ -46,12 +46,15 @@ export function UpdateRepoButton(props) {
 
 
 export function CreateRepoForm(props) {
+    const user_id = 1;
     const paper_id = useParams().paper_id;
     const [validated, setValidated] = useState(false)
     const [paperName, setPaperName] = useState(""),
         onPaperNameInput = ({ target: { value } }) => setPaperName(value);
     const [paperLink, setPaperLink] = useState(""),
         onPaperLinkInput = ({ target: { value } }) => setPaperLink(value);
+    const [dockerLink, setDockerLink] = useState(""),
+        onDockerLinkInput = ({ target: { value } }) => setDockerLink(value);
     const [paperAbstract, setPaperAbstract] = useState(""),
         onPaperAbstractInput = ({ target: { value } }) => setPaperAbstract(value);
     const [createRepoFailure, setCreateRepoFailure] = useState(false)
@@ -61,6 +64,7 @@ export function CreateRepoForm(props) {
                 setPaperName(data[0].paper_name);
                 setPaperLink(data[0].paper_link);
                 setPaperAbstract(data[0].paper_abstract);
+                setDockerLink(data[0].docker_link);
             })
         }
     },[]);
@@ -75,12 +79,12 @@ export function CreateRepoForm(props) {
         else {
             setValidated(false)
             if(props.update){
-                UpdateRepo(paper_id, paperName, paperLink, paperAbstract).then((data, err) => {
+                UpdateRepo(user_id, paper_id, paperName, paperLink, dockerLink, paperAbstract).then((data, err) => {
                     if(err)setCreateRepoFailure(true);
                     else window.location.replace('/repositoryInfo/' + paper_id);
                 })
             }else{
-                CreateRepo(paperName, paperLink, paperAbstract).then((data, err) => {
+                CreateRepo(user_id, paperName, paperLink, dockerLink, paperAbstract).then((data, err) => {
                     if(err)setCreateRepoFailure(true);
                     else window.location.replace('/repositoryInfo/' + data.paper_id);
                 })
@@ -100,6 +104,13 @@ export function CreateRepoForm(props) {
                 <Form.Group className="mb-3" controlId="formPaperLink">
                     <Form.Label>Paper Link</Form.Label>
                     <Form.Control type="text" placeholder="Paper Link" maxLength="200" value={paperLink} onChange={onPaperLinkInput} required />
+                    <Form.Control.Feedback type="invalid">
+                        Please provide a link.
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formDockerLink">
+                    <Form.Label>Docker Link</Form.Label>
+                    <Form.Control type="text" placeholder="Docker Link" maxLength="200" value={dockerLink} onChange={onDockerLinkInput} required />
                     <Form.Control.Feedback type="invalid">
                         Please provide a link.
                     </Form.Control.Feedback>

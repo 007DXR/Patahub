@@ -27,6 +27,7 @@ function RepoOverView(props) {
                             {repoInfo.paper_link}
                         </Col>
                     </Row>
+                    <Row>{repoInfo.docker_link}</Row>
                 </Container>
             </Card.Body>
         </Card>

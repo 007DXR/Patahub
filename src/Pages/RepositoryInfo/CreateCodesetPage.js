@@ -28,6 +28,7 @@ export function CreateCodesetButton() {
 }
 
 function CreateCodesetPage(props) {
+    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [CodesetName, setCodesetName] = useState("");
     const [CodesetLink, setCodesetLink] = useState("");
@@ -47,7 +48,7 @@ function CreateCodesetPage(props) {
         else {
             setIfAlert(true);
             setValidated(false);
-            const res = CreateCodeset(CodesetName, CodesetLink);
+            const res = CreateCodeset(userID, CodesetName, CodesetLink);
             if (res) {
                 setSucc(true);
             }

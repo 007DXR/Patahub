@@ -4,6 +4,7 @@ import { CreateDataset, EditDataset } from '../../Data/dataset';
 
 function EditDatasetForm(props) {
     console.log("dataset",props.dataset);
+    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [datasetName, setDatasetName] = useState(props.dataset.dataset_name);
     const [datasetLink, setDatasetLink] = useState(props.dataset.dataset_link);
@@ -25,7 +26,7 @@ function EditDatasetForm(props) {
         }
         else {
             setValidated(false)
-            const res = EditDataset(props.dataset.dataset_id, datasetName, datasetLink);
+            const res = EditDataset(userID, props.dataset.dataset_id, datasetName, datasetLink);
             if (res) {
                 props.onHide();
                 window.location.reload();

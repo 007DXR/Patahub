@@ -15,36 +15,46 @@ export async function getResultLink(resultID) {
     })
 }
 
-export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLink, codeLink, rcdID) {
+export async function getResultDetail(resultID) {
+    return await getResult(resultID).then((data, err) => {
+        if (err) throw err;
+        return [data[0].result_description, data[0].result_value];
+    })
+}
+
+export async function CreateRCD(userID, paperID, resultID, datasetID, codesetID, makefile, rcdID) {
     let succ = false;
     let data;
+    console.log('result id', resultID)
     if (rcdID === null) {
         data = {
-            user_id: 1,
+            user_id: userID,
             paper_id: paperID,
             result_id: resultID,
             codeset_id: codesetID,
             dataset_id: datasetID,
-            code_link: codeLink,
-            data_link: dataLink
+            // code_link: codeLink,
+            // data_link: dataLink
+            makefile: makefile
         }
     } else {
         data = {
-            user_id: 1,
+            user_id: userID,
             paper_id: paperID,
             result_id: resultID,
             codeset_id: codesetID,
             dataset_id: datasetID,
-            code_link: codeLink,
-            data_link: dataLink,
+            // code_link: codeLink,
+            // data_link: dataLink,
+            makefile: makefile,
             rcd_id: rcdID
         }
     }
 
-    //console.log("post data",data);
+    console.log("post data",data);
     await $.ajax({
         type: "post",
-        url: "/api/rcd",
+        url: `/api/rcd?cur_user_id=${userID}`,
         data: JSON.stringify(data),
         contentType: "application/json",
         async: true,
@@ -56,19 +66,19 @@ export async function CreateRCD(paperID, resultID, datasetID, codesetID, dataLin
             alert(XMLHttpRequest.responseText);
         }
     });
-    //console.log("post data", res)
+    console.log("post data", succ)
     // return $.post('/api/rcd',data);
     return succ//[succ, res]
 }
 
-export function DelRCD(rcdID) {
+export function DelRCD(userID, rcdID) {
     let success = false
     const data = JSON.stringify({
         rcd_id: rcdID
     })
     $.ajax({
         type: "delete",
-        url: `/api/rcd?rcd_id=${rcdID}`,
+        url: `/api/rcd?cur_user_id=${userID}&rcd_id=${rcdID}`,
         contentType: "application/json",
         async: false,
         success: () => success = true,

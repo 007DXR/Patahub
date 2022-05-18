@@ -28,19 +28,19 @@ export async function getDatasetById(dataset_id){
     return $.get('/api/dataset', {dataset_id});
 }
 
-export function CreateDataset(datasetName, datasetLink){
+export function CreateDataset(userID, datasetName, datasetLink){
     let res = null;
     const data = {
-        user_id: 1,
+        user_id: userID,
         dataset_name: datasetName,
         dataset_link: datasetLink
     }
     
-    console.log("post data", data);
+    // console.log("post data", data);
 
     $.ajax({
         type: "post",
-        url: "/api/dataset",
+        url: `/api/dataset?cur_user_id=${userID}`,
         data: JSON.stringify(data),
         contentType: "application/json",
         async: false,
@@ -53,10 +53,10 @@ export function CreateDataset(datasetName, datasetLink){
     return res
 }
 
-export function EditDataset(datasetID, datasetName, datasetLink){
+export function EditDataset(userID, datasetID, datasetName, datasetLink){
     let res = false;
     const data = {
-        user_id: 1,
+        user_id: userID,
         dataset_name: datasetName,
         dataset_link: datasetLink,
         dataset_id: datasetID
@@ -64,7 +64,7 @@ export function EditDataset(datasetID, datasetName, datasetLink){
 
     $.ajax({
         type: "post",
-        url: "/api/dataset",
+        url: `/api/dataset?cur_user_id=${userID}`,
         data: JSON.stringify(data),
         contentType: "application/json",
         async: false,
@@ -76,11 +76,11 @@ export function EditDataset(datasetID, datasetName, datasetLink){
     console.log("post data", res)
     return res
 }
-export function DeleteDataset(datasetID) {
+export function DeleteDataset(userID, datasetID) {
     let res = null;
     $.ajax({
         type: "delete",
-        url: `/api/dataset?dataset_id=${datasetID}`,
+        url: `/api/dataset?cur_user_id=${userID}&dataset_id=${datasetID}`,
         async: false,
         success: (data) => { res = data },
         error: function (XMLHttpRequest, texterror) {

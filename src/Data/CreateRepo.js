@@ -1,16 +1,17 @@
 import $ from 'jquery'
 
-export async function CreateRepo(paperName, paperLink, paperAbstract) {
+export async function CreateRepo(userID, paperName, paperLink, dockerLink, paperAbstract) {
     let res = null
     const data = JSON.stringify({
-        user_id: 0,
+        user_id: userID,
         paper_name: paperName,
         paper_link: paperLink,
+        docker_link: dockerLink,
         paper_abstract: paperAbstract
     })
     await $.ajax({
         type: "post",
-        url: "/api/paper",
+        url: `/api/paper?cur_user_id=${userID}`,
         data: data,
         contentType: "application/json",
         success: (data) => res = data,
@@ -21,18 +22,19 @@ export async function CreateRepo(paperName, paperLink, paperAbstract) {
     return res
 }
 
-export async function UpdateRepo(paperId, paperName, paperLink, paperAbstract) {
+export async function UpdateRepo(userID, paperId, paperName, paperLink, dockerLink, paperAbstract) {
     let res = null
     const data = JSON.stringify({
-        user_id: 0,
+        user_id: userID,
         paper_id: paperId,
         paper_name: paperName,
         paper_link: paperLink,
+        docker_link: dockerLink,
         paper_abstract: paperAbstract
     })
     await $.ajax({
         type: "post",
-        url: "/api/paper",
+        url: `/api/paper?cur_user_id=${userID}`,
         data: data,
         contentType: "application/json",
         success: (data) => res = data,

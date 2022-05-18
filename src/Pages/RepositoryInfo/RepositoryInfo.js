@@ -11,6 +11,7 @@ import { GoPlus } from 'react-icons/go';
 
 function RepositoryInfo(props) {
     const repoId = useParams().repoName;
+    const userId = 1;
     const [RCDList, setRCDList] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -25,7 +26,7 @@ function RepositoryInfo(props) {
     }, [isCreating, isEditing, isDeleting]);
 
     const delRCD = rcdID => {
-        const res = DelRCD(rcdID);
+        const res = DelRCD(userId, rcdID);
         setIsDeleting(true);
         if (res) window.location.reload();
     }
@@ -55,7 +56,7 @@ function RepositoryInfo(props) {
             }
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
             <Button onClick={() => setIsCreating(true)}><GoPlus /></Button>
-            <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId} userID={1}></PostRCDForm>
+            <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId} userID={userId}></PostRCDForm>
         </Container >
     )
 }

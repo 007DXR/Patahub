@@ -9,7 +9,7 @@ import { GoX, GoPlus, GoCheck } from 'react-icons/go';
 import { RiEditFill } from 'react-icons/ri';
 import { getDatasetById } from '../../Data/dataset.js';
 import { getCodesetById } from '../../Data/codeset.js';
-import { getResultLink } from '../../Data/rcd.js';
+import { getResultLink, getResultDetail } from '../../Data/rcd.js';
 
 function RCDOverView(props) {
     // props.RCD must have keys {RCD}
@@ -18,7 +18,8 @@ function RCDOverView(props) {
     }
     const [codesetLink, setCodeSetLink] = useState('');
     const [datasetLink, setDataSetLink] = useState('');
-    const [resultLink, setResultLink] = useState('');
+    // const [resultLink, setResultLink] = useState('');
+    const [resultDetail, setResultDetail] = useState('');
 
     useEffect(() => {
         getDatasetById(props.RCD.dataset_id).then((data, err) => {
@@ -29,9 +30,13 @@ function RCDOverView(props) {
             if (data.length > 0) setCodeSetLink(data[0].codeset_link);
             else throw (err || 'error no valid codeset');
         });
-        getResultLink(props.RCD.result_id).then((data, err) => {
+        // getResultLink(props.RCD.result_id).then((data, err) => {
+        //     if (err) throw err;
+        //     setResultLink(data);
+        // });
+        getResultDetail(props.RCD.result_id).then((data, err) => {
             if (err) throw err;
-            setResultLink(data);
+            setResultDetail(data);
         });
     }, []);
 
@@ -39,7 +44,9 @@ function RCDOverView(props) {
         <Row>
             <Col>
                 <Link to={`/RCDInfo/${props.repoName}/${props.RCD.rcd_id}`}>
-                    <Image src={resultLink} style={{ height: '50px' }} />
+                    {/* <Image src={resultLink} style={{ height: '50px' }} /> */}
+                    <div>{resultDetail[0]}</div>
+                    <div>{resultDetail[1]}</div>
                 </Link>
             </Col>
             <Col>
@@ -56,6 +63,7 @@ function RCDOverView(props) {
                     </Col>)
                     : <React.Fragment />
             }
+            <div>makefile: {props.RCD.makefile}</div>
         </Row>
     )
 }

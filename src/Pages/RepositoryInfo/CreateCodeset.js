@@ -3,6 +3,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateCodeset } from '../../Data/codeset';
 
 function CreateCodesetForm(props) {
+    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [CodesetName, setCodesetName] = useState("");
     const [CodesetLink, setCodesetLink] = useState("");
@@ -19,7 +20,7 @@ function CreateCodesetForm(props) {
         }
         else {
             setValidated(false)
-            const res = CreateCodeset(CodesetName, CodesetLink);
+            const res = CreateCodeset(userID, CodesetName, CodesetLink);
             if (res) {
                 props.onHide();
             }

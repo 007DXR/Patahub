@@ -22,11 +22,12 @@ function DeleteRepoAlert(props) {
 }
 
 function DeleteRepoButton(props) {
+    const userID = 1;
     const [deleteRepoFailure, setDeleteRepoFailure] = useState(false)
     return (
         <React.Fragment>
             <Button variant="primary h-50 align-self-center" onClick={async function () {
-                const success = await DeleteRepo(props.paper_id)
+                const success = await DeleteRepo(userID, props.paper_id)
                 if (success) window.location.replace('/')
                 else setDeleteRepoFailure(true)
             }}

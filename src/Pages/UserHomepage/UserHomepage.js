@@ -30,7 +30,7 @@ function CodesetCard(props) {
                     <Button onClick={function (event) {
                         event.stopPropagation()
                         console.log(props.codeset.codeset_id)
-                        const res = DeleteCodeset(props.codeset.codeset_id)
+                        const res = DeleteCodeset(props.userID, props.codeset.codeset_id)
                         if (res) window.location.reload();
                     }} className="btn-sm btn-danger"><BsFillTrashFill /></Button>
                 </Card.Body>
@@ -51,7 +51,7 @@ function CodesetCardList(props) {
     }, []);
     return (
         <React.Fragment>
-            {codesetList.map((codeset) => <CodesetCard codeset={codeset}
+            {codesetList.map((codeset) => <CodesetCard codeset={codeset} userID={props.userID}
                 onEdit={() => { setCodesetEditing(true); setEditingCodeset(codeset) }}></CodesetCard>
             )}
             <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
@@ -77,7 +77,7 @@ function DatasetCard(props) {
                     <Button onClick={function (event) {
                         event.stopPropagation()
                         console.log(props.dataset.dataset)
-                        const res = DeleteDataset(props.dataset.dataset_id)
+                        const res = DeleteDataset(props.userID, props.dataset.dataset_id)
                         if (res) window.location.reload();
                     }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button>
                 </Card.Body>
@@ -98,7 +98,7 @@ function DatasetCardList(props) {
     }, []);
     return (
         <React.Fragment>
-            {datasetList.map((dataset) => <DatasetCard dataset={dataset}
+            {datasetList.map((dataset) => <DatasetCard dataset={dataset} userID={props.userID}
                 onEdit={() => { setDatasetEditing(true); setEditingDataset(dataset) }}></DatasetCard>
             )}
             <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>

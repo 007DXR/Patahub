@@ -28,6 +28,7 @@ export function CreateDatasetButton() {
 }
 
 function CreateDatasetPage(props) {
+    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [DatasetName, setDatasetName] = useState("");
     const [DatasetLink, setDatasetLink] = useState("");
@@ -47,7 +48,7 @@ function CreateDatasetPage(props) {
         else {
             setIfAlert(true);
             setValidated(false);
-            const res = CreateDataset(DatasetName, DatasetLink);
+            const res = CreateDataset(userID, DatasetName, DatasetLink);
             if (res) {
                 setSucc(true);
             }

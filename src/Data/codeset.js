@@ -28,10 +28,10 @@ export async function getCodesetById(codeset_id) {
 }
 
 
-export function CreateCodeset(codesetName, codesetLink) {
+export function CreateCodeset(userID, codesetName, codesetLink) {
     let res = null;
     const data = {
-        user_id: 1,
+        user_id: userID,
         codeset_name: codesetName,
         codeset_link: codesetLink
     }
@@ -40,7 +40,7 @@ export function CreateCodeset(codesetName, codesetLink) {
 
     $.ajax({
         type: "post",
-        url: "/api/codeset",
+        url: `/api/codeset?cur_user_id=${userID}`,
         data: JSON.stringify(data),
         contentType: "application/json",
         async: false,
@@ -53,10 +53,10 @@ export function CreateCodeset(codesetName, codesetLink) {
     return res
 }
 
-export function EditCodeset(codesetID, codesetName, codesetLink){
+export function EditCodeset(userID, codesetID, codesetName, codesetLink){
     let res = false;
     const data = {
-        user_id: 1,
+        user_id: userID,
         codeset_name: codesetName,
         codeset_link: codesetLink,
         codeset_id: codesetID
@@ -64,7 +64,7 @@ export function EditCodeset(codesetID, codesetName, codesetLink){
 
     $.ajax({
         type: "post",
-        url: "/api/codeset",
+        url: `/api/codeset?cur_user_id=${userID}`,
         data: JSON.stringify(data),
         contentType: "application/json",
         async: false,
@@ -77,11 +77,11 @@ export function EditCodeset(codesetID, codesetName, codesetLink){
     return res
 }
 
-export function DeleteCodeset(codesetID) {
+export function DeleteCodeset(userID, codesetID) {
     let res = null;
     $.ajax({
         type: "delete",
-        url: `/api/codeset?codeset_id=${codesetID}`,
+        url: `/api/codeset?cur_user_id=${userID}&codeset_id=${codesetID}`,
         async: false,
         success: (data) => { res = data },
         error: function (XMLHttpRequest, texterror) {
