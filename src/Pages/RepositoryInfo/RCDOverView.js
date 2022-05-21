@@ -49,11 +49,14 @@ function RCDOverView(props) {
                     <div>{resultDetail[1]}</div>
                 </Link>
             </Col>
-            <Col>
+            {/* <Col>
                 <GithubRepoInfo link={codesetLink}>somecode</GithubRepoInfo>
-            </Col>
+            </Col> */}
             <Col>
                 <GithubRepoInfo link={datasetLink}>somedata</GithubRepoInfo>
+            </Col>
+            <Col>
+                <div>{props.RCD.makefile}</div>
             </Col>
             {
                 props.needEdit ? (
@@ -63,7 +66,7 @@ function RCDOverView(props) {
                     </Col>)
                     : <React.Fragment />
             }
-            <div>makefile: {props.RCD.makefile}</div>
+            
         </Row>
     )
 }

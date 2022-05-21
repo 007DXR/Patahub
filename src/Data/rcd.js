@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { parseGithubLink } from "./github.js"
+import { searchRepositories } from './link.js';
 
 export async function getResult(resultID) {
     const data = {
@@ -20,6 +21,14 @@ export async function getResultDetail(resultID) {
         if (err) throw err;
         return [data[0].result_description, data[0].result_value];
     })
+}
+
+export async function getPaperById(repoID) {
+    return await searchRepositories({paper_id: repoID}).then((data, err) => {
+        if (err) throw err;
+        return data[0];
+    });
+    // return searchRepositories({ paper_id: repoID });
 }
 
 export async function CreateRCD(userID, paperID, resultID, datasetID, codesetID, makefile, rcdID) {
