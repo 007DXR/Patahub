@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateDataset } from '../../Data/dataset';
+import { UserInfo } from '../Utilities/auth';
 
 function CreateDatasetForm(props) {
-    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [DatasetName, setDatasetName] = useState("");
     const [DatasetLink, setDatasetLink] = useState("");
@@ -15,19 +15,15 @@ function CreateDatasetForm(props) {
         const form = event.currentTarget;
         let valid = form.checkValidity();
         if (!valid) {
-            setValidated(true)
+            setValidated(true);
             event.stopPropagation();
         }
         else {
-            setValidated(false)
-            const res = CreateDataset(userID, DatasetName, DatasetLink);
-            if (res) {
-                props.onHide();
-            }
-            else {
-                // setCreateRepoFailure(true)
-                alert("error");
-            }
+            setValidated(false);
+            CreateDataset(UserInfo.token, DatasetName, DatasetLink).then((data, err) => {
+                if(data)props.onHide();
+                else alert(err);
+            });
         }
     };
 

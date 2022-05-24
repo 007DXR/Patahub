@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateDataset, EditDataset } from '../../Data/dataset';
+import { UserInfo } from '../Utilities/auth';
 
 function EditDatasetForm(props) {
-    console.log("dataset",props.dataset);
-    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [datasetName, setDatasetName] = useState(props.dataset.dataset_name);
     const [datasetLink, setDatasetLink] = useState(props.dataset.dataset_link);
@@ -26,15 +25,10 @@ function EditDatasetForm(props) {
         }
         else {
             setValidated(false)
-            const res = EditDataset(userID, props.dataset.dataset_id, datasetName, datasetLink);
-            if (res) {
-                props.onHide();
-                window.location.reload();
-            }
-            else {
-                // setCreateRepoFailure(true)
-                alert("error");
-            }
+            EditDataset(UserInfo.token, props.dataset.dataset_id, datasetName, datasetLink).then((data, err) => {
+                if(data)window.location.reload();
+                else alert(err);
+            });
         }
     };
 

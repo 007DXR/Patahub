@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Image, Button, Table, Card } from 'react-bootstrap';
 import { Link, useParams } from "react-router-dom";
-import { getAllCodesetByUser, DeleteCodeset } from '../../Data/codeset';
 import { getAllDatasetByUser, DeleteDataset } from '../../Data/dataset';
 import './scroll.css';
-import CreateCodesetForm from '../RepositoryInfo/CreateCodeset';
 import CreateDatasetForm from '../RepositoryInfo/CreateDataset';
-import EditCodesetForm from '../RepositoryInfo/EditCodeset';
 import EditDatasetForm from '../RepositoryInfo/EditDataset';
 import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
 import { UserAvatar } from '../../User.js'
@@ -14,58 +11,13 @@ import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import { UserInfo } from '../Utilities/auth';
 
-function CodesetCard(props) {
-    const [showEdit, setShowEdit] = useState(false);
-    const editCodeset = () => {
-        props.onEdit();
-        setShowEdit(true);
-    };
-
-    return (
-        <>
-            <Card className="mt-3" onClick={editCodeset}>
-                <Card.Title>{props.codeset.codeset_name}</Card.Title>
-                <Card.Body>
-                    {props.codeset.codeset_link}
-                    <p />
-                    <Button onClick={function (event) {
-                        event.stopPropagation()
-                        console.log(props.codeset.codeset_id)
-                        const res = DeleteCodeset(UserInfo.token, props.codeset.codeset_id)
-                        if (res) window.location.reload();
-                    }} className="btn-sm btn-danger"><BsFillTrashFill /></Button>
-                </Card.Body>
-            </Card>
-        </>
-    )
-}
-
-function CodesetCardList(props) {
-    const [codesetList, setCodesetList] = useState([]);
-    const [codesetCreating, setCodesetCreating] = useState(false);
-    const [codesetEditing, setCodesetEditing] = useState(false);
-    const [editingCodeset, setEditingCodeset] = useState({});
-    useEffect(() => {
-        getAllCodesetByUser(props.userID).then((data, err) => {
-            setCodesetList(data);
-        })
-    }, []);
-    return (
-        <React.Fragment>
-            {codesetList.map((codeset) => <CodesetCard codeset={codeset} userID={props.userID}
-                onEdit={() => { setCodesetEditing(true); setEditingCodeset(codeset) }}></CodesetCard>
-            )}
-            <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
-            <EditCodesetForm show={codesetEditing} onHide={() => setCodesetEditing(false)} codeset={editingCodeset}></EditCodesetForm>
-        </React.Fragment>
-    )
-}
-
 function DatasetCard(props) {
     const [showEdit, setShowEdit] = useState(false);
     const editDataset = () => {
-        props.onEdit();
-        setShowEdit(true);
+        if(props.edit){
+            props.onEdit();
+            setShowEdit(true);
+        }
     };
 
     return (
@@ -73,15 +25,20 @@ function DatasetCard(props) {
             <Card className="mt-3" onClick={editDataset}>
                 <Card.Title>{props.dataset.dataset_name}</Card.Title>
                 <Card.Body>
+                    <p>
                     {props.dataset.dataset_link}
-                    <p />
-                    <Button onClick={function (event) {
+                    </p>
+                    { props.edit ? <Button onClick={function (event) {
                         event.stopPropagation()
                         console.log(props.dataset.dataset)
-                        const res = DeleteDataset(props.userID, props.dataset.dataset_id)
-                        if (res) window.location.reload();
+                        DeleteDataset(UserInfo.token, props.dataset.dataset_id).then((data, err) => {
+                            if(data)window.location.reload();
+                            else alert(err);
+                        });
                     }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button>
-                </Card.Body>
+                    : null}
+                </Card.Body> 
+                
             </Card>
         </>
     )
@@ -99,8 +56,8 @@ function DatasetCardList(props) {
     }, []);
     return (
         <React.Fragment>
-            {datasetList.map((dataset) => <DatasetCard dataset={dataset} userID={props.userID}
-                onEdit={() => { setDatasetEditing(true); setEditingDataset(dataset) }}></DatasetCard>
+            {datasetList.map((dataset) => <DatasetCard dataset={dataset} userID={props.userID} edit={props.edit}
+                onEdit={() => { setDatasetEditing(true); setEditingDataset(dataset) }}> </DatasetCard>
             )}
             <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
             <EditDatasetForm show={datasetEditing} onHide={() => setDatasetEditing(false)} dataset={editingDataset}></EditDatasetForm>
@@ -110,18 +67,17 @@ function DatasetCardList(props) {
 
 function UserProfile(props) {
     return (
-        <UserAvatar></UserAvatar>
+        <Container className='mt-5'>
+            <Row className='h4'>{props.userName}'s homepage</Row>
+        </Container>
     )
 }
 
 function UserOverview(props) {
     return (
-        <Tabs defaultActiveKey="Codesets" className="mb-3">
-            <Tab eventKey="Codesets" title="Codesets">
-                <CodesetCardList/>
-            </Tab>
+        <Tabs defaultActiveKey="Datasets" className="mb-3">
             <Tab eventKey="Datasets" title="Datasets">
-                <DatasetCardList/>
+                <DatasetCardList edit={props.edit}/>
             </Tab>
         </Tabs>
     )
@@ -129,13 +85,11 @@ function UserOverview(props) {
 
 function UserHomepage(props) {
     const userName = useParams().userName;
-    const userID = UserInfo.token;
-
     return (
-        <Container>
+        <Container className='mt-2'>
             <Row>
-                <Col xs={4}><UserProfile /></Col>
-                <Col xs={8}><UserOverview/></Col>
+                <Col xs={4}><UserProfile userName={userName}/></Col>
+                <Col xs={8}><UserOverview edit={String(userName) == String(UserInfo.userName)}/></Col>
             </Row>
         </Container>
     )

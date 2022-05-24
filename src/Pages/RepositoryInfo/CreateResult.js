@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateResult, getResultListByPaper } from '../../Data/result';
+import { UserInfo } from '../Utilities/auth';
 
 function CreateResultForm(props) {
     const userID = 1;
@@ -25,7 +26,7 @@ function CreateResultForm(props) {
         }
         else {
             setValidated(false)
-            const res = CreateResult(userID, resultName, resultDescription, resultValue, props.paperID);
+            const res = CreateResult(UserInfo.token, resultName, resultDescription, resultValue, props.paperID);
             if (res) {
                 props.onHide();
             }

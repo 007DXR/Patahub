@@ -11,10 +11,9 @@ export async function getResultListByPaper(paperID){
     return $.get('/api/result', data);
 }
 
-export function CreateResult(userID, resultName, resultDescription, resultValue, paperID){
+export function CreateResult(token, resultName, resultDescription, resultValue, paperID){
     let res = null;
     const data = {
-        user_id: userID,
         // result_type: resultType,
         result_name: resultName,
         result_description: resultDescription,
@@ -26,13 +25,16 @@ export function CreateResult(userID, resultName, resultDescription, resultValue,
 
     $.ajax({
         type: "post",
-        url: `/api/result?cur_user_id=${userID}`,
+        url: `/api/result`,
         data: JSON.stringify(data),
         contentType: "application/json",
         async: false,
         success: (data) => {res = data},
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
+        },
+        headers:{
+            Authorization: token
         }
     });
     return res

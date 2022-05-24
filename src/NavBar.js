@@ -8,7 +8,6 @@ import { getAllRepositories, searchRepositories } from './Data/link';
 import SearchBar from './SearchBar.js';
 import { CreateRepoButton } from './Pages/AllRepositories/CreateRepo.js'
 import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
-import { CreateCodesetButton } from './Pages/RepositoryInfo/CreateCodesetPage';
 import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
 import CreateButton from './Create.js'
 import User from './User.js'
@@ -24,7 +23,7 @@ function NavBar(props) {
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
                 <CreateButton />
                 <div className='ms-auto me-auto'></div>
-                <User UserInfo={UserInfo} setUserInfo={setUserInfo}/>
+                <User/>
             </Container>
         </Navbar>
     );

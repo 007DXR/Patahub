@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateDataset } from '../../Data/dataset';
 import { GoPlus } from 'react-icons/go';
+import { UserInfo } from '../Utilities/auth';
 
 function CreateDatasetAlert(props) {
     return (
@@ -28,7 +29,6 @@ export function CreateDatasetButton() {
 }
 
 function CreateDatasetPage(props) {
-    const userID = 1;
     const [validated, setValidated] = useState(false);
     const [DatasetName, setDatasetName] = useState("");
     const [DatasetLink, setDatasetLink] = useState("");
@@ -48,7 +48,7 @@ function CreateDatasetPage(props) {
         else {
             setIfAlert(true);
             setValidated(false);
-            const res = CreateDataset(userID, DatasetName, DatasetLink);
+            const res = CreateDataset(UserInfo.token, DatasetName, DatasetLink);
             if (res) {
                 setSucc(true);
             }

@@ -3,11 +3,11 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { CreateRCD } from '../../Data/rcd';
 import { CreateResult, getResultListByPaper } from '../../Data/result';
 import CreateResultForm from './CreateResult';
-import CreateCodesetForm from './CreateCodeset';
 import { getAllCodesetByUser } from '../../Data/codeset';
 import { getAllDatasetByUser } from '../../Data/dataset';
 import CreateDatasetForm from './CreateDataset';
 import { GoPlus } from 'react-icons/go';
+import { UserInfo } from '../Utilities/auth';
 
 function PostRCDForm(props) {
     // console.log("debug", props.RCD.paperId, props.fixedPaperID)
@@ -55,14 +55,15 @@ function PostRCDForm(props) {
             let res;
             if (props.onCreate) {
                 // res = await CreateRCD(paperID, resultID, datasetID, codesetID, makefile, null);
-                res = await CreateRCD(props.userID, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, null);
+                res = await CreateRCD(UserInfo.token, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, null);
             }
             if (props.onEdit) {
                 console.log('edit', resultID)
-                res = await CreateRCD(props.userID, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, props.RCD.rcd_id);
+                res = await CreateRCD(UserInfo.token, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, props.RCD.rcd_id);
             }
             //console.log(res)
             if (res) {
+                
                 props.onHide();
                 window.location.reload();
             }
@@ -88,11 +89,11 @@ function PostRCDForm(props) {
             setResultList(data);
             //console.log("resultlist", data)
         })
-        getAllCodesetByUser(props.userID).then((data, err) => {
+        getAllCodesetByUser().then((data, err) => {
             setCodesetList(data);
             //console.log("codesetlist", data)
         })
-        getAllDatasetByUser(props.userID).then((data, err) => {
+        getAllDatasetByUser().then((data, err) => {
             setDatasetList(data);
             //console.log("datasetlist", data)
         })
@@ -179,7 +180,7 @@ function PostRCDForm(props) {
                                 Please choose a result.
                             </Form.Control.Feedback>
                         </Form.Group>
-
+                        {/*
                         <Form.Group className="mb-3">
                             <Form.Label>Codeset</Form.Label>
                             {
@@ -210,7 +211,7 @@ function PostRCDForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        {/* <Form.Group className="mb-3">
+                         <Form.Group className="mb-3">
                             <Form.Label>code link</Form.Label>
                             <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required placeholder="/blob/main/code.py"/>
                             <Form.Control.Feedback type="invalid">
@@ -265,7 +266,6 @@ function PostRCDForm(props) {
                 </Modal.Body>
             </Modal>
             <CreateResultForm show={resultCreating} paperID={paperID} onHide={() => setResultCreating(false)}></CreateResultForm>
-            <CreateCodesetForm show={codesetCreating} onHide={() => setCodesetCreating(false)}></CreateCodesetForm>
             <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
         </React.Fragment>
     )

@@ -3,6 +3,7 @@ import avatar from './logo.png';
 import sha256 from 'crypto-js/sha256';
 import { Modal, Form, Button } from 'react-bootstrap';
 import {tryLogin, tryRegister, tryLogout} from './Data/User.js'
+import { setUserInfo, UserInfo } from './Pages/Utilities/auth';
 
 function passwordCrypto(pw){
     return sha256('PatahubQWQQWwqwqwqwq' + pw + '233333333NeverGonnaGiveUUp').toString();
@@ -42,7 +43,7 @@ function User(props) {
                         userName,
                         token: data["token_type"] + ' ' + data["access_token"],
                     };
-                    props.setUserInfo(Info);
+                    setUserInfo(Info);
                     window.localStorage.setItem('UserInfo', JSON.stringify(Info));
                     window.location.reload();
                 }
@@ -121,9 +122,9 @@ function User(props) {
         window.location.reload();
     };
 
-    return props.UserInfo ? (
+    return UserInfo.userName ? (
         <React.Fragment>
-            <UserName userName={props.UserInfo.userName}></UserName>
+            <UserName userName={UserInfo.userName}></UserName>
             <Button onClick={Logout}>Logout</Button>
         </React.Fragment>
     ) : (

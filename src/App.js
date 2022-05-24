@@ -12,18 +12,19 @@ import Search from './Pages/Search/Search.js'
 import AdvancedSearch from './Pages/Search/AdvancedSearch.js'
 import ReactMarkdown from 'react-markdown'
 import 'highlight.js/styles/default.css';
-import CreateCodesetPage from './Pages/RepositoryInfo/CreateCodesetPage.js';
 import CreateDatasetPage from './Pages/RepositoryInfo/CreateDatasetPage.js';
 import initAuth from './Pages/Utilities/auth.js';
 
 
 function App() {
-    const [UserInfo, setUserInfo] = useState({});
+    const [UserInfo, setUserInfo] = useState({
+        userName: undefined,
+    });
     initAuth([UserInfo, setUserInfo]);
     useEffect(() => {
-        setUserInfo(JSON.parse(window.localStorage.getItem('UserInfo')));
-        if(Object.prototype.toString.call(UserInfo) !== "[object Object]")
-            setUserInfo({});
+        let saved = JSON.parse(window.localStorage.getItem('UserInfo'));
+        if(Object.prototype.toString.call(saved) == "[object Object]")
+            setUserInfo(saved);
     }, []);
     return (
         <div className="App">
@@ -37,7 +38,6 @@ function App() {
                     <Route path="/" element={<AllRepositories />} />
                     <Route path="/createRepo" element={<CreateRepoForm />} />
                     <Route path="/updateRepo/:paper_id" element={<CreateRepoForm update={true} />} />
-                    <Route path="/createCodeset" element={<CreateCodesetPage />} />
                     <Route path="/createDataset" element={<CreateDatasetPage />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />

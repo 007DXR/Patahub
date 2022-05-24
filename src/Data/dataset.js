@@ -17,76 +17,61 @@ export async function getDatasetLinkByID(datasetID){
     })
 }
 
-export async function getAllDatasetByUser(userID){
-    const data = {
-        user_id: userID
-    }
-    return $.get('/api/dataset', data);
+export async function getAllDatasetByUser(){
+    return $.get('/api/dataset');
 }
 
 export async function getDatasetById(dataset_id){
     return $.get('/api/dataset', {dataset_id});
 }
 
-export function CreateDataset(userID, datasetName, datasetLink){
-    let res = null;
+export function CreateDataset(token, datasetName, datasetLink){
     const data = {
-        user_id: userID,
         dataset_name: datasetName,
         dataset_link: datasetLink
     }
     
     // console.log("post data", data);
 
-    $.ajax({
+    return $.ajax({
         type: "post",
-        url: `/api/dataset?cur_user_id=${userID}`,
+        url: `/api/dataset`,
         data: JSON.stringify(data),
         contentType: "application/json",
-        async: false,
-        success: (data) => {res = data},
-        error: function (XMLHttpRequest, texterror) {
-            alert(XMLHttpRequest.responseText);
+        headers:{
+            Authorization: token
         }
     });
-    console.log("post data", res)
-    return res
 }
 
-export function EditDataset(userID, datasetID, datasetName, datasetLink){
-    let res = false;
+export function EditDataset(token, datasetID, datasetName, datasetLink){
     const data = {
-        user_id: userID,
         dataset_name: datasetName,
         dataset_link: datasetLink,
-        dataset_id: datasetID
     }
 
-    $.ajax({
-        type: "post",
-        url: `/api/dataset?cur_user_id=${userID}`,
+    return $.ajax({
+        type: "put",
+        url: `/api/dataset/${datasetID}`,
         data: JSON.stringify(data),
         contentType: "application/json",
-        async: false,
-        success: () => {res = true},
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
+        },
+        headers:{
+            Authorization: token
         }
     });
-    console.log("post data", res)
-    return res
 }
-export function DeleteDataset(userID, datasetID) {
-    let res = null;
-    $.ajax({
+export function DeleteDataset(token, datasetID) {
+    return $.ajax({
         type: "delete",
-        url: `/api/dataset?cur_user_id=${userID}&dataset_id=${datasetID}`,
-        async: false,
-        success: (data) => { res = data },
+        url: `/api/dataset?dataset_id=${datasetID}`,
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
+        },
+        headers:{
+            Authorization: token
         }
     });
-    console.log("post data", res)
-    return res
 }

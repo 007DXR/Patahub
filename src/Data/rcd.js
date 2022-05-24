@@ -31,39 +31,34 @@ export async function getPaperById(repoID) {
     // return searchRepositories({ paper_id: repoID });
 }
 
-export async function CreateRCD(userID, paperID, resultID, datasetID, codesetID, makefile, rcdID) {
+export async function CreateRCD(token, paperID, resultID, datasetID, codesetID, makefile, rcdID) {
     let succ = false;
     let data;
-    console.log('result id', resultID)
     if (rcdID === null) {
         data = {
-            user_id: userID,
             paper_id: paperID,
             result_id: resultID,
-            codeset_id: codesetID,
+            //codeset_id: codesetID,
             dataset_id: datasetID,
             // code_link: codeLink,
             // data_link: dataLink
             makefile: makefile
-        }
+        };
     } else {
         data = {
-            user_id: userID,
             paper_id: paperID,
             result_id: resultID,
-            codeset_id: codesetID,
+            //codeset_id: codesetID,
             dataset_id: datasetID,
             // code_link: codeLink,
             // data_link: dataLink,
             makefile: makefile,
-            rcd_id: rcdID
         }
     }
 
-    console.log("post data",data);
     await $.ajax({
-        type: "post",
-        url: `/api/rcd?cur_user_id=${userID}`,
+        type: rcdID ? "put" : "post",
+        url: `/api/rcd/` + (rcdID ? rcdID : ''),
         data: JSON.stringify(data),
         contentType: "application/json",
         async: true,
@@ -73,9 +68,11 @@ export async function CreateRCD(userID, paperID, resultID, datasetID, codesetID,
             // succ = false;
             // res = XMLHttpRequest.responseText;
             alert(XMLHttpRequest.responseText);
+        },
+        headers:{
+            Authorization: token
         }
     });
-    console.log("post data", succ)
     // return $.post('/api/rcd',data);
     return succ//[succ, res]
 }
