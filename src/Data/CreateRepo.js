@@ -1,45 +1,40 @@
 import $ from 'jquery'
 
-export async function CreateRepo(userID, paperName, paperLink, dockerLink, paperAbstract) {
+export async function CreateRepo(token, params) {
     let res = null
-    const data = JSON.stringify({
-        user_id: userID,
-        paper_name: paperName,
-        paper_link: paperLink,
-        docker_link: dockerLink,
-        paper_abstract: paperAbstract
-    })
+    const data = JSON.stringify(params)
     await $.ajax({
         type: "post",
-        url: `/api/paper?cur_user_id=${userID}`,
+        url: `/api/paper`,
         data: data,
         contentType: "application/json",
         success: (data) => res = data,
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
+        },
+        headers:{
+            Authorization: token
         }
     });
     return res
 }
 
-export async function UpdateRepo(userID, paperId, paperName, paperLink, dockerLink, paperAbstract) {
+export async function UpdateRepo(token, paperId, params) {
     let res = null
-    const data = JSON.stringify({
-        user_id: userID,
-        paper_id: paperId,
-        paper_name: paperName,
-        paper_link: paperLink,
-        docker_link: dockerLink,
-        paper_abstract: paperAbstract
-    })
+    let Params = Object.Object(params);
+    Params.paper_id = paperId;
+    const data = JSON.stringify(Params);
     await $.ajax({
         type: "post",
-        url: `/api/paper?cur_user_id=${userID}`,
+        url: `/api/paper`,
         data: data,
         contentType: "application/json",
         success: (data) => res = data,
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
+        },
+        headers:{
+            Authorization: token
         }
     });
     return res

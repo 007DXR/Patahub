@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import SimpleForm from '../Utilities/SimpleForm';
 
 const keys = {
     paper: ['paper_name','paper_id'],
@@ -41,12 +42,7 @@ function AdvancedSearch(props){
                 <option value="rcd">RCD</option>
             </Form.Select>
         </Container>
-        {searchType?keys[searchType].map((key)=>(
-            <Container className='d-flex mt-3'>
-                <Form.Label for={key} className="my-auto" style={{whiteSpace:'nowrap'}}>{key}</Form.Label>
-                <Form.Control id={key} value={searchArgs[key]} className="ms-auto w-75" onChange={(event) => handleArgChange(key,event.target.value)}/>
-            </Container>
-        )):null}
+        {searchType?<SimpleForm keys={keys[searchType]} value={searchArgs} setValue={setSearchArgs}/>:null}
         <Button type="submit" className='mt-3' disabled={!searchType} >Search</Button>
     </Form>);
 }

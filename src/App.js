@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import NavBar from './NavBar.js';
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import AllRepositories from './Pages/AllRepositories/AllRepositories.js'
@@ -14,15 +14,24 @@ import ReactMarkdown from 'react-markdown'
 import 'highlight.js/styles/default.css';
 import CreateCodesetPage from './Pages/RepositoryInfo/CreateCodesetPage.js';
 import CreateDatasetPage from './Pages/RepositoryInfo/CreateDatasetPage.js';
+import initAuth from './Pages/Utilities/auth.js';
+
 
 function App() {
+    const [UserInfo, setUserInfo] = useState({});
+    initAuth([UserInfo, setUserInfo]);
+    useEffect(() => {
+        setUserInfo(JSON.parse(window.localStorage.getItem('UserInfo')));
+        if(Object.prototype.toString.call(UserInfo) !== "[object Object]")
+            setUserInfo({});
+    }, []);
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path="/advancedSearch" element={<NavBar disableSearchbar />} />
-                    <Route path="/*" element={<NavBar />} />
-                    <Route path="/repositoryInfo/:repoName" element={<NavBar deleteRepoButton />} />
+                    <Route path="/advancedSearch" element={<NavBar disableSearchbar/>} />
+                    <Route path="/*" element={<NavBar/>}/>
+                    <Route path="/repositoryInfo/:repoName" element={<NavBar deleteRepoButton/>} />
                 </Routes>
                 <Routes>
                     <Route path="/" element={<AllRepositories />} />

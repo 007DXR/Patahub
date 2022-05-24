@@ -12,6 +12,7 @@ import { CreateCodesetButton } from './Pages/RepositoryInfo/CreateCodesetPage';
 import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
 import CreateButton from './Create.js'
 import User from './User.js'
+import {UserInfo, setUserInfo} from './Pages/Utilities/auth.js'
 
 function NavBar(props) {
     return (
@@ -23,7 +24,7 @@ function NavBar(props) {
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
                 <CreateButton />
                 <div className='ms-auto me-auto'></div>
-                <User />
+                <User UserInfo={UserInfo} setUserInfo={setUserInfo}/>
             </Container>
         </Navbar>
     );

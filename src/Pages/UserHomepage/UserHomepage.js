@@ -12,6 +12,7 @@ import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
 import { UserAvatar } from '../../User.js'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
+import { UserInfo } from '../Utilities/auth';
 
 function CodesetCard(props) {
     const [showEdit, setShowEdit] = useState(false);
@@ -30,7 +31,7 @@ function CodesetCard(props) {
                     <Button onClick={function (event) {
                         event.stopPropagation()
                         console.log(props.codeset.codeset_id)
-                        const res = DeleteCodeset(props.userID, props.codeset.codeset_id)
+                        const res = DeleteCodeset(UserInfo.token, props.codeset.codeset_id)
                         if (res) window.location.reload();
                     }} className="btn-sm btn-danger"><BsFillTrashFill /></Button>
                 </Card.Body>
@@ -92,7 +93,7 @@ function DatasetCardList(props) {
     const [datasetEditing, setDatasetEditing] = useState(false);
     const [editingDataset, setEditingDataset] = useState({});
     useEffect(() => {
-        getAllDatasetByUser(props.userID).then((data, err) => {
+        getAllDatasetByUser().then((data, err) => {
             setDatasetList(data);
         })
     }, []);
@@ -109,7 +110,7 @@ function DatasetCardList(props) {
 
 function UserProfile(props) {
     return (
-        <UserAvatar userName="user"></UserAvatar>
+        <UserAvatar></UserAvatar>
     )
 }
 
@@ -117,10 +118,10 @@ function UserOverview(props) {
     return (
         <Tabs defaultActiveKey="Codesets" className="mb-3">
             <Tab eventKey="Codesets" title="Codesets">
-                <CodesetCardList userID={props.userID} />
+                <CodesetCardList/>
             </Tab>
             <Tab eventKey="Datasets" title="Datasets">
-                <DatasetCardList userID={props.userID} />
+                <DatasetCardList/>
             </Tab>
         </Tabs>
     )
@@ -128,13 +129,13 @@ function UserOverview(props) {
 
 function UserHomepage(props) {
     const userName = useParams().userName;
-    const userID = 1;
+    const userID = UserInfo.token;
 
     return (
         <Container>
             <Row>
                 <Col xs={4}><UserProfile /></Col>
-                <Col xs={8}><UserOverview userID={userID} /></Col>
+                <Col xs={8}><UserOverview/></Col>
             </Row>
         </Container>
     )
