@@ -51,13 +51,14 @@ function RepositoryInfo(props) {
     }
 
     return (
-        <Container className='pt-5'>
-            <p class="fs-1 text-start">{paperInfo.paper_name}</p>
-            <div class="text-start">Link: <a  href={paperInfo.paper_link}>{paperInfo.paper_link}</a></div>
-            <p class="text-start">Abstract: {paperInfo.paper_abstract}</p>
-            {/* <p class="text-start"style={{textAlign:'left'}}>{paperInfo.paper_link}</p> */}
-            <p class="text-start">Docker: {paperInfo.docker_link}</p>
-            {/* <>{paperInfo.codeset}</> */}
+        <Container className='pt-5 pb-5'>
+            <div className='mb-5 text-start'>
+            <p class='fs-1'>{paperInfo.paper_name}</p>
+            <div ><b>Link: </b><a  href={paperInfo.paper_link}>{paperInfo.paper_link}</a></div>
+            <div ><b>Code: </b><a  href={paperInfo.codeset_link}>{paperInfo.codeset_link}</a></div>
+            <div ><b>Docker: </b>{paperInfo.docker_link}</div>
+            <div ><b>Abstract: </b>{paperInfo.paper_abstract}</div>
+            </div>
             {RCDList.length>0?(
                 <Row className="mt-5">
                     <Col>Result</Col>

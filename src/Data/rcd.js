@@ -19,7 +19,7 @@ export async function getResultLink(resultID) {
 export async function getResultDetail(resultID) {
     return await getResult(resultID).then((data, err) => {
         if (err) throw err;
-        return [data[0].result_description, data[0].result_value];
+        return data[0];
     })
 }
 
@@ -31,7 +31,7 @@ export async function getPaperById(repoID) {
     // return searchRepositories({ paper_id: repoID });
 }
 
-export async function CreateRCD(token, paperID, resultID, datasetID, codesetID, makefile, rcdID) {
+export async function CreateRCD(token, paperID, resultID, datasetID, makefile, rcdID) {
     let succ = false;
     let data;
     if (rcdID === null) {

@@ -14,14 +14,14 @@ function PostRCDForm(props) {
     const [paperID, setPaperID] = useState(props.fixedPaperID ? props.fixedPaperID : null);
     const [resultID, setResultID] = useState(null);
     const [datasetID, setDatasetID] = useState(null);
-    const [codesetID, setCodesetID] = useState(null);
+    // const [codesetID, setCodesetID] = useState(null);
     // const [dataLink, setDataLink] = useState("");
     // const [codeLink, setCodeLink] = useState("");
     const [makefile, setMakefile] = useState("");
     const onPaperIDInput = event => setPaperID(event.target.value);
     const onResultIDInput = event => setResultID(event.target.value);
     const onDatasetIDInput = event => setDatasetID(event.target.value);
-    const onCodesetIDInput = event => setCodesetID(event.target.value);
+    // const onCodesetIDInput = event => setCodesetID(event.target.value);
     // const onDataLinkInput = event => setDataLink(event.target.value);
     // const onCodeLinkInput = event => setCodeLink(event.target.value);
     const onMakefileInput = event => setMakefile(event.target.value);
@@ -33,8 +33,8 @@ function PostRCDForm(props) {
     const [resultList, setResultList] = useState([]);
     const [resultName, setResultName] = useState("");
 
-    const [codesetList, setCodesetList] = useState([]);
-    const [codesetName, setCodesetName] = useState("");
+    // const [codesetList, setCodesetList] = useState([]);
+    // const [codesetName, setCodesetName] = useState("");
 
     const [datasetList, setDatasetList] = useState([]);
     const [datasetName, setDatasetName] = useState("");
@@ -55,11 +55,11 @@ function PostRCDForm(props) {
             let res;
             if (props.onCreate) {
                 // res = await CreateRCD(paperID, resultID, datasetID, codesetID, makefile, null);
-                res = await CreateRCD(UserInfo.token, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, null);
+                res = await CreateRCD(UserInfo.token, parseInt(paperID), parseInt(resultID), parseInt(datasetID), makefile, null);
             }
             if (props.onEdit) {
                 console.log('edit', resultID)
-                res = await CreateRCD(UserInfo.token, parseInt(paperID), parseInt(resultID), parseInt(datasetID), parseInt(codesetID), makefile, props.RCD.rcd_id);
+                res = await CreateRCD(UserInfo.token, parseInt(paperID), parseInt(resultID), parseInt(datasetID), makefile, props.RCD.rcd_id);
             }
             //console.log(res)
             if (res) {
@@ -73,7 +73,7 @@ function PostRCDForm(props) {
         // setPaperID(props.fixedPaperID?props.RCD.paperId:null);
         setResultID(props.onEdit ? props.RCD.result_id : null);
         setDatasetID(props.onEdit ? props.RCD.dataset_id : null);
-        setCodesetID(props.onEdit ? props.RCD.codeset_id : null);
+        // setCodesetID(props.onEdit ? props.RCD.codeset_id : null);
         // setDataLink(props.onEdit ? props.RCD.data_link : "");
         // setCodeLink(props.onEdit ? props.RCD.code_link : "");
         setMakefile(props.onEdit ? props.RCD.makefile : "");
@@ -89,10 +89,10 @@ function PostRCDForm(props) {
             setResultList(data);
             //console.log("resultlist", data)
         })
-        getAllCodesetByUser().then((data, err) => {
-            setCodesetList(data);
-            //console.log("codesetlist", data)
-        })
+        // getAllCodesetByUser().then((data, err) => {
+        //     setCodesetList(data);
+        //     //console.log("codesetlist", data)
+        // })
         getAllDatasetByUser().then((data, err) => {
             setDatasetList(data);
             //console.log("datasetlist", data)
@@ -111,17 +111,17 @@ function PostRCDForm(props) {
         }
     }, [resultID])
 
-    useEffect(() => {
-        if (codesetID) {
-            const match = codesetList.find(codeset => codeset.codeset_id == codesetID);
-            if (match === undefined)
-                setCodesetName("");
-            else
-                setCodesetName(match.codeset_name);
-        } else {
-            setCodesetName("");
-        }
-    }, [codesetID])
+    // useEffect(() => {
+    //     if (codesetID) {
+    //         const match = codesetList.find(codeset => codeset.codeset_id == codesetID);
+    //         if (match === undefined)
+    //             setCodesetName("");
+    //         else
+    //             setCodesetName(match.codeset_name);
+    //     } else {
+    //         setCodesetName("");
+    //     }
+    // }, [codesetID])
 
     useEffect(() => {
         if (datasetID) {
@@ -211,7 +211,7 @@ function PostRCDForm(props) {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                         <Form.Group className="mb-3">
+                        <Form.Group className="mb-3">
                             <Form.Label>code link</Form.Label>
                             <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required placeholder="/blob/main/code.py"/>
                             <Form.Control.Feedback type="invalid">

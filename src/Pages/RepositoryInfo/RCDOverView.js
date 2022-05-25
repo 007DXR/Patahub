@@ -8,7 +8,7 @@ import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
 import { GoX, GoPlus, GoCheck } from 'react-icons/go';
 import { RiEditFill } from 'react-icons/ri';
 import { getDatasetById } from '../../Data/dataset.js';
-import { getCodesetById } from '../../Data/codeset.js';
+// import { getCodesetById } from '../../Data/codeset.js';
 import { getResultLink, getResultDetail } from '../../Data/rcd.js';
 
 function RCDOverView(props) {
@@ -16,20 +16,20 @@ function RCDOverView(props) {
     const delRCD = () => {
         props.onRemove(props.RCD.rcd_id);
     }
-    const [codesetLink, setCodeSetLink] = useState('');
+    // const [codesetLink, setCodeSetLink] = useState('');
     const [datasetLink, setDataSetLink] = useState('');
     // const [resultLink, setResultLink] = useState('');
-    const [resultDetail, setResultDetail] = useState('');
+    const [resultDetail, setResultDetail] = useState({});
 
     useEffect(() => {
         getDatasetById(props.RCD.dataset_id).then((data, err) => {
             if (data.length > 0) setDataSetLink(data[0].dataset_link);
             else throw (err || 'error no valid dataset');
         });
-        getCodesetById(props.RCD.codeset_id).then((data, err) => {
-            if (data.length > 0) setCodeSetLink(data[0].codeset_link);
-            else throw (err || 'error no valid codeset');
-        });
+        // getCodesetById(props.RCD.codeset_id).then((data, err) => {
+        //     if (data.length > 0) setCodeSetLink(data[0].codeset_link);
+        //     else throw (err || 'error no valid codeset');
+        // });
         // getResultLink(props.RCD.result_id).then((data, err) => {
         //     if (err) throw err;
         //     setResultLink(data);
@@ -45,9 +45,10 @@ function RCDOverView(props) {
             <Col>
                 <Link to={`/RCDInfo/${props.repoName}/${props.RCD.rcd_id}`}>
                     {/* <Image src={resultLink} style={{ height: '50px' }} /> */}
-                    <div>{resultDetail[0]}</div>
-                    <div>{resultDetail[1]}</div>
+                    <div>{resultDetail.result_name}</div>
                 </Link>
+                <div>{resultDetail.result_value}</div>
+                <div>{resultDetail.result_description}</div>
             </Col>
             {/* <Col>
                 <GithubRepoInfo link={codesetLink}>somecode</GithubRepoInfo>
