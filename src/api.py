@@ -12,21 +12,12 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import Field, BaseModel, BaseSettings
 
-import signal
-
 
 app = FastAPI(
     title="Patahub",
     version='0.0.1'
 )
-# (db, conn) = dbop.dbInit('20220522.db')
-# async def common_parameters(q: Optional[str] = None, skip: int = 0, limit: int = 100):
-#     return {"q": q, "skip": skip, "limit": limit}
- 
- 
-# @app.get("/items")
-# async def read_items(commons: int = Depends(common_parameters)):
-#     return commons
+
 def swagger_monkey_patch(*args, **kwargs):
     """
     Wrap the function which is generating the HTML for the /docs endpoint and 
@@ -68,9 +59,14 @@ tags_metadata = [
     },
 ]
 
+# token类，默认token type是bearer
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "Bearer"
+
+# 以下的类中，带Frontend的是前端应发送的，带Indb的是数据库中存储的，
+# 啥都不带的是用户第一次输入的（比如新增、注册等）
 
 class User(BaseModel):
     user_name: str # 用户名
@@ -118,12 +114,6 @@ class DatasetFrontend(Dataset):
 class DatasetIndb(DatasetFrontend):
     user_id: int # 数据集的用户
 
-# class Codeset(BaseModel):
-#     # user_id: Optional[int] # 代码的用户
-#     codeset_name: Optional[str] # 代码名
-#     codeset_link: Optional[str] # 代码链接
-#     codeset_id: Optional[int] # 代码编号
-
 class RCD(BaseModel):
     paper_id: int # rcd中的paper编号
     result_id: int # rcd中的result编号
@@ -136,8 +126,6 @@ class RCDFrontend(RCD):
 
 class RCDIndb(RCDFrontend):
     user_id: int # rcd的用户
-
-
 
 
 
@@ -157,7 +145,14 @@ async def shutdown_event():
     conn.commit()
     conn.close()
 
+# 主页
+@app.get("/")
+async def read_root():
+    return {"Title": "Patahub"}
+
 # ------------------------------身份认证---------------------------------
+
+# 验证密码
 def authenticate_user(user_name: str, password: str):
     user = dbop.dbGetUser(db, user_name=user_name)
     if len(user)==0:
@@ -167,6 +162,7 @@ def authenticate_user(user_name: str, password: str):
         return False
     return user
 
+# 创建token
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -177,6 +173,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encode_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encode_jwt
 
+# 获取当前用户
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     print('token_userid',token)
     token_exception = HTTPException(
@@ -197,14 +194,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise token_exception
     return user
 
+# 获取当前用户id
 async def get_current_userid(user: dict = Depends(get_current_user)):
     print(user)
     return user['user_id']
 
-# 主页
-@app.get("/")
-async def read_root():
-    return {"Title": "Patahub"}
 
 # -----------------------------用户操作------------------------------
 # 用户注册
@@ -299,16 +293,6 @@ async def get_dataset_list(
     datasetlist = dbop.dbGetDatasetList(db, dataset_id=dataset_id, dataset_name=dataset_name, user_id=user_id)
     return datasetlist
 
-# # Code列表
-# @app.get("/codeset", tags=["codeset"])
-# async def get_codeset_list(
-#     codeset_id: Optional[int] = None,
-#     codeset_name: Optional[str] = None,
-#     user_id: Optional[int] = None,
-# ):
-#     code_list = dbop.dbGetCodesetList(db, codeset_id=codeset_id, codeset_name=codeset_name, user_id=user_id)
-#     return code_list
-
 # 结果列表
 @app.get("/result", tags=["result"])
 async def get_result_list(
@@ -326,7 +310,6 @@ async def get_result_list(
 async def get_rcd_list(
     rcd_id: Optional[int] = None,
     result_id: Optional[int] = None,
-    # codeset_id: Optional[int] = None,
     dataset_id: Optional[int] = None,
     paper_id: Optional[int] = None,
     user_id: Optional[int] = None,
@@ -403,32 +386,6 @@ async def put_dataset(
         raise HTTPException(status_code=403, detail="update failed")
     return result    
 
-#更新code
-# @app.put("/codeset/{codeset_id}", response_model=Codeset, tags=["codeset"])
-# async def post_code(
-    
-#     codeset_in: Codeset,
-#     cur_user_id: int = Depends(get_current_userid),
-# ):
-#     dbop.dbUpdateCodeset(db, user_id=cur_user_id,codeset_id=codeset_in.codeset_id, codeset_name=codeset_in.codeset_name, codeset_link=codeset_in.codeset_link)
-#     if result==None:
-#         raise HTTPException(status_code=403, detail="update failed")
-#     return result    
-
-#新增code
-# @app.post("/codeset", response_model=Codeset, tags=["codeset"])
-# async def post_code(
-    
-#     codeset_in: Codeset,
-#     cur_user_id: int = Depends(get_current_user)
-# ):
-#     if (not codeset_in.codeset_name) or (not codeset_in.codeset_link):
-#         raise HTTPException(status_code=422)
-#     newid = dbop.dbInsertCodeset(db, codeset_name=codeset_in.codeset_name, codeset_link=codeset_in.codeset_link, user_id=cur_user_id)
-#     codeset_in.codeset_id = newid
-#     codeset_in.user_id=cur_user_id
-#     return codeset_in
-  
 
 #新增result
 @app.post("/result", response_model=ResultIndb, tags=["result"])
@@ -539,21 +496,6 @@ async def delete_dataset(
     dbop.dbDeleteDataset(db, dataset_id)
     dbop.dbDeleteRCD(db, user_id=cur_user_id, dataset_id=dataset_id)
     return dataset_id
-    
-#删除代码
-# @app.delete("/codeset", tags=["codeset"])
-# async def delete_code(
-#     codeset_id: int,
-#     cur_user_id: int = Depends(get_current_userid),
-# ):
-#     cur_codeset = dbop.dbGetCodesetList(db, codeset_id=codeset_id)
-#     if len(cur_codeset) == 0:
-#         raise HTTPException(status_code=404, detail="code id not found")
-#     if cur_user_id != cur_codeset[0]['user_id']:
-#         raise HTTPException(status_code=403, detail="no permission")
-#     dbop.dbDeleteCodeset(db, codeset_id)
-#     dbop.dbDeleteRCD(db, codeset_id=codeset_id)
-#     return codeset_id
 
 #删除结果
 @app.delete("/result", tags=["result"])
