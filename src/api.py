@@ -1,8 +1,17 @@
-from typing import Optional, List, Set
-import dbutils as dbop
+from typing import Optional, List, Set, Union
 
-from fastapi import FastAPI, Path, Query, Body, HTTPException, Response
+import dbutils as dbop
+from authorization import *
+
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+
+from fastapi import FastAPI, Path, Query, Body, Depends
+from fastapi import HTTPException, Response, applications
+from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import Field, BaseModel, BaseSettings
+
 import signal
 
 
@@ -10,66 +19,267 @@ app = FastAPI(
     title="Patahub",
     version='0.0.1'
 )
+# (db, conn) = dbop.dbInit('20220522.db')
+# async def common_parameters(q: Optional[str] = None, skip: int = 0, limit: int = 100):
+#     return {"q": q, "skip": skip, "limit": limit}
+ 
+ 
+# @app.get("/items")
+# async def read_items(commons: int = Depends(common_parameters)):
+#     return commons
+def swagger_monkey_patch(*args, **kwargs):
+    """
+    Wrap the function which is generating the HTML for the /docs endpoint and 
+    overwrite the default values for the swagger js and css.
+    """
+    return get_swagger_ui_html(
+        *args, **kwargs,
+        swagger_js_url="https://unpkg.com/swagger-ui-dist@3.29/swagger-ui-bundle.js",
+        swagger_css_url="https://unpkg.com/swagger-ui-dist@3.29/swagger-ui.css")
 
+
+# Actual monkey patch
+applications.get_swagger_ui_html = swagger_monkey_patch
+
+tags_metadata = [
+    {
+        "name": "user",
+        "description": "Operations with user",
+    },
+    {
+        "name": "paper",
+        "description": "Operations with paper",
+    },
+    {
+        "name": "dataset",
+        "description": "Operations with dataset",
+    },
+    {
+        "name": "codeset",
+        "description": "Operations with codeset",
+    },
+    {
+        "name": "result",
+        "description": "Operations with result",
+    },
+    {
+        "name": "rcd",
+        "description": "Operations with rcd",
+    },
+]
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "Bearer"
+
+class User(BaseModel):
+    user_name: str # 用户名
+    user_email: str # 用户邮箱
+    user_password: str
+
+class UserIndb(BaseModel):
+    user_name: str
+    user_email: str
+    user_password_hash: str # 密文密码
+    user_id: int # 用户id
+
+class Result(BaseModel):
+    result_value: float # 类型
+    result_description: Optional[str] # 结果名 如figure1
+    result_name: Optional[str]
+    paper_id: int # 论文id
+
+class ResultFrontend(Result):
+    result_id: int # 结果id
+
+class ResultIndb(ResultFrontend):
+    user_id: int # 结果的用户
+
+class Paper(BaseModel):
+    paper_name: Optional[str] # 论文标题
+    paper_link: Optional[str] # 论文链接
+    paper_abstract: Optional[str] # 论文摘要
+    docker_link: Optional[str] # docker链接
+    codeset_link: Optional[str] # rcd中的codeset编号
+
+class PaperFrontend(Paper):
+    paper_id: int # 论文id
+
+class PaperIndb(PaperFrontend):
+    user_id: int # 论文的用户
+
+class Dataset(BaseModel):
+    dataset_name: Optional[str] # 数据集名称
+    dataset_link: Optional[str] # 数据集链接
+
+class DatasetFrontend(Dataset):
+    dataset_id: int # 数据集id
+
+class DatasetIndb(DatasetFrontend):
+    user_id: int # 数据集的用户
+
+# class Codeset(BaseModel):
+#     # user_id: Optional[int] # 代码的用户
+#     codeset_name: Optional[str] # 代码名
+#     codeset_link: Optional[str] # 代码链接
+#     codeset_id: Optional[int] # 代码编号
+
+class RCD(BaseModel):
+    paper_id: int # rcd中的paper编号
+    result_id: int # rcd中的result编号
+    dataset_id: Optional[int] # rcd中的dataset编号
+    # codeset_id: Optional[int] # rcd中的codeset编号
+    makefile: Optional[str] # make语句
+
+class RCDFrontend(RCD):
+    rcd_id: int # rcd编号
+
+class RCDIndb(RCDFrontend):
+    user_id: int # rcd的用户
+
+
+
+
+
+# ------------------------------基本操作---------------------------------
+
+# 启动
 @app.on_event("startup")
 async def startup_event():
+    print('startup_event','-'*20)
     global db, conn
-    (db, conn) = dbop.dbInit('database.db')
+    (db, conn) = dbop.dbInit('20220523.db')
 
 @app.on_event("shutdown")
 async def shutdown_event():
+    print('shutdown_event','-'*20)
     #dbop.dbClear('database.db')
     conn.commit()
     conn.close()
 
-class Result(BaseModel):
-    user_id: int
-    result_type: str # 类型
-    result_name: Optional[str] # 结果名 如figure1
-    result_link: Optional[str] # 链接
-    paper_id: int # 论文id
-    result_id: Optional[int] # 结果id
+# ------------------------------身份认证---------------------------------
+def authenticate_user(user_name: str, password: str):
+    user = dbop.dbGetUser(db, user_name=user_name)
+    if len(user)==0:
+        return False
+    user=user[0]
+    if not pwd_context.verify(password, user['user_password_hash']):
+        return False
+    return user
 
-class Paper(BaseModel):
-    user_id: int # 论文的用户
-    paper_name: Optional[str] # 论文标题
-    paper_link: Optional[str] # 论文链接
-    paper_id: Optional[int] # 论文id
-    paper_abstract: Optional[str] # 论文摘要
+def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=30)
+    to_encode.update({"exp": expire})
+    encode_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encode_jwt
 
-class Dataset(BaseModel):
-    user_id: int #数据集的用户
-    dataset_name: Optional[str] # 数据集名称
-    dataset_link: Optional[str] # 数据集链接
-    dataset_id: Optional[int] # 数据集id
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    print('token_userid',token)
+    token_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token =token, key=SECRET_KEY, algorithms=[ALGORITHM])
+        user_name: str = payload.get("sub")
+        # print('token_userid3',token_userid)
+        if user_name is None:
+            raise token_exception
+    except:
+        raise token_exception
+    user = dbop.dbGetUser(db,user_name=user_name)[0]
+    if not user:
+        raise token_exception
+    return user
 
-class Codeset(BaseModel):
-    user_id: int # 代码的用户
-    codeset_name: Optional[str] # 代码名
-    codeset_link: Optional[str] # 代码链接
-    codeset_id: Optional[int] # 代码编号
+async def get_current_userid(user: dict = Depends(get_current_user)):
+    print(user)
+    return user['user_id']
 
-class RCD(BaseModel):
-    user_id: int
-    paper_id: int # rcd中的paper编号
-    result_id: int # rcd中的result编号
-    dataset_id: Optional[int] # rcd中的dataset编号
-    codeset_id: Optional[int] # rcd中的codeset编号
-    data_link: Optional[str] # 数据链接
-    code_link: Optional[str] # 代码链接
-    rcd_id: Optional[int] # rcd编号
-
-
-#主页
+# 主页
 @app.get("/")
 async def read_root():
     return {"Title": "Patahub"}
+
+# -----------------------------用户操作------------------------------
+# 用户注册
+@app.post("/register", response_model=UserIndb, tags=["user"])
+async def user_register(
+    user_in: User
+):
+    if len(dbop.dbGetUser(db, user_in.user_name)) != 0:
+        raise HTTPException(400, detail="name already used")
+    # if len(dbop.dbGetUser(db, user_in.user_email)) != 0:
+    #     raise HTTPException(400, detail="email already registered")
+    password_hash = pwd_context.hash(user_in.user_password)
+    user_id = dbop.dbInsertUser(db, user_in.user_name, user_in.user_email, password_hash)
+    return UserIndb(user_name=user_in.user_name,user_email=user_in.user_email, user_id=user_id, user_password_hash=password_hash)
+
+# 用户登录
+@app.post("/login", response_model=Token, tags=["user"])
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends()
+):
+    user = authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user['user_name']}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
+
+# 用户查看个人信息
+@app.get("/userinfo", response_model=UserIndb, tags=['user'])
+async def user_check_info(
+    current_user: UserIndb = Depends(get_current_user)
+):
+    return current_user
+
+# 用户修改信息
+@app.put("/userinfo/{user_id}", response_model=UserIndb, tags=["user"])
+async def user_modify_info(
+    user_in: User,
+    user_id: int = Depends(get_current_userid)
+):
+    if user_in.user_name!=None and len(dbop.dbGetUser(db, user_in.user_name)) != 0:
+        raise HTTPException(400, detail="name already used")
+    if len(dbop.dbGetUser(db, user_in.user_email)) != 0:
+        raise HTTPException(400, detail="email already registered")
+    password_hash = pwd_context.hash(user_in.user_password)
+    dbop.dbModifyUserInfo(db, user_id=user_id,new_name=user_in.user_name, new_email=user_in.user_email,new_password_hash= password_hash)
+    return UserIndb(user_name=user_in.user_name,user_email=user_in.user_email, user_id=user_id, user_password_hash=password_hash)
+
+# 用户查看自己的仓库
+@app.get("/userinfo/paper", tags=['user'])
+async def get_my_paper(
+    cur_user_id: int = Depends(get_current_userid)
+):
+    paperlist = dbop.dbGetPaperList(db, user_id=cur_user_id)
+    return paperlist
+
+# 用户查看自己的数据集
+@app.get("/userinfo/dataset", tags=['user'])
+async def get_my_dataset(
+    cur_user_id: int = Depends(get_current_userid)
+):
+    datasetlist = dbop.dbGetDatasetList(db, user_id=cur_user_id)
+    return datasetlist
 
 # -----------------------------查询操作------------------------------
 
 # 论文列表
 #response_model可以设置为List[Paper]
-@app.get("/paper")
+@app.get("/paper", tags=["paper"])
 async def get_paper_list(
     paper_id: Optional[int] = None,
     paper_name: Optional[str] = None,
@@ -80,7 +290,7 @@ async def get_paper_list(
 
 # 数据集列表
 #response_model可以设置为List[Dataset]
-@app.get("/dataset")
+@app.get("/dataset", tags=["dataset"])
 async def get_dataset_list(
     dataset_id: Optional[int] = None,
     dataset_name: Optional[str] = None,
@@ -89,197 +299,288 @@ async def get_dataset_list(
     datasetlist = dbop.dbGetDatasetList(db, dataset_id=dataset_id, dataset_name=dataset_name, user_id=user_id)
     return datasetlist
 
-# Code列表
-@app.get("/codeset")
-async def get_codeset_list(
-    codeset_id: Optional[int] = None,
-    codeset_name: Optional[str] = None,
-    user_id: Optional[int] = None,
-):
-    code_list = dbop.dbGetCodesetList(db, codeset_id=codeset_id, codeset_name=codeset_name, user_id=user_id)
-    return code_list
+# # Code列表
+# @app.get("/codeset", tags=["codeset"])
+# async def get_codeset_list(
+#     codeset_id: Optional[int] = None,
+#     codeset_name: Optional[str] = None,
+#     user_id: Optional[int] = None,
+# ):
+#     code_list = dbop.dbGetCodesetList(db, codeset_id=codeset_id, codeset_name=codeset_name, user_id=user_id)
+#     return code_list
 
 # 结果列表
-@app.get("/result")
+@app.get("/result", tags=["result"])
 async def get_result_list(
     result_id: Optional[int] = None,
-    result_type: Optional[str] = None,
+    # result_type: Optional[str] = None,
     result_name: Optional[str] = None,
     paper_id: Optional[int] = None,
-    user_id: Optional[int] = None
+    user_id: Optional[int] = None,
 ):
-    resultlist = dbop.dbGetResultList(db, result_id=result_id, result_name=result_name, result_type=result_type, paper_id=paper_id, user_id=user_id)
+    resultlist = dbop.dbGetResultList(db, result_id=result_id, result_name=result_name, paper_id=paper_id, user_id=user_id)
     return resultlist
 
 #RCD列表
-@app.get("/rcd")
+@app.get("/rcd", tags=["rcd"])
 async def get_rcd_list(
     rcd_id: Optional[int] = None,
     result_id: Optional[int] = None,
-    codeset_id: Optional[int] = None,
+    # codeset_id: Optional[int] = None,
     dataset_id: Optional[int] = None,
     paper_id: Optional[int] = None,
-    user_id: Optional[int] = None
+    user_id: Optional[int] = None,
 ):
-    rcd = dbop.dbGetRCDList(db, rcd_id=rcd_id, result_id=result_id, codeset_id=codeset_id, dataset_id=dataset_id, paper_id=paper_id, user_id=user_id)
+    rcd = dbop.dbGetRCDList(db, rcd_id=rcd_id, result_id=result_id, dataset_id=dataset_id, paper_id=paper_id, user_id=user_id)
     return rcd
 
 # -------------------------增添/更新操作-----------------------------
 
-#新增/更新论文
-@app.post("/paper", response_model=Paper)
+#新增论文
+@app.post("/paper", response_model=PaperIndb, tags=["paper"])
 async def post_paper(
-    paper_in: Paper
-):
-    if paper_in.paper_id == None:
-        # 新建
-        if (not paper_in.paper_name) or (not paper_in.paper_link) or (not paper_in.paper_abstract):
-            raise HTTPException(status_code=422)
-        newid = dbop.dbInsertPaper(db, paper_in.paper_name, paper_in.paper_link, paper_in.user_id, paper_in.paper_abstract)
-        paper_in.paper_id = newid
-        return paper_in
-    else:
-        # 更新
-        dbop.dbUpdatePaper(db, paper_in.paper_id, paper_name=paper_in.paper_name, paper_link=paper_in.paper_link, paper_abstract=paper_in.paper_abstract)
+    paper_in: Paper,
+    cur_user_id: int = Depends(get_current_userid),
+): 
+    print('post_paper')
+    if (not paper_in.paper_name) or (not paper_in.paper_link) :#or (not paper_in.paper_abstract):
+        raise HTTPException(status_code=422)
+    newid = dbop.dbInsertPaper(db, paper_in.paper_name, paper_in.paper_link, cur_user_id, paper_in.paper_abstract, paper_in.codeset_link, paper_in.docker_link)
+    return PaperIndb(**paper_in.dict(), paper_id = newid, user_id=cur_user_id)
 
-#新增/更新数据集
-@app.post("/dataset", response_model=Dataset)
+#更新论文
+@app.put("/paper/{paper_id}", tags=["paper"])
+async def put_paper(
+    paper_in: PaperFrontend,
+    cur_user_id: int = Depends(get_current_user),
+):
+    paper_user = dbop.dbGetPaperList(db,
+        paper_id=paper_in.paper_id,
+        paper_name=paper_in.paper_name
+    )[0]["user_id"]
+    if paper_user != cur_user_id:
+        raise HTTPException(status_code=403, detail="no permission")
+    result=dbop.dbUpdatePaper(db,
+        user_id=cur_user_id,
+        paper_id=paper_in.paper_id,
+        paper_name=paper_in.paper_name,
+        paper_link=paper_in.paper_link,
+        paper_abstract=paper_in.paper_abstract,
+        docker_link=paper_in.docker_link
+    )
+    if result==None:
+        raise HTTPException(status_code=403, detail="update failed")
+    return result
+
+#新增数据集
+@app.post("/dataset", response_model=DatasetIndb, tags=["dataset"])
 async def post_dataset(
-    dataset_in: Dataset
+    dataset_in: Dataset,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    if dataset_in.dataset_id == None:
-        # 新建
-        if (not dataset_in.dataset_name) or (not dataset_in.dataset_link):
-            raise HTTPException(status_code=422)
-        newid = dbop.dbInsertDataset(db, dataset_in.dataset_name, dataset_in.dataset_link, dataset_in.user_id)
-        dataset_in.dataset_id = newid
-        return dataset_in
-    else:
-        # 更新
-        dbop.dbUpdateDataset(db, dataset_in.dataset_id, dataset_name=dataset_in.dataset_name, dataset_link=dataset_in.dataset_link)
-
-#新增/更新code
-@app.post("/codeset", response_model=Codeset)
-async def post_code(
-    codeset_in: Codeset
+    if (not dataset_in.dataset_name) or (not dataset_in.dataset_link):
+        raise HTTPException(status_code=422, detail="imformation not completed")
+    newid = dbop.dbInsertDataset(db, dataset_in.dataset_name, dataset_in.dataset_link, cur_user_id)
+    return DatasetIndb(**dataset_in.dict(), dataset_id=newid, user_id=cur_user_id)
+  
+       
+#更新数据集
+@app.put("/dataset/{dataset_id}", response_model=DatasetIndb, tags=["dataset"])
+async def put_dataset(
+    dataset_in: DatasetFrontend,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    if codeset_in.codeset_id == None:
-        # 新建
-        if (not codeset_in.codeset_name) or (not codeset_in.codeset_link) or (not codeset_in.user_id):
-            raise HTTPException(status_code=422)
-        newid = dbop.dbInsertCodeset(db, codeset_in.codeset_name, codeset_in.codeset_link, codeset_in.user_id)
-        codeset_in.codeset_id = newid
-        return codeset_in
-    else:
-        # 更新
-        dbop.dbUpdateCodeset(db, codeset_in.codeset_id, codeset_name=codeset_in.codeset_name, codeset_link=codeset_in.codeset_link)
+    dataset_user = dbop.dbGetDatasetList(db, dataset_id=dataset_in.dataset_id)[0]["user_id"]
+    if dataset_user != cur_user_id:
+        raise HTTPException(status_code=403, detail="no permission")
+    result=dbop.dbUpdateDataset(db,
+        user_id=cur_user_id,
+        dataset_id=dataset_in.dataset_id,
+        dataset_name=dataset_in.dataset_name,
+        dataset_link=dataset_in.dataset_link
+    )
+    if not result:
+        raise HTTPException(status_code=403, detail="update failed")
+    return result    
 
-#新增/更新result
-@app.post("/result", response_model=Result)
+#更新code
+# @app.put("/codeset/{codeset_id}", response_model=Codeset, tags=["codeset"])
+# async def post_code(
+    
+#     codeset_in: Codeset,
+#     cur_user_id: int = Depends(get_current_userid),
+# ):
+#     dbop.dbUpdateCodeset(db, user_id=cur_user_id,codeset_id=codeset_in.codeset_id, codeset_name=codeset_in.codeset_name, codeset_link=codeset_in.codeset_link)
+#     if result==None:
+#         raise HTTPException(status_code=403, detail="update failed")
+#     return result    
+
+#新增code
+# @app.post("/codeset", response_model=Codeset, tags=["codeset"])
+# async def post_code(
+    
+#     codeset_in: Codeset,
+#     cur_user_id: int = Depends(get_current_user)
+# ):
+#     if (not codeset_in.codeset_name) or (not codeset_in.codeset_link):
+#         raise HTTPException(status_code=422)
+#     newid = dbop.dbInsertCodeset(db, codeset_name=codeset_in.codeset_name, codeset_link=codeset_in.codeset_link, user_id=cur_user_id)
+#     codeset_in.codeset_id = newid
+#     codeset_in.user_id=cur_user_id
+#     return codeset_in
+  
+
+#新增result
+@app.post("/result", response_model=ResultIndb, tags=["result"])
 async def post_result(
-    result_in: Result
+    result_in: Result,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    if result_in.result_id == None:
-        # 新建
-        if (not result_in.result_name) or (not result_in.result_link) \
-            or (not result_in.result_type) or (not result_in.paper_id):
-            raise HTTPException(status_code=422)
-        newid = dbop.dbInsertResult(db, result_in.result_type, result_in.result_name, result_in.result_link, result_in.paper_id, result_in.user_id)
-        if not newid:
-            raise HTTPException(status_code=400, detail="invalid type")
-        result_in.result_id = newid
-        return result_in
-    else:
-        # 更新
-        dbop.dbUpdateResult(db, result_in.result_id, result_name=result_in.result_name, result_link=result_in.result_link)
+   
+    if (not result_in.result_name) or   (not result_in.paper_id):
+        raise HTTPException(status_code=422)
+    newid = dbop.dbInsertResult(db, 
+        result_name=result_in.result_name, 
+        result_description=result_in.result_description, 
+        result_value=result_in.result_value, 
+        paper_id=result_in.paper_id, 
+        user_id=cur_user_id)
+    if not newid:
+        raise HTTPException(status_code=400, detail="invalid type")
+    return ResultIndb(**result_in.dict(), result_id=newid, user_id=cur_user_id)
+   
 
-#新增/更新RCD项
-@app.post("/rcd", response_model=RCD)
+#更新result
+@app.put("/result/{result_id}", response_model=ResultIndb, tags=["result"])
+async def put_result(
+    result_in: ResultFrontend,
+    cur_user_id: int = Depends(get_current_userid),
+):
+    result_user = dbop.dbGetResultList(db, result_id=result_in.result_id)[0]["user_id"]
+    if result_user != cur_user_id:
+        raise HTTPException(status_code=403, detail="no permission")
+    result=dbop.dbUpdateResult(db,
+        user_id=cur_user_id,
+        result_id=result_in.result_id, 
+        result_name=result_in.result_name, 
+        result_description=result_in.result_description, 
+        result_value=result_in.result_value
+    )
+    if not result:
+        raise HTTPException(status_code=403, detail="update failed")
+    return result
+
+#新增RCD项
+@app.post("/rcd", response_model=RCDIndb, tags=["rcd"])
 async def post_rcd(
-    rcd: RCD
+    rcd_in: RCD,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    if rcd.rcd_id == None:
-        # 新建
-        if (not rcd.result_id) or (not rcd.paper_id) or (not rcd.dataset_id) \
-            or (not rcd.codeset_id) or (not rcd.data_link) or (not rcd.code_link) or (not rcd.user_id):
-            raise HTTPException(status_code=422)
-        if len(dbop.dbGetPaperList(db, rcd.paper_id)) == 0:
-            raise HTTPException(status_code=404, detail="paper id invalid")
-        if len(dbop.dbGetDatasetList(db, rcd.dataset_id)) == 0:
-            raise HTTPException(status_code=404, detail="dataset id invalid")
-        if len(dbop.dbGetResultList(db, rcd.result_id)) == 0:
-            raise HTTPException(status_code=404, detail="result id invalid")
-        if len(dbop.dbGetCodesetList(db, rcd.codeset_id)) == 0:
-            raise HTTPException(status_code=404, detail="code id invalid")
-        newid = dbop.dbInsertRCD(db, rcd.result_id, rcd.codeset_id, rcd.code_link, rcd.dataset_id, rcd.data_link, rcd.paper_id, rcd.user_id)
-        rcd.rcd_id = newid
-        return rcd.dict()
-    else:
-        # 更新
-        if len(dbop.dbGetRCDList(db, rcd_id=rcd.rcd_id, result_id=rcd.result_id,
-            codeset_id=rcd.codeset_id, dataset_id=rcd.dataset_id, paper_id=rcd.paper_id, user_id=rcd.user_id)) == 0:
-            raise HTTPException(status_code=404, detail="rcd not found")
-        dbop.dbUpdateRCD(db, rcd.rcd_id, result_id=rcd.result_id,
-            codeset_id=rcd.codeset_id, code_link=rcd.code_link,
-            dataset_id=rcd.dataset_id, data_link=rcd.data_link,
-            paper_id=rcd.paper_id)
+    
+    if (not rcd_in.result_id) or (not rcd_in.paper_id) or (not rcd_in.dataset_id):
+        raise HTTPException(status_code=422)
+    if len(dbop.dbGetPaperList(db, rcd_in.paper_id)) == 0:
+        raise HTTPException(status_code=404, detail="paper id invalid")
+    if len(dbop.dbGetDatasetList(db, rcd_in.dataset_id)) == 0:
+        raise HTTPException(status_code=404, detail="dataset id invalid")
+    if len(dbop.dbGetResultList(db, rcd_in.result_id)) == 0:
+        raise HTTPException(status_code=404, detail="result id invalid")
+    newid = dbop.dbInsertRCD(db, rcd_in.result_id,  rcd_in.dataset_id, rcd_in.paper_id, cur_user_id, rcd_in.makefile)
+    return RCDIndb(**rcd_in.dict(), rcd_id=newid, user_id=cur_user_id)
+  
 
+#更新RCD项
+@app.put("/rcd/{rcd_id}", response_model=RCDIndb, tags=["rcd"])
+async def put_rcd(
+    rcd_in: RCDFrontend,
+    cur_user_id: int = Depends(get_current_userid),
+):
+    rcd_user = dbop.dbGetRCDList(db, rcd_id=rcd_in.rcd_id)[0]["user_id"]
+    if rcd_user != cur_user_id:
+        raise HTTPException(status_code=403, detail="no permission")
+    result=dbop.dbUpdateRCD(db,
+        user_id=cur_user_id,
+        rcd_id=rcd_in.rcd_id,
+        result_id=rcd_in.result_id,
+        dataset_id=rcd_in.dataset_id, 
+        makefile=rcd_in.makefile
+    )
+    if not result:
+        raise HTTPException(status_code=403, detail="update failed")
+    return result
 # --------------------------删除操作-----------------------------
 
 #删除论文
-@app.delete("/paper")
+@app.delete("/paper", tags=["paper"])
 async def delete_paper(
-    paper_id: int
+    paper_id: int,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    if len(dbop.dbGetPaperList(db, paper_id)) == 0:
+    cur_paper = dbop.dbGetPaperList(db, paper_id=paper_id)
+    if len(cur_paper) == 0:
         raise HTTPException(status_code=404, detail="paper id not found")
+    if cur_user_id != cur_paper[0]["user_id"]:
+        raise HTTPException(status_code=403, detail="no permission")
     dbop.dbDeletePaper(db, paper_id)
-    dbop.dbDeleteRCD(db, paper_id=paper_id)
+    dbop.dbDeleteRCD(db,user_id=cur_user_id, paper_id=paper_id)
     return paper_id
     
 #删除数据集
-@app.delete("/dataset")
+@app.delete("/dataset", tags=["dataset"])
 async def delete_dataset(
-    dataset_id: int
+    dataset_id: int,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    if len(dbop.dbGetDatasetList(db, dataset_id)) == 0:
+    cur_dataset = dbop.dbGetDatasetList(db, dataset_id=dataset_id)
+    if len(cur_dataset) == 0:
         raise HTTPException(status_code=404, detail="dataset id not found")
+    if cur_user_id != cur_dataset[0]["user_id"]:
+        raise HTTPException(status_code=403, detail="no permission")
     dbop.dbDeleteDataset(db, dataset_id)
-    dbop.dbDeleteRCD(db, dataset_id=dataset_id)
+    dbop.dbDeleteRCD(db, user_id=cur_user_id, dataset_id=dataset_id)
     return dataset_id
     
 #删除代码
-@app.delete("/codeset")
-async def delete_code(
-    codeset_id: int
-):
-    if len(dbop.dbGetCodesetList(db, codeset_id)) == 0:
-        raise HTTPException(status_code=404, detail="code id not found")
-    dbop.dbDeleteCodeset(db, codeset_id)
-    dbop.dbDeleteRCD(db, codeset_id=codeset_id)
-    return codeset_id
+# @app.delete("/codeset", tags=["codeset"])
+# async def delete_code(
+#     codeset_id: int,
+#     cur_user_id: int = Depends(get_current_userid),
+# ):
+#     cur_codeset = dbop.dbGetCodesetList(db, codeset_id=codeset_id)
+#     if len(cur_codeset) == 0:
+#         raise HTTPException(status_code=404, detail="code id not found")
+#     if cur_user_id != cur_codeset[0]['user_id']:
+#         raise HTTPException(status_code=403, detail="no permission")
+#     dbop.dbDeleteCodeset(db, codeset_id)
+#     dbop.dbDeleteRCD(db, codeset_id=codeset_id)
+#     return codeset_id
 
 #删除结果
-@app.delete("/result")
+@app.delete("/result", tags=["result"])
 async def delete_result(
-    result_id: int
+    result_id: int,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    if len(dbop.dbGetResultList(db, result_id)) == 0:
+    cur_result = dbop.dbGetResultList(db, result_id)
+    if len(cur_result) == 0:
         raise HTTPException(status_code=404, detail="result id not found")
+    if cur_user_id != cur_result[0]['user_id']:
+        raise HTTPException(status_code=403, detail="no permission")
     dbop.dbDeleteResult(db, result_id)
-    dbop.dbDeleteRCD(db, result_id=result_id)
+    dbop.dbDeleteRCD(db,user_id=cur_user_id,  result_id=result_id)
     return result_id
 
 #删除RCD项
-@app.delete("/rcd")
+@app.delete("/rcd", tags=["rcd"])
 async def delete_rcd(
     rcd_id: Optional[int] = None,
     result_id: Optional[int] = None,
     codeset_id: Optional[int] = None,
     dataset_id: Optional[int] = None,
-    paper_id: Optional[int] = None
+    paper_id: Optional[int] = None,
+    cur_user_id: int = Depends(get_current_userid),
 ):
-    dbop.dbDeleteRCD(db, rcd_id=rcd_id, result_id=result_id,
-        codeset_id=codeset_id, dataset_id=dataset_id,
-        paper_id=paper_id)
+    # cur_rcd = dbop.dbGetRCDList(db, rcd_id)
+    dbop.dbDeleteRCD(db, user_id=cur_user_id,rcd_id=rcd_id, result_id=result_id,
+        dataset_id=dataset_id,paper_id=paper_id)
     return {"status": "success"}
