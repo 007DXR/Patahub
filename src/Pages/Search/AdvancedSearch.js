@@ -8,7 +8,6 @@ const keys = {
     paper: ['paper_name','paper_id'],
     result: ['result_name','result_id','result_type'],
     dataset: ['dataset_name','dataset_id'],
-    codeset: ['codeset_name','codeset_id'],
     rcd: ['paper_id','result_id','dataset_id','codeset_id','rcd_id']
 };
 
@@ -38,7 +37,6 @@ function AdvancedSearch(props){
                 <option value="paper">paper</option>
                 <option value="result">result</option>
                 <option value="dataset">dataset</option>
-                <option value="codeset">codeset</option>
                 <option value="rcd">RCD</option>
             </Form.Select>
         </Container>

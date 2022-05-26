@@ -2,16 +2,18 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import RCDOverView from './RCDOverView.js'
-import { getRCDList } from '../../Data/demo.js'
 import { Card, Container, Row, Button, Col } from 'react-bootstrap';
 // import EmptyRCDOverView from './EmptyRCDOverView.js';
 import { CreateRCD, DelRCD, getPaperById, getRCDByRepoID, getRCDByRepoName, getResultLink } from '../../Data/rcd.js';
 import PostRCDForm from './PostRCD.js';
 import { GoPlus } from 'react-icons/go';
+import DeleteRepoButton from './DeleteRepo.js';
+import { UserInfo } from '../Utilities/auth.js';
+import { UpdateRepoButton } from '../AllRepositories/CreateRepo.js';
 
 function RepositoryInfo(props) {
     const repoId = useParams().repoName;
-    const userId = 1;
+    
     const [paperInfo, setPaperInfo] = useState({});
     const [RCDList, setRCDList] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
@@ -34,9 +36,11 @@ function RepositoryInfo(props) {
     }, [isCreating, isEditing, isDeleting]);
 
     const delRCD = rcdID => {
-        const res = DelRCD(userId, rcdID);
+        DelRCD(UserInfo.token, rcdID).then((data, err) => {
+            if(data)window.location.reload();
+            else alert(err);
+        });
         setIsDeleting(true);
-        if (res) window.location.reload();
     }
     const hideForm = () => {
         if (isCreating) {
@@ -53,11 +57,11 @@ function RepositoryInfo(props) {
     return (
         <Container className='pt-5 pb-5'>
             <div className='mb-5 text-start'>
-            <p class='fs-1'>{paperInfo.paper_name}</p>
-            <div ><b>Link: </b><a  href={paperInfo.paper_link}>{paperInfo.paper_link}</a></div>
-            <div ><b>Code: </b><a  href={paperInfo.codeset_link}>{paperInfo.codeset_link}</a></div>
-            <div ><b>Docker: </b>{paperInfo.docker_link}</div>
-            <div ><b>Abstract: </b>{paperInfo.paper_abstract}</div>
+                <p class='fs-1'>{paperInfo.paper_name}</p>
+                <div ><b>Link: </b><a  href={paperInfo.paper_link}>{paperInfo.paper_link}</a></div>
+                <div ><b>Code: </b><a  href={paperInfo.codeset_link}>{paperInfo.codeset_link}</a></div>
+                <div ><b>Docker: </b>{paperInfo.docker_link}</div>
+                <div ><b>Abstract: </b>{paperInfo.paper_abstract}</div>
             </div>
             {RCDList.length>0?(
                 <Row className="mt-5">
@@ -69,12 +73,18 @@ function RepositoryInfo(props) {
                 </Row>):""
             }
             {
-                RCDList.map((RCD) => <Card className="m-3 p-3"><RCDOverView repoName={repoId} RCD={RCD} needEdit={true}
+                RCDList.map((RCD) => <Card className="m-3 p-3"><RCDOverView repoName={repoId} RCD={RCD}
                     onRemove={(rcdID) => delRCD(rcdID)} onEdit={(RCD) => { setIsEditing(true); setEditingRCD(RCD) }} /></Card>)
             }
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
-            <Button onClick={() => setIsCreating(true)}><GoPlus /></Button>
-            <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId} userID={userId}></PostRCDForm>
+            {paperInfo.user_id && paperInfo.user_id == UserInfo.userId ? 
+                <React.Fragment>
+                    <Button onClick={() => setIsCreating(true)}>Add New RCD</Button>
+                    <UpdateRepoButton paper_id={paperInfo.paper_id}/>
+                    <DeleteRepoButton paper_id={paperInfo.paper_id}/>
+                </React.Fragment>
+            : null}
+            <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId}></PostRCDForm>
         </Container >
     )
 }

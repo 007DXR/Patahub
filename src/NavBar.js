@@ -7,7 +7,6 @@ import { GrSearchAdvanced } from 'react-icons/gr';
 import { getAllRepositories, searchRepositories } from './Data/link';
 import SearchBar from './SearchBar.js';
 import { CreateRepoButton } from './Pages/AllRepositories/CreateRepo.js'
-import DeleteRepoButton from './Pages/AllRepositories/DeleteRepo.js';
 import { CreateDatasetButton } from './Pages/RepositoryInfo/CreateDatasetPage';
 import CreateButton from './Create.js'
 import User from './User.js'
@@ -21,7 +20,7 @@ function NavBar(props) {
                     Patahub
                 </Navbar.Brand>
                 {props.disableSearchbar ? <React.Fragment /> : <SearchBar />}
-                <CreateButton />
+                {UserInfo.userName ? <CreateButton /> : null}
                 <div className='ms-auto me-auto'></div>
                 <User/>
             </Container>

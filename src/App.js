@@ -14,6 +14,7 @@ import ReactMarkdown from 'react-markdown'
 import 'highlight.js/styles/default.css';
 import CreateDatasetPage from './Pages/RepositoryInfo/CreateDatasetPage.js';
 import initAuth from './Pages/Utilities/auth.js';
+import { validateUser } from './Data/User.js';
 
 
 function App() {
@@ -23,8 +24,18 @@ function App() {
     initAuth([UserInfo, setUserInfo]);
     useEffect(() => {
         let saved = JSON.parse(window.localStorage.getItem('UserInfo'));
-        if(Object.prototype.toString.call(saved) == "[object Object]")
-            setUserInfo(saved);
+        if(Object.prototype.toString.call(saved) == "[object Object]"){
+            let newUserInfo = saved;
+            validateUser(saved, setUserInfo).then((data, err) => {
+                if(data){
+                    newUserInfo.userId = data.user_id;
+                    newUserInfo.userEmail = data.user_email;
+                }else newUserInfo = {
+                    userName: undefined,
+                };
+                setUserInfo(newUserInfo);
+            })
+        }
     }, []);
     return (
         <div className="App">

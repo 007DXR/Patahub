@@ -28,5 +28,14 @@ export async function tryRegister(userName, userEmail, userPassword) {
     });
 }
 
-export async function tryLogout() {
+export async function validateUser(userInfo, setUserInfo) {
+    return $.ajax({
+        url: '/api/userinfo',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        headers:{
+            Authorization: userInfo.token
+        },
+    });
 }
