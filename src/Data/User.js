@@ -45,12 +45,12 @@ export async function updateUser(token, userName, userEmail, userPassword, userI
     return $.ajax({
         url: '/api/userinfo/' + userId,
         type: "put",
-        data: {
+        data: JSON.stringify({
             'user_name': userName,
-            'user_password': passwordCrypto(userPassword),
             'user_email': userEmail,
-            'user_id': userId,
-        },
+            'user_password': passwordCrypto(userPassword),
+        }),
+        contentType: "application/json",
         headers:{
             Authorization: token
         },

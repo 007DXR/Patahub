@@ -15,7 +15,7 @@ export async function CreateRepo(token, params) {
 
 export async function UpdateRepo(token, paperId, params) {
     let Params = structuredClone(params);
-    Params.paper_id = paperId;
+    Params.paper_id = Number(paperId);
     const data = JSON.stringify(Params);
     return $.ajax({
         type: "put",
