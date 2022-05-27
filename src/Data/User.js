@@ -1,16 +1,17 @@
 import $ from 'jquery';
+import sha256 from 'crypto-js/sha256';
+
+function passwordCrypto(pw){
+    return sha256('PatahubQWQQWwqwqwqwq' + pw + '233333333NeverGonnaGiveUUp').toString();
+}
 
 export async function tryLogin(userName, userPassword) {
     return $.ajax({
         url: '/api/login',
         type: "POST",
         data: {
-            'grant_type': null,
-            'scope': null,
-            'client_id': null,
-            'client_secret': null,
             'username': userName,
-            'password': userPassword,
+            'password': passwordCrypto(userPassword),
         },
     });
 }
@@ -23,7 +24,7 @@ export async function tryRegister(userName, userEmail, userPassword) {
         data: JSON.stringify({
             'user_name': userName,
             'user_email': userEmail,
-            'user_password': userPassword,
+            'user_password': passwordCrypto(userPassword),
         })
     });
 }
@@ -36,6 +37,22 @@ export async function validateUser(userInfo, setUserInfo) {
         contentType: "application/json",
         headers:{
             Authorization: userInfo.token
+        },
+    });
+}
+
+export async function updateUser(token, userName, userEmail, userPassword, userId) {
+    return $.ajax({
+        url: '/api/userinfo/' + userId,
+        type: "put",
+        data: {
+            'user_name': userName,
+            'user_password': passwordCrypto(userPassword),
+            'user_email': userEmail,
+            'user_id': userId,
+        },
+        headers:{
+            Authorization: token
         },
     });
 }

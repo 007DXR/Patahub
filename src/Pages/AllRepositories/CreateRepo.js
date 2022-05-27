@@ -76,12 +76,12 @@ export function CreateRepoForm(props) {
             setValidated(false)
             if(props.update){
                 UpdateRepo(UserInfo.token, paper_id, paperInfo).then((data, err) => {
-                    if(err)setCreateRepoFailure(true);
+                    if(err)alert(err);
                     else window.location.replace('/repositoryInfo/' + paper_id);
                 })
             }else{
                 CreateRepo(UserInfo.token, paperInfo).then((data, err) => {
-                    if(err)setCreateRepoFailure(true);
+                    if(err)alert(err);
                     else window.location.replace('/repositoryInfo/' + data.paper_id);
                 })
             }
