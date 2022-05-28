@@ -27,7 +27,7 @@ function DatasetCard(props) {
 
     return (
         <>
-            <Card className="mt-3" onClick={editDataset}>
+            <Card className="mt-3 pt-3" onClick={editDataset}>
                 <Card.Title>{props.dataset.dataset_name}</Card.Title>
                 <Card.Body>
                     <p>

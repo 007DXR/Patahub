@@ -43,7 +43,7 @@ function User(props) {
                     window.localStorage.setItem('UserInfo', JSON.stringify(Info));
                     window.location.reload();
                 }
-            })
+            }, error=>{alert(error.responseJSON.detail)})
         }
         let showForm = () => {setIsShown(true);}
         return (

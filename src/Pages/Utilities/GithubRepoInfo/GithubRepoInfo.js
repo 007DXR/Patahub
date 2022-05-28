@@ -32,7 +32,7 @@ function GithubRepoInfo(props){
         {errInfo}
         </p>
     ) : (info ? (
-        <a href={info.html_url} style={{color: 'black'}} className="text-decoration-none text-start">
+        <a href={info.html_url} style={{color: 'black'}} className="text-decoration-none text-center">
             <h5 className='fw-bold'>{info.name} | <GoStar className='pb-1' size={22} /> {info.watchers }</h5>
             <p>{info.description}</p>
         </a>

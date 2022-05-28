@@ -69,11 +69,13 @@ function RepositoryInfo(props) {
                     {/* <Col>Code</Col> */}
                     <Col>Data</Col>
                     <Col>Makefile</Col>
-                    <Col></Col>
+                    {paperInfo.user_id && paperInfo.user_id == UserInfo.userId ? 
+                        <Col></Col>:""
+                    }
                 </Row>):""
             }
             {
-                RCDList.map((RCD) => <Card className="m-3 p-3"><RCDOverView repoName={repoId} RCD={RCD}
+                RCDList.map((RCD) => <Card className="m-3 py-3"><RCDOverView repoName={repoId} RCD={RCD}
                     onRemove={(rcdID) => delRCD(rcdID)} onEdit={(RCD) => { setIsEditing(true); setEditingRCD(RCD) }} /></Card>)
             }
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
