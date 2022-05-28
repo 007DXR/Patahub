@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import DeleteRepo from '../../Data/DeleteRepo.js'
 import { GoTrashcan } from 'react-icons/go';
+import { UserInfo } from '../Utilities/auth.js';
 
 function DeleteRepoAlert(props) {
     return (
@@ -22,17 +23,16 @@ function DeleteRepoAlert(props) {
 }
 
 function DeleteRepoButton(props) {
-    const userID = 1;
     const [deleteRepoFailure, setDeleteRepoFailure] = useState(false)
     return (
         <React.Fragment>
-            <Button variant="primary h-50 align-self-center" onClick={async function () {
-                const success = await DeleteRepo(userID, props.paper_id)
+            <Button variant="primary align-self-center" onClick={async function () {
+                const success = await DeleteRepo(UserInfo.token, props.paper_id)
                 if (success) window.location.replace('/')
                 else setDeleteRepoFailure(true)
             }}
-                className="bg-transparent border-0 btm-sm ms-2 p-1">
-                <GoTrashcan color='red' />
+                className="bg-danger border-danger ms-2">
+                Delete This Repository
             </Button>
             <DeleteRepoAlert show={deleteRepoFailure} onHide={() => setDeleteRepoFailure(false)} />
         </React.Fragment>

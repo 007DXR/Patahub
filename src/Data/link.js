@@ -27,6 +27,16 @@ export async function getRepositorieById(paper_id) {
     return searchRepositories({paper_id});
 }
 
+export async function getMyRepositories(token) {
+    return $.ajax({
+        type: "get",
+        url: `/api/userinfo/paper`,
+        headers:{
+            Authorization: token
+        },
+    });
+}
+
 export async function getRepositoryInfo() {
     return $.get('/api/getpaperlist',
         { version: "$api版本", username: "tester" });

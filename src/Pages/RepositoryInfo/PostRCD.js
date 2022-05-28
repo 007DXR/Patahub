@@ -4,7 +4,7 @@ import { CreateRCD } from '../../Data/rcd';
 import { CreateResult, getResultListByPaper } from '../../Data/result';
 import CreateResultForm from './CreateResult';
 import { getAllCodesetByUser } from '../../Data/codeset';
-import { getAllDatasetByUser } from '../../Data/dataset';
+import { getMyDatasets } from '../../Data/dataset';
 import CreateDatasetForm from './CreateDataset';
 import { GoPlus } from 'react-icons/go';
 import { UserInfo } from '../Utilities/auth';
@@ -93,11 +93,12 @@ function PostRCDForm(props) {
         //     setCodesetList(data);
         //     //console.log("codesetlist", data)
         // })
-        getAllDatasetByUser().then((data, err) => {
+        if(UserInfo.userName)
+        getMyDatasets(UserInfo.token).then((data, err) => {
             setDatasetList(data);
             //console.log("datasetlist", data)
         })
-    }, [props.onEdit, props.onCreate, resultCreating, codesetCreating, datasetCreating])
+    }, [props.onEdit, props.onCreate, resultCreating, codesetCreating, datasetCreating, UserInfo])
 
     useEffect(() => {
         if (resultID) {

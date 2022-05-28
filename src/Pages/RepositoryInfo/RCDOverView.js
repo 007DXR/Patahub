@@ -10,6 +10,7 @@ import { RiEditFill } from 'react-icons/ri';
 import { getDatasetById } from '../../Data/dataset.js';
 // import { getCodesetById } from '../../Data/codeset.js';
 import { getResultLink, getResultDetail } from '../../Data/rcd.js';
+import { UserInfo } from '../Utilities/auth.js';
 
 function RCDOverView(props) {
     // props.RCD must have keys {RCD}
@@ -60,12 +61,12 @@ function RCDOverView(props) {
                 <div>{props.RCD.makefile}</div>
             </Col>
             {
-                props.needEdit ? (
+                props.RCD.user_id && props.RCD.user_id == UserInfo.userId ? (
                     <Col>
                         <Button onClick={() => props.onEdit(props.RCD)} className="btn-sm"><RiEditFill /></Button>
                         <Button onClick={delRCD} className="btn-sm btn-danger"><BsFillTrashFill /></Button>
                     </Col>)
-                    : <React.Fragment />
+                : null
             }
             
         </Row>

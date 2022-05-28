@@ -24,7 +24,6 @@ function SearchBar() {
                 <option value="paper_name" description="paper">paper</option>
                 <option value="result_name" description="result">result</option>
                 <option value="dataset_name" description="dataset">dataset</option>
-                <option value="codeset_name" description="codeset">codeset</option>
             </Form.Select>
         <FormControl
             type="text" 

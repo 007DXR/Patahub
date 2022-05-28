@@ -40,8 +40,8 @@ export function CreateRepoButton() {
 export function UpdateRepoButton(props) {
     return (
         <Button onClick={() => window.location.replace(`/updateRepo/` + props.paper_id)}
-            className="bg-transparent border-0 btm-sm ms-2 p-1 btn btn-primary h-50 align-self-center">
-            <FaRegEdit color="black"/>
+            className="ms-2 btn btn-primary h-50 align-self-center">
+            Modify This Repository
         </Button>
     )
 }
@@ -50,16 +50,17 @@ export function UpdateRepoButton(props) {
 export function CreateRepoForm(props) {
     const paper_id = useParams().paper_id;
     const [validated, setValidated] = useState(false)
-    const [paperInfo, setPaperInfo] = useState("");
+    const [paperInfo, setPaperInfo] = useState({});
     const [createRepoFailure, setCreateRepoFailure] = useState(false)
     useEffect(() => {
         if(paper_id){
             getRepositorieById(paper_id).then((data, err) => {
-                setPaperInfo({'paper_id': data[0].paper_name});
-                setPaperInfo({'paper_link': data[0].paper_link});
-                setPaperInfo({'paper_abstract': data[0].paper_abstract});
-                setPaperInfo({'docker_link': data[0].docker_link});
-                setPaperInfo({'codeset_link': data[0].codeset_link});
+                setPaperInfo({
+                    'paper_name': data[0].paper_name,
+                    'paper_link': data[0].paper_link,
+                    'paper_abstract': data[0].paper_abstract,
+                    'docker_link': data[0].docker_link,
+                    'codeset_link': data[0].codeset_link});
             })
         }
     },[]);
@@ -75,12 +76,12 @@ export function CreateRepoForm(props) {
             setValidated(false)
             if(props.update){
                 UpdateRepo(UserInfo.token, paper_id, paperInfo).then((data, err) => {
-                    if(err)setCreateRepoFailure(true);
+                    if(err)alert(err);
                     else window.location.replace('/repositoryInfo/' + paper_id);
                 })
             }else{
                 CreateRepo(UserInfo.token, paperInfo).then((data, err) => {
-                    if(err)setCreateRepoFailure(true);
+                    if(err)alert(err);
                     else window.location.replace('/repositoryInfo/' + data.paper_id);
                 })
             }

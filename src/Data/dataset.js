@@ -17,8 +17,14 @@ export async function getDatasetLinkByID(datasetID){
     })
 }
 
-export async function getAllDatasetByUser(){
-    return $.get('/api/dataset');
+export async function getMyDatasets(token){
+    return $.ajax({
+        type: "get",
+        url: `/api/userinfo/dataset`,
+        headers:{
+            Authorization: token
+        },
+    });
 }
 
 export async function getDatasetById(dataset_id){
@@ -48,6 +54,7 @@ export function EditDataset(token, datasetID, datasetName, datasetLink){
     const data = {
         dataset_name: datasetName,
         dataset_link: datasetLink,
+        dataset_id: datasetID,
     }
 
     return $.ajax({

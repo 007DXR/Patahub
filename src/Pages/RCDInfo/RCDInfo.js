@@ -9,7 +9,6 @@ import { getDatasetLinkByID } from '../../Data/dataset.js';
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import SetInfo from './SetInfo.js';
-import { getCodesetLinkByID } from '../../Data/codeset.js';
 
 function RCDInfo(props) {
     let p = useParams();
@@ -17,7 +16,6 @@ function RCDInfo(props) {
     const [RCD, setRCD] = useState({});
     const [resultImg, setResultImg] = useState(null);
     const [datasetLink, setDatasetLink] = useState(null);
-    const [codesetLink, setCodesetLink] = useState(null);
 
     useEffect(() => {
         let rcd;
@@ -33,7 +31,6 @@ function RCDInfo(props) {
             }else throw 'data.length<=0'
         }).then((data, err) => {
             getDatasetLinkByID(rcd.dataset_id).then((data, err) => {setDatasetLink(data)});
-            getCodesetLinkByID(rcd.codeset_id).then((data, err) => {setCodesetLink(data)});
         })
     }, []);
     return (
@@ -46,9 +43,6 @@ function RCDInfo(props) {
             <Row>
                 <Col className='text-start w-50'>
                     <SetInfo RCD={RCD} setLink={datasetLink} link={RCD.data_link}/>
-                </Col>
-                <Col className='text-start w-50'>
-                    <SetInfo RCD={RCD} setLink={codesetLink} link={RCD.code_link}/>
                 </Col>
             </Row>
         </Container>

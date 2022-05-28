@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import avatar from './logo.png';
-import sha256 from 'crypto-js/sha256';
 import { Modal, Form, Button } from 'react-bootstrap';
 import {tryLogin, tryRegister, tryLogout} from './Data/User.js'
 import { setUserInfo, UserInfo } from './Pages/Utilities/auth';
 
-function passwordCrypto(pw){
-    return sha256('PatahubQWQQWwqwqwqwq' + pw + '233333333NeverGonnaGiveUUp').toString();
-}
 
 export function UserAvatar(props) {
     const toUserHomepage = async () => {
@@ -36,7 +32,7 @@ function User(props) {
         const [isShown, setIsShown] = useState(false);
         let handleLogin = (event) => {
             event.preventDefault();
-            tryLogin(userName, passwordCrypto(userPassword)).then((data, err) => {
+            tryLogin(userName, userPassword).then((data, err) => {
                 if(err)alert(err);
                 if(data){
                     let Info = {
@@ -47,7 +43,7 @@ function User(props) {
                     window.localStorage.setItem('UserInfo', JSON.stringify(Info));
                     window.location.reload();
                 }
-            })
+            }, error=>{alert(error.responseJSON.detail)})
         }
         let showForm = () => {setIsShown(true);}
         return (
@@ -80,7 +76,7 @@ function User(props) {
         const [isShown, setIsShown] = useState(false);
         let handleRegister = (event) => {
             event.preventDefault();
-            tryRegister(userName, userEmail, passwordCrypto(userPassword)).then((data, err) => {
+            tryRegister(userName, userEmail, userPassword).then((data, err) => {
                 if(err)alert(err);
                 if(data){
                     alert('Success!');

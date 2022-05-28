@@ -32,7 +32,6 @@ export async function getPaperById(repoID) {
 }
 
 export async function CreateRCD(token, paperID, resultID, datasetID, makefile, rcdID) {
-    let succ = false;
     let data;
     if (rcdID === null) {
         data = {
@@ -53,46 +52,33 @@ export async function CreateRCD(token, paperID, resultID, datasetID, makefile, r
             // code_link: codeLink,
             // data_link: dataLink,
             makefile: makefile,
+            rcd_id: rcdID,
         }
     }
 
-    await $.ajax({
+    return $.ajax({
         type: rcdID ? "put" : "post",
-        url: `/api/rcd/` + (rcdID ? rcdID : ''),
+        url: `/api/rcd` + (rcdID ? '/' + rcdID : ''),
         data: JSON.stringify(data),
         contentType: "application/json",
-        async: true,
-        success: (data) => succ = true,//succ=true;
-        error: function (XMLHttpRequest, texterror) {
-            // console.log("请求失败，无法post RCD", XMLHttpRequest.responseText, texterror);
-            // succ = false;
-            // res = XMLHttpRequest.responseText;
-            alert(XMLHttpRequest.responseText);
-        },
         headers:{
             Authorization: token
         }
     });
-    // return $.post('/api/rcd',data);
-    return succ//[succ, res]
 }
 
-export function DelRCD(userID, rcdID) {
-    let success = false
+export function DelRCD(token, rcdID) {
     const data = JSON.stringify({
         rcd_id: rcdID
     })
-    $.ajax({
+    return $.ajax({
         type: "delete",
-        url: `/api/rcd?cur_user_id=${userID}&rcd_id=${rcdID}`,
+        url: `/api/rcd?rcd_id=${rcdID}`,
         contentType: "application/json",
-        async: false,
-        success: () => success = true,
-        error: function (XMLHttpRequest, texterror) {
-            alert(XMLHttpRequest.responseText);
-        }
+        headers:{
+            Authorization: token
+        },
     });
-    return success
 }
 
 export async function searchRCD(options) {

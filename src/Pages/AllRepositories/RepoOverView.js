@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button'
 import { GoTrashcan } from 'react-icons/go';
-import DeleteRepoButton, { DeleteRepo } from './DeleteRepo.js'
 import { UpdateRepoButton } from './CreateRepo.js';
+import { UserInfo } from '../Utilities/auth.js';
 
 function RepoOverView(props) {
     const repoInfo = props.repoInfo;
@@ -15,19 +15,19 @@ function RepoOverView(props) {
             <Card.Body>
                 <Card.Title className="d-flex" style={{wordBreak: 'break-all'}}>
                     <Link to={'/repositoryInfo/' + repoInfo.paper_id} className="text-start fw-bold mt-2 text-decoration-none" style={{ color: 'black' }}>{repoInfo.paper_name}</Link>
-                    <UpdateRepoButton paper_id={repoInfo.paper_id}/>
-                    <DeleteRepoButton paper_id={repoInfo.paper_id}/>
                 </Card.Title>
-                <Container>
+                <Container className='text-start'>
+                    <Row className='my-2'>
+                        <Col>
+                            <a className='text-body' href={repoInfo.paper_link}>{repoInfo.paper_link}</a>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col>
                             {repoInfo.paper_abstract}
                         </Col>
-                        <Col>
-                            {repoInfo.paper_link}
-                        </Col>
                     </Row>
-                    <Row>{repoInfo.docker_link}</Row>
+                    {/* <Row>{repoInfo.docker_link}</Row> */}
                 </Container>
             </Card.Body>
         </Card>
