@@ -82,7 +82,7 @@ function User(props) {
                     alert('Success!');
                     setIsShown(false);
                 }
-            })
+            }, error=>{alert(error.responseJSON.detail)})
         }
         let showForm = () => {setIsShown(true);}
         return (
