@@ -118,7 +118,9 @@ function User(props) {
         window.location.reload();
     };
 
-    return UserInfo.userName ? (
+    return UserInfo.loading ? (
+        <Button>Loading...</Button>
+    ) : UserInfo.userName ? (
         <React.Fragment>
             <UserName userName={UserInfo.userName}></UserName>
             <Button onClick={Logout}>Logout</Button>

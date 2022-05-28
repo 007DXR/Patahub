@@ -20,21 +20,28 @@ import { validateUser } from './Data/User.js';
 function App() {
     const [UserInfo, setUserInfo] = useState({
         userName: undefined,
+        loading: true,
     });
     initAuth([UserInfo, setUserInfo]);
     useEffect(() => {
-        let saved = JSON.parse(window.localStorage.getItem('UserInfo'));
-        if(Object.prototype.toString.call(saved) == "[object Object]"){
-            let newUserInfo = saved;
-            validateUser(saved, setUserInfo).then((data, err) => {
-                if(data){
-                    newUserInfo.userId = data.user_id;
-                    newUserInfo.userEmail = data.user_email;
-                }else newUserInfo = {
-                    userName: undefined,
-                };
-                setUserInfo(newUserInfo);
-            })
+        try{
+            let saved = JSON.parse(window.localStorage.getItem('UserInfo'));
+            if(Object.prototype.toString.call(saved) == "[object Object]"){
+                let newUserInfo = saved;
+                newUserInfo.loading = false;
+                validateUser(saved, setUserInfo).then((data, err) => {
+                    if(data){
+                        newUserInfo.userName = data.user_name;
+                        newUserInfo.userId = data.user_id;
+                        newUserInfo.userEmail = data.user_email;
+                    }else newUserInfo = {
+                        userName: undefined,
+                    };
+                    setUserInfo(newUserInfo);
+                }, error=>setUserInfo({loading: false}))
+            }else setUserInfo({loading: false});
+        }catch(err){
+            setUserInfo({loading: false});
         }
     }, []);
     return (

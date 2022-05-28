@@ -96,9 +96,11 @@ function UserModifyInfo(props){
     function handleSubmit(event){
         event.preventDefault();
         updateUser(UserInfo.token, myUserInfo.user_name, myUserInfo.user_email, myUserInfo.user_password, UserInfo.userId).then((data, err) => {
-            if(data) window.location.refresh();
-            else alert(err);
-        });
+            if(data){
+                window.localStorage.setItem('UserInfo', '');
+                window.location.replace('/');
+            }else alert(err);
+        }, error=>{alert(JSON.stringify(error))});
     }
     
     return (
