@@ -53,17 +53,18 @@ export function CreateRepoForm(props) {
     const [paperInfo, setPaperInfo] = useState({});
     const [createRepoFailure, setCreateRepoFailure] = useState(false)
     useEffect(() => {
-        if(paper_id){
+        if (paper_id) {
             getRepositorieById(paper_id).then((data, err) => {
                 setPaperInfo({
                     'paper_name': data[0].paper_name,
                     'paper_link': data[0].paper_link,
                     'paper_abstract': data[0].paper_abstract,
                     'docker_link': data[0].docker_link,
-                    'codeset_link': data[0].codeset_link});
+                    'codeset_link': data[0].codeset_link
+                });
             })
         }
-    },[]);
+    }, []);
     async function handleSubmit(event) {
         event.preventDefault();
         const form = event.currentTarget;
@@ -74,27 +75,27 @@ export function CreateRepoForm(props) {
         }
         else {
             setValidated(false)
-            if(props.update){
+            if (props.update) {
                 UpdateRepo(UserInfo.token, paper_id, paperInfo).then((data, err) => {
-                    if(err)alert(err);
+                    if (err) alert(err);
                     else window.location.replace('/repositoryInfo/' + paper_id);
-                })
-            }else{
+                }).catch((err) => alert(err.responseText))
+            } else {
                 CreateRepo(UserInfo.token, paperInfo).then((data, err) => {
-                    if(err)alert(err);
+                    if (err) alert(err);
                     else window.location.replace('/repositoryInfo/' + data.paper_id);
-                })
+                }).catch((err) => alert(err.responseText))
             }
         }
     };
     return (
         <React.Fragment>
             <Form className="w-50 mx-auto pt-5" noValidate validated={validated} id="formPaperInfo" onSubmit={handleSubmit}>
-                {<SimpleForm keys={['paper_name', 'paper_link', 'paper_abstract', 'docker_link', 'codeset_link']} 
-                    value={paperInfo} setValue={setPaperInfo}/>}
+                {<SimpleForm keys={['paper_name', 'paper_link', 'paper_abstract', 'docker_link', 'codeset_link']}
+                    value={paperInfo} setValue={setPaperInfo} />}
                 <div className="d-grid gap-2">
                     <Button variant="primary" type="submit">
-                        {props.update ? "Update": "Create"}
+                        {props.update ? "Update" : "Create"}
                     </Button>
                 </div>
             </Form>

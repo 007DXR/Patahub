@@ -139,7 +139,7 @@ function UserProfile(props) {
 
 function UserOverview(props) {
     return (
-        <Tabs defaultActiveKey="Datasets" className="mb-3">
+        <Tabs defaultActiveKey="Papers" className="mb-3">
             <Tab eventKey="Papers" title="Papers">
                 <PaperCardList/>
             </Tab>

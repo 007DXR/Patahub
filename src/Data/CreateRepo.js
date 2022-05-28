@@ -7,7 +7,7 @@ export async function CreateRepo(token, params) {
         url: `/api/paper`,
         data: data,
         contentType: "application/json",
-        headers:{
+        headers: {
             Authorization: token
         }
     });
@@ -22,7 +22,7 @@ export async function UpdateRepo(token, paperId, params) {
         url: `/api/paper/${paperId}`,
         data: data,
         contentType: "application/json",
-        headers:{
+        headers: {
             Authorization: token
         }
     });

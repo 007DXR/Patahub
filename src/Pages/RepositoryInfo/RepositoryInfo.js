@@ -10,10 +10,11 @@ import { GoPlus } from 'react-icons/go';
 import DeleteRepoButton from './DeleteRepo.js';
 import { UserInfo } from '../Utilities/auth.js';
 import { UpdateRepoButton } from '../AllRepositories/CreateRepo.js';
+import Stack from 'react-bootstrap/Stack'
 
 function RepositoryInfo(props) {
     const repoId = useParams().repoName;
-    
+
     const [paperInfo, setPaperInfo] = useState({});
     const [RCDList, setRCDList] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
@@ -37,7 +38,7 @@ function RepositoryInfo(props) {
 
     const delRCD = rcdID => {
         DelRCD(UserInfo.token, rcdID).then((data, err) => {
-            if(data)window.location.reload();
+            if (data) window.location.reload();
             else alert(err);
         });
         setIsDeleting(true);
@@ -58,34 +59,40 @@ function RepositoryInfo(props) {
         <Container className='pt-5 pb-5'>
             <div className='mb-5 text-start'>
                 <p class='fs-1'>{paperInfo.paper_name}</p>
-                <div ><b>Link: </b><a  href={paperInfo.paper_link}>{paperInfo.paper_link}</a></div>
-                <div ><b>Code: </b><a  href={paperInfo.codeset_link}>{paperInfo.codeset_link}</a></div>
-                <div ><b>Docker: </b>{paperInfo.docker_link}</div>
-                <div ><b>Abstract: </b>{paperInfo.paper_abstract}</div>
+                <p >{paperInfo.paper_abstract}</p>
+                <Stack direction="horizontal" gap={3}>
+                    <Button variant="outline-primary" href={paperInfo.paper_link}>Paper</Button>
+                    <Button variant="outline-primary" href={paperInfo.codeset_link}>Code</Button>
+                    <Button variant="outline-primary" href={paperInfo.docker_link}>Docker</Button>
+                </Stack>
             </div>
-            {RCDList.length>0?(
-                <Row className="mt-5">
+            <div className='mb-3 text-start'>
+                <p class="fs-4">RCD List</p>
+            </div>
+            <hr />
+            {RCDList.length > 0 ? (
+                <Row className="mt-3">
                     <Col>Result</Col>
                     {/* <Col>Code</Col> */}
                     <Col>Data</Col>
                     <Col>Makefile</Col>
-                    {paperInfo.user_id && paperInfo.user_id == UserInfo.userId ? 
-                        <Col></Col>:""
+                    {paperInfo.user_id && paperInfo.user_id == UserInfo.userId ?
+                        <Col></Col> : ""
                     }
-                </Row>):""
+                </Row>) : ""
             }
             {
                 RCDList.map((RCD) => <Card className="m-3 py-3"><RCDOverView repoName={repoId} RCD={RCD}
                     onRemove={(rcdID) => delRCD(rcdID)} onEdit={(RCD) => { setIsEditing(true); setEditingRCD(RCD) }} /></Card>)
             }
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
-            {paperInfo.user_id && paperInfo.user_id == UserInfo.userId ? 
+            {paperInfo.user_id && paperInfo.user_id == UserInfo.userId ?
                 <React.Fragment>
                     <Button onClick={() => setIsCreating(true)}>Add New RCD</Button>
-                    <UpdateRepoButton paper_id={paperInfo.paper_id}/>
-                    <DeleteRepoButton paper_id={paperInfo.paper_id}/>
+                    <UpdateRepoButton paper_id={paperInfo.paper_id} />
+                    <DeleteRepoButton paper_id={paperInfo.paper_id} />
                 </React.Fragment>
-            : null}
+                : null}
             <PostRCDForm onCreate={isCreating} onEdit={isEditing} RCD={editingRCD} onHide={hideForm} fixedPaperID={repoId}></PostRCDForm>
         </Container >
     )
