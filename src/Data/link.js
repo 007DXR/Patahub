@@ -18,6 +18,12 @@ export async function searchAll(api_name, options) {
 export async function searchRepositories(options) {
     return $.get('/api/paper', options);
 }
+export async function getRepositoriesByUserId(userId) {
+    return $.get(`/api/${userId}/paper`);
+}
+export async function getDatasetsByUserId(userId) {
+    return $.get(`/api/${userId}/dataset`);
+}
 
 export async function getAllRepositories() {
     return searchRepositories(null);

@@ -60,7 +60,7 @@ function App() {
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />
                     <Route path="/search/:op" element={<Search />} />
-                    <Route path="/UserHomepage/:userName" element={<UserHomepage />} />
+                    <Route path="/UserHomepage/:userId" element={<UserHomepage />} />
                     <Route path="/advancedSearch" element={<AdvancedSearch />} />
                 </Routes>
             </BrowserRouter>

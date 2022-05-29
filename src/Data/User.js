@@ -5,6 +5,10 @@ function passwordCrypto(pw){
     return sha256('PatahubQWQQWwqwqwqwq' + pw + '233333333NeverGonnaGiveUUp').toString();
 }
 
+export async function getInfoByUserId(userId) {
+    return $.get(`/api/${userId}/info`);
+}
+
 export async function tryLogin(userName, userPassword) {
     return $.ajax({
         url: '/api/login',
@@ -15,6 +19,7 @@ export async function tryLogin(userName, userPassword) {
         },
     });
 }
+
 export async function tryRegister(userName, userEmail, userPassword) {
     return $.ajax({
         url: '/api/register',
