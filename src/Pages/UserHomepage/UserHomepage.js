@@ -101,7 +101,7 @@ function UserModifyInfo(props){
                 window.localStorage.setItem('UserInfo', '');
                 window.location.replace('/');
             }else alert(err);
-        }, error=>{alert(JSON.stringify(error))});
+        }, error=>{alert(error.responseJSON.detail)});
     }
     
     return (
