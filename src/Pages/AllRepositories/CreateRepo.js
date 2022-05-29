@@ -91,7 +91,11 @@ export function CreateRepoForm(props) {
     return (
         <React.Fragment>
             <Form className="w-50 mx-auto pt-5" noValidate validated={validated} id="formPaperInfo" onSubmit={handleSubmit}>
-                {<SimpleForm keys={['paper_name', 'paper_link', 'paper_abstract', 'docker_link', 'codeset_link']}
+                {<SimpleForm keys={[{key: 'paper_name', content: 'Paper name'},
+                                    {key: 'paper_link', content: 'Paper link'},
+                                    {key: 'paper_abstract', content: 'Abstract'},
+                                    {key: 'docker_link', content: 'Docker link'},
+                                    {key: 'codeset_link', content: 'Codeset Link'}]}
                     value={paperInfo} setValue={setPaperInfo} />}
                 <div className="d-grid gap-2">
                     <Button variant="primary" type="submit">

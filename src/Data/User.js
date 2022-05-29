@@ -41,14 +41,14 @@ export async function validateUser(userInfo, setUserInfo) {
     });
 }
 
-export async function updateUser(token, userName, userEmail, userPassword, userId) {
+export async function updateUser(token, userName, userEmail, userOldPassword, userNewPassword, userId) {
     return $.ajax({
-        url: '/api/userinfo/' + userId,
+        url: '/api/userinfo/' + userId + '?user_old_password=' + passwordCrypto(userOldPassword),
         type: "put",
         data: JSON.stringify({
             'user_name': userName,
             'user_email': userEmail,
-            'user_password': passwordCrypto(userPassword),
+            'user_password': userNewPassword ? passwordCrypto(userNewPassword) : '',
         }),
         contentType: "application/json",
         headers:{

@@ -89,13 +89,14 @@ function UserModifyInfo(props){
         if(UserInfo.userName)setMyUserInfo({
             user_name: UserInfo.userName,
             user_email: UserInfo.userEmail,
-            user_password: '',
+            old_password: '',
+            new_password: '',
         });
     }, [UserInfo]);
 
     function handleSubmit(event){
         event.preventDefault();
-        updateUser(UserInfo.token, myUserInfo.user_name, myUserInfo.user_email, myUserInfo.user_password, UserInfo.userId).then((data, err) => {
+        updateUser(UserInfo.token, myUserInfo.user_name, myUserInfo.user_email, myUserInfo.old_password, myUserInfo.new_password, UserInfo.userId).then((data, err) => {
             if(data){
                 window.localStorage.setItem('UserInfo', '');
                 window.location.replace('/');
@@ -112,7 +113,11 @@ function UserModifyInfo(props){
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
-                        <SimpleForm keys={['user_name', 'user_email', {key: 'user_password', type:'password'}]} value={myUserInfo} setValue={setMyUserInfo}/>
+                        <SimpleForm keys={[{key: 'user_name', content: 'Name'},
+                                        {key: 'user_email', content: 'Email'},
+                                        {key: 'old_password', type:'password', content: 'Old password'}, 
+                                        {key: 'new_password', type:'password', content: 'New password'}]}
+                            value={myUserInfo} setValue={setMyUserInfo}/>
                         <Button type="submit">Submit</Button>
                     </Form>
                 </Modal.Body>
