@@ -168,11 +168,10 @@ function UserHomepage(props) {
     const [info , setInfo] = useState({});
     const [edit , setEdit] = useState(false);
     useEffect(() => {
-        getInfoByUserId(userId).then((data) => {
-            if(data.length>0)setInfo(data[0]);
-            else throw 'cannot find such user';
+        if(userId)getInfoByUserId(userId).then((data) => {
+            setInfo(data);
         }).catch(err => window.location.replace('/'))
-    }, []);
+    }, [userId]);
     useEffect(() => {
         setEdit(userId == UserInfo.userId);
     }, [UserInfo]);
