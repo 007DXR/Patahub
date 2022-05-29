@@ -44,11 +44,11 @@ function RCDOverView(props) {
     return (
         <Row>
             <Col>
-                <Link to={`/RCDInfo/${props.repoName}/${props.RCD.rcd_id}`}>
-                    {/* <Image src={resultLink} style={{ height: '50px' }} /> */}
+                {/*<Link to={`/RCDInfo/${props.repoName}/${props.RCD.rcd_id}`}>
                     <div>{resultDetail.result_name}</div>
-                </Link>
-                <div>{resultDetail.result_value}</div>
+                </Link>*/}
+                <div>{resultDetail.result_name}</div>
+                <div>value: {resultDetail.result_value}</div>
                 <div>{resultDetail.result_description}</div>
             </Col>
             {/* <Col>

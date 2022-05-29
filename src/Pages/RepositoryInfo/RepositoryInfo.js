@@ -60,6 +60,10 @@ function RepositoryInfo(props) {
             <div className='mb-5 text-start'>
                 <p class='fs-1'>{paperInfo.paper_name}</p>
                 <p >{paperInfo.paper_abstract}</p>
+                <p>
+                    {'Author: '}
+                    <a variant="outline-primary" href={`/UserHomepage/` + paperInfo.user_id}>{paperInfo.user_name}</a>
+                </p>
                 <Stack direction="horizontal" gap={3}>
                     <Button variant="outline-primary" href={paperInfo.paper_link}>Paper</Button>
                     <Button variant="outline-primary" href={paperInfo.codeset_link}>Code</Button>

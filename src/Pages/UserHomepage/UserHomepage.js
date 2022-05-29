@@ -10,10 +10,10 @@ import { UserAvatar } from '../../User.js'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import { UserInfo } from '../Utilities/auth';
-import { getMyRepositories } from '../../Data/link';
+import { getDatasetsByUserId, getMyRepositories, getRepositoriesByUserId } from '../../Data/link';
 import RepoOverView from '../AllRepositories/RepoOverView';
 import SimpleForm from '../Utilities/SimpleForm';
-import { updateUser } from '../../Data/User';
+import { getInfoByUserId, updateUser } from '../../Data/User';
 import { HiOutlineMail } from 'react-icons/hi'
 
 function DatasetCard(props) {
@@ -33,7 +33,7 @@ function DatasetCard(props) {
                     <p>
                     {props.dataset.dataset_link}
                     </p>
-                    { props.dataset.user_id && props.dataset.user_id == UserInfo.userId ? 
+                    { props.edit ? 
                         <Button onClick={function (event) {
                         event.stopPropagation()
                         DeleteDataset(UserInfo.token, props.dataset.dataset_id).then((data, err) => {
@@ -50,28 +50,32 @@ function DatasetCard(props) {
 }
 
 function PaperCardList(props) {
-    const [paperList, setPaperList] = useState([]);
+    const [paperList, setPaperList] = useState(null);
     useEffect(() => {
         if(UserInfo.userName)
-        getMyRepositories(UserInfo.token).then((data, err) => {
+        getRepositoriesByUserId(props.userId).then((data, err) => {
             setPaperList(data);
         })
     }, [UserInfo]);
-    return paperList.map((paper) => <RepoOverView repoInfo={paper}/>)
+    return (paperList && paperList.length>0 ? 
+        paperList.map((paper) => <RepoOverView repoInfo={paper}/>)
+    : Object.is(paperList, null) ? null
+    : 'This user does not have any papers yet :(')
 }
 
 function DatasetCardList(props) {
-    const [datasetList, setDatasetList] = useState([]);
+    const [datasetList, setDatasetList] = useState(null);
     const [datasetCreating, setDatasetCreating] = useState(false);
     const [datasetEditing, setDatasetEditing] = useState(false);
     const [editingDataset, setEditingDataset] = useState({});
     useEffect(() => {
         if(UserInfo.userName)
-        getMyDatasets(UserInfo.token).then((data, err) => {
+        getDatasetsByUserId(props.userId).then((data, err) => {
             setDatasetList(data);
         })
     }, [UserInfo]);
     return (
+        datasetList && datasetList.length>0 ? 
         <React.Fragment>
             {datasetList.map((dataset) => <DatasetCard dataset={dataset}
                 onEdit={() => {setDatasetEditing(true); setEditingDataset(dataset) }}> </DatasetCard>
@@ -79,6 +83,8 @@ function DatasetCardList(props) {
             <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
             <EditDatasetForm show={datasetEditing} onHide={() => setDatasetEditing(false)} dataset={editingDataset}></EditDatasetForm>
         </React.Fragment>
+        : Object.is(datasetList, null) ? null
+        : 'This user does not have any datasets yet :('
     )
 }
 
@@ -128,17 +134,19 @@ function UserModifyInfo(props){
 
 function UserProfile(props) {
     return (
+        props.info.user_name ? 
         <Container className='mt-5'>
-            <Row className='h4'>{props.userName}'s homepage</Row>
-            <HiOutlineMail /> {UserInfo.userEmail}
+            <Row className='h4'>{props.info.user_name}'s homepage</Row>
+            <HiOutlineMail /> {props.info.user_email}
             <br/>
             {
-                props.userName == UserInfo.userName ? 
+                props.edit ? 
                     <UserModifyInfo />
                 : null
             }
 
         </Container>
+        : 'Loading...'
     )
 }
 
@@ -146,26 +154,35 @@ function UserOverview(props) {
     return (
         <Tabs defaultActiveKey="Papers" className="mb-3">
             <Tab eventKey="Papers" title="Papers">
-                <PaperCardList/>
+                <PaperCardList userId={props.userId} edit={props.edit} info={props.info}/>
             </Tab>
             <Tab eventKey="Datasets" title="Datasets">
-                <DatasetCardList/>
+                <DatasetCardList userId={props.userId} edit={props.edit} info={props.info}/>
             </Tab>
         </Tabs>
     )
 }
 
 function UserHomepage(props) {
-    const userName = useParams().userName;
+    const userId = useParams().userId;
+    const [info , setInfo] = useState({});
+    const [edit , setEdit] = useState(false);
+    useEffect(() => {
+        getInfoByUserId(userId).then((data) => {
+            if(data.length>0)setInfo(data[0]);
+            else throw 'cannot find such user';
+        }).catch(err => window.location.replace('/'))
+    }, []);
+    useEffect(() => {
+        setEdit(userId == UserInfo.userId);
+    }, [UserInfo]);
     return (
-        userName == UserInfo.userName ? 
         <Container className='mt-2'>
             <Row>
-                <Col xs={4}><UserProfile userName={userName}/></Col>
-                <Col xs={8}><UserOverview/></Col>
+                <Col xs={4}><UserProfile userId={userId} edit={edit} info={info}/></Col>
+                <Col xs={8}><UserOverview userId={userId} edit={edit} info={info}/></Col>
             </Row>
         </Container>
-        : null
     )
 }
 

@@ -17,10 +17,10 @@ export function UserAvatar(props) {
 
 function UserName(props) {
     const toUserHomepage = async () => {
-        window.location.replace(`/UserHomepage/${props.userName}`);
+        window.location.replace(`/UserHomepage/${UserInfo.userId}`);
     }
     return (
-        <Button onClick={toUserHomepage} className='my-auto text-light fw-bold fs-6'>{props.userName}</Button>
+        <Button onClick={toUserHomepage} className='my-auto text-light fw-bold fs-6'>{UserInfo.userName}</Button>
     )
 }
 
@@ -122,7 +122,7 @@ function User(props) {
         <Button>Loading...</Button>
     ) : UserInfo.userName ? (
         <React.Fragment>
-            <UserName userName={UserInfo.userName}></UserName>
+            <UserName />
             <Button onClick={Logout}>Logout</Button>
         </React.Fragment>
     ) : (
