@@ -10,9 +10,7 @@ import { CreateRepoButton, CreateRepoForm } from './Pages/AllRepositories/Create
 import UserHomepage from './Pages/UserHomepage/UserHomepage.js';
 import Search from './Pages/Search/Search.js'
 import AdvancedSearch from './Pages/Search/AdvancedSearch.js'
-import ReactMarkdown from 'react-markdown'
 import 'highlight.js/styles/default.css';
-import CreateDatasetPage from './Pages/RepositoryInfo/CreateDatasetPage.js';
 import initAuth from './Pages/Utilities/auth.js';
 import { validateUser } from './Data/User.js';
 
@@ -56,7 +54,6 @@ function App() {
                     <Route path="/" element={<AllRepositories />} />
                     <Route path="/createRepo" element={<CreateRepoForm />} />
                     <Route path="/updateRepo/:paper_id" element={<CreateRepoForm update={true} />} />
-                    <Route path="/createDataset" element={<CreateDatasetPage />} />
                     <Route path="/repositoryInfo/:repoName" element={<RepositoryInfo />} />
                     <Route path="/RCDInfo/:repoName/:RCDId" element={<RCDInfo />} />
                     <Route path="/search/:op" element={<Search />} />

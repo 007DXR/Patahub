@@ -181,45 +181,6 @@ function PostRCDForm(props) {
                                 Please choose a result.
                             </Form.Control.Feedback>
                         </Form.Group>
-                        {/*
-                        <Form.Group className="mb-3">
-                            <Form.Label>Codeset</Form.Label>
-                            {
-                                props.onCreate ? (
-                                    <React.Fragment>
-                                        <Button onClick={() => setCodesetCreating(true)}><GoPlus /></Button>
-                                        <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
-                                            onChange={onCodesetIDInput}>
-                                            <option value="">choose a codeset</option>
-                                            {codesetList.map((codeset) => <option value={codeset.codeset_id}>{codeset.codeset_name}</option>)}
-                                        </Form.Select>
-                                    </React.Fragment>
-                                ) : (props.onEdit && codesetID ? (
-                                    <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required //disabled
-                                        onChange={onCodesetIDInput}>
-                                        {codesetList.map((codeset) => {
-                                            if (codeset.codeset_id == codesetID) {
-                                                return (<option selected value={codesetID}>{codesetName}</option>);
-                                            } else {
-                                                return (<option value={codeset.codeset_id}>{codeset.codeset_name}</option>);
-                                            }
-                                        })}
-                                    </Form.Select>) : ""
-                                )
-                            }
-                            <Form.Control.Feedback type="invalid">
-                                Please choose a codeset.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>code link</Form.Label>
-                            <Form.Control type="text" maxLength="200" value={codeLink} onChange={onCodeLinkInput} required placeholder="/blob/main/code.py"/>
-                            <Form.Control.Feedback type="invalid">
-                                Please provide a code link.
-                            </Form.Control.Feedback>
-                        </Form.Group> */}
-
                         <Form.Group className="mb-3">
                             <Form.Label>Dataset</Form.Label>
                             {

@@ -18,13 +18,13 @@ function RCDOverView(props) {
         props.onRemove(props.RCD.rcd_id);
     }
     // const [codesetLink, setCodeSetLink] = useState('');
-    const [datasetLink, setDataSetLink] = useState('');
+    const [dataset, setDataSet] = useState('');
     // const [resultLink, setResultLink] = useState('');
     const [resultDetail, setResultDetail] = useState({});
 
     useEffect(() => {
         getDatasetById(props.RCD.dataset_id).then((data, err) => {
-            if (data.length > 0) setDataSetLink(data[0].dataset_link);
+            if (data.length > 0) setDataSet(data[0]);
             else throw (err || 'error no valid dataset');
         });
         // getCodesetById(props.RCD.codeset_id).then((data, err) => {
@@ -55,7 +55,7 @@ function RCDOverView(props) {
                 <GithubRepoInfo link={codesetLink}>somecode</GithubRepoInfo>
             </Col> */}
             <Col>
-                <GithubRepoInfo link={datasetLink}>somedata</GithubRepoInfo>
+                <a href={dataset.dataset_link}>{dataset.dataset_name}</a>
             </Col>
             <Col>
                 <div>{props.RCD.makefile}</div>
