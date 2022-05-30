@@ -77,7 +77,7 @@ function DatasetCardList(props) {
     return (
         datasetList && datasetList.length>0 ? 
         <React.Fragment>
-            {datasetList.map((dataset) => <DatasetCard dataset={dataset}
+            {datasetList.map((dataset) => <DatasetCard dataset={dataset} edit={props.edit}
                 onEdit={() => {setDatasetEditing(true); setEditingDataset(dataset) }}> </DatasetCard>
             )}
             <CreateDatasetForm show={datasetCreating} onHide={() => setDatasetCreating(false)}></CreateDatasetForm>
