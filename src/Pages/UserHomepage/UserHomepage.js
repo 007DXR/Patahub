@@ -55,7 +55,7 @@ function DatasetCard(props) {
 function PaperCardList(props) {
     const [paperList, setPaperList] = useState(null);
     useEffect(() => {
-        if(UserInfo.userName)
+        // if(UserInfo.userName)
         getRepositoriesByUserId(props.userId).then((data, err) => {
             setPaperList(data);
         })
@@ -72,7 +72,7 @@ function DatasetCardList(props) {
     const [datasetEditing, setDatasetEditing] = useState(false);
     const [editingDataset, setEditingDataset] = useState({});
     useEffect(() => {
-        if(UserInfo.userName)
+        // if(UserInfo.userName)
         getDatasetsByUserId(props.userId).then((data, err) => {
             setDatasetList(data);
         })
@@ -99,7 +99,7 @@ function ResultCardList(props) {
     const [resultEditing, setResultEditing] = useState(false);
     const [editingResult, setEditingResult] = useState({});
     useEffect(() => {
-        if(UserInfo.userName)
+        // if(UserInfo.userName)
         getResultsByUserId(props.userId).then((data, err) => {
             setResultList(data);
         })

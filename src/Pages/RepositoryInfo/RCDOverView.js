@@ -66,9 +66,9 @@ function RCDOverView(props) {
                         <Button onClick={() => props.onEdit(props.RCD)} className="btn-sm"><RiEditFill /></Button>
                         <Button onClick={delRCD} className="btn-sm btn-danger"><BsFillTrashFill /></Button>
                     </Col>)
-                : null
+                    : null
             }
-            
+
         </Row>
     )
 }
