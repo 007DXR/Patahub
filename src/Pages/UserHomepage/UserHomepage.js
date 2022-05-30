@@ -10,11 +10,14 @@ import { UserAvatar } from '../../User.js'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import { UserInfo } from '../Utilities/auth';
-import { getDatasetsByUserId, getMyRepositories, getRepositoriesByUserId } from '../../Data/link';
+import { getDatasetsByUserId, getMyRepositories, getRepositoriesByUserId, getResultsByUserId } from '../../Data/link';
 import RepoOverView from '../AllRepositories/RepoOverView';
 import SimpleForm from '../Utilities/SimpleForm';
 import { getInfoByUserId, updateUser } from '../../Data/User';
 import { HiOutlineMail } from 'react-icons/hi'
+import CreateResultForm from '../RepositoryInfo/CreateResult';
+import { DeleteResult } from '../../Data/result';
+import EditResultForm from '../RepositoryInfo/EditResult';
 
 function DatasetCard(props) {
     const [showEdit, setShowEdit] = useState(false);
@@ -88,6 +91,68 @@ function DatasetCardList(props) {
     )
 }
 
+
+
+function ResultCardList(props) {
+    const [resultList, setResultList] = useState(null);
+    const [resultCreating, setResultCreating] = useState(false);
+    const [resultEditing, setResultEditing] = useState(false);
+    const [editingResult, setEditingResult] = useState({});
+    useEffect(() => {
+        if(UserInfo.userName)
+        getResultsByUserId(props.userId).then((data, err) => {
+            setResultList(data);
+        })
+    }, [UserInfo]);
+    return (
+        resultList && resultList.length>0 ? 
+        <React.Fragment>
+            {resultList.map((result) => <ResultCard result={result} edit={props.edit}
+                onEdit={() => {setResultEditing(true); setEditingResult(result) }}> </ResultCard>
+            )}
+            <CreateResultForm show={resultCreating} onHide={() => setResultCreating(false)}></CreateResultForm>
+            <EditResultForm show={resultEditing} onHide={() => setResultEditing(false)} result={editingResult}></EditResultForm>
+        </React.Fragment>
+        : Object.is(resultList, null) ? null
+        : 'This user does not have any results yet :('
+    )
+}
+
+function ResultCard(props) {
+    const [showEdit, setShowEdit] = useState(false);
+    const editResult = () => {
+        if(props.result.user_id && props.result.user_id == UserInfo.userId){
+            props.onEdit();
+            setShowEdit(true);
+        }
+    };
+
+    return (
+        <>
+            <Card className="mt-3 pt-3" onClick={editResult}>
+                <Card.Title>{props.result.result_name}</Card.Title>
+                <Card.Body>
+                    <p>
+                    value: {props.result.result_value}
+                    <br/>
+                    description: {props.result.result_description}
+                    </p>
+                    { props.edit ? 
+                        <Button onClick={function (event) {
+                        event.stopPropagation()
+                        DeleteResult(UserInfo.token, props.result.result_id).then((data, err) => {
+                            if(data)window.location.reload();
+                            else alert(err);
+                        });
+                        }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button>
+                    : null}
+                </Card.Body> 
+                
+            </Card>
+        </>
+    )
+}
+
 function UserModifyInfo(props){
     let [myUserInfo, setMyUserInfo] = useState({});
     let [onEdit, setOnEdit] = useState(false);
@@ -158,6 +223,9 @@ function UserOverview(props) {
             </Tab>
             <Tab eventKey="Datasets" title="Datasets">
                 <DatasetCardList userId={props.userId} edit={props.edit} info={props.info}/>
+            </Tab>
+            <Tab eventKey="Results" title="Results">
+                <ResultCardList userId={props.userId} edit={props.edit} info={props.info}/>
             </Tab>
         </Tabs>
     )

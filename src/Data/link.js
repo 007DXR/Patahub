@@ -24,6 +24,9 @@ export async function getRepositoriesByUserId(userId) {
 export async function getDatasetsByUserId(userId) {
     return $.get(`/api/${userId}/dataset`);
 }
+export async function getResultsByUserId(userId) {
+    return $.get(`/api/${userId}/result`);
+}
 
 export async function getAllRepositories() {
     return searchRepositories(null);

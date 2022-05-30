@@ -28,7 +28,6 @@ export function CreateResult(token, resultName, resultDescription, resultValue, 
         url: `/api/result`,
         data: JSON.stringify(data),
         contentType: "application/json",
-        async: false,
         success: (data) => {res = data},
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
@@ -38,4 +37,38 @@ export function CreateResult(token, resultName, resultDescription, resultValue, 
         }
     });
     return res
+}
+export function EditResult(token, resultName, resultDescription, resultValue, paperID, resultID){
+    const data = {
+        // result_type: resultType,
+        result_name: resultName,
+        result_description: resultDescription,
+        result_value: resultValue,
+        // result_link: "link",
+        paper_id: paperID,
+        result_id: resultID,
+    }
+    
+
+    return $.ajax({
+        type: "put",
+        url: `/api/result/${resultID}`,
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        headers:{
+            Authorization: token
+        }
+    });
+}
+export function DeleteResult(token, datasetID) {
+    return $.ajax({
+        type: "delete",
+        url: `/api/result?result_id=${datasetID}`,
+        error: function (XMLHttpRequest, texterror) {
+            alert(XMLHttpRequest.responseText);
+        },
+        headers:{
+            Authorization: token
+        }
+    });
 }
