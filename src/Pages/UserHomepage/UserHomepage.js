@@ -233,6 +233,7 @@ function UserOverview(props) {
 
 function UserHomepage(props) {
     const userId = useParams().userId;
+    if(userId <= 0)window.location.replace('/');
     const [info , setInfo] = useState({});
     const [edit , setEdit] = useState(false);
     useEffect(() => {

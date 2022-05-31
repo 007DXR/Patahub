@@ -8,7 +8,7 @@ const keys = {
     paper: ['paper_name','paper_id'],
     result: ['result_name','result_id','result_type'],
     dataset: ['dataset_name','dataset_id'],
-    rcd: ['paper_id','result_id','dataset_id','codeset_id','rcd_id']
+    rcd: ['paper_id','result_id','dataset_id','rcd_id']
 };
 
 function AdvancedSearch(props){
