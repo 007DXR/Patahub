@@ -47,7 +47,7 @@ function RCDOverView(props) {
                 {/*<Link to={`/RCDInfo/${props.repoName}/${props.RCD.rcd_id}`}>
                     <div>{resultDetail.result_name}</div>
                 </Link>*/}
-                <div>{resultDetail.result_name}</div>
+                <div><a href={`/RCDInfo/${props.repoName}/${props.RCD.rcd_id}`}>{resultDetail.result_name}</a></div>
                 <div>value: {resultDetail.result_value}</div>
                 <div>{resultDetail.result_description}</div>
             </Col>
@@ -66,9 +66,9 @@ function RCDOverView(props) {
                         <Button onClick={() => props.onEdit(props.RCD)} className="btn-sm"><RiEditFill /></Button>
                         <Button onClick={delRCD} className="btn-sm btn-danger"><BsFillTrashFill /></Button>
                     </Col>)
-                : null
+                    : null
             }
-            
+
         </Row>
     )
 }

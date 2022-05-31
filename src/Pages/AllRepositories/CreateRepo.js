@@ -79,23 +79,23 @@ export function CreateRepoForm(props) {
                 UpdateRepo(UserInfo.token, paper_id, paperInfo).then((data, err) => {
                     if (err) alert(err);
                     else window.location.replace('/repositoryInfo/' + paper_id);
-                }).catch((err) => alert(err.responseText))
+                }, error => { alert(error.responseJSON.detail) })
             } else {
                 CreateRepo(UserInfo.token, paperInfo).then((data, err) => {
                     if (err) alert(err);
                     else window.location.replace('/repositoryInfo/' + data.paper_id);
-                }).catch((err) => alert(err.responseText))
+                }, error => { alert(error.responseJSON.detail) })
             }
         }
     };
     return (
         <React.Fragment>
             <Form className="w-50 mx-auto pt-5" noValidate validated={validated} id="formPaperInfo" onSubmit={handleSubmit}>
-                {<SimpleForm keys={[{key: 'paper_name', content: 'Paper name'},
-                                    {key: 'paper_link', content: 'Paper link'},
-                                    {key: 'paper_abstract', content: 'Abstract'},
-                                    {key: 'docker_link', content: 'Docker link'},
-                                    {key: 'codeset_link', content: 'Codeset Link'}]}
+                {<SimpleForm keys={[{ key: 'paper_name', content: 'Paper name' },
+                { key: 'paper_link', content: 'Paper link' },
+                { key: 'paper_abstract', content: 'Abstract' },
+                { key: 'docker_link', content: 'Docker link' },
+                { key: 'codeset_link', content: 'Codeset Link' }]}
                     value={paperInfo} setValue={setPaperInfo} />}
                 <div className="d-grid gap-2">
                     <Button variant="primary" type="submit">

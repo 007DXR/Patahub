@@ -23,7 +23,7 @@ function CreateDatasetForm(props) {
             CreateDataset(UserInfo.token, DatasetName, DatasetLink).then((data, err) => {
                 if(data)props.onHide();
                 else alert(err);
-            });
+            }, error=>{alert(error.responseJSON.detail)});
         }
     };
 
