@@ -89,3 +89,7 @@ export async function getRCDByRepoID(repoID) {
     return searchRCD({ paper_id: repoID });
 }
 
+export async function getRCDByID(ID) {
+    return searchRCD({ rcd_id: ID });
+}
+
