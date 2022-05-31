@@ -79,10 +79,10 @@ export function EditResult(token, resultName, resultDescription, resultValue, pa
         }
     });
 }
-export function DeleteResult(token, datasetID) {
+export function DeleteResult(token, resultID) {
     return $.ajax({
         type: "delete",
-        url: `/api/result?result_id=${datasetID}`,
+        url: `/api/result?result_id=${resultID}`,
         error: function (XMLHttpRequest, texterror) {
             alert(XMLHttpRequest.responseText);
         },

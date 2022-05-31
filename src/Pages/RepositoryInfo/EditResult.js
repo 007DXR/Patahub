@@ -45,9 +45,9 @@ function EditResultForm(props) {
                 <Modal.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
 
-                        <Form.Group className="mb-3" >
+                        <Form.Group className="mb-3">
                             <Form.Label>result name</Form.Label>
-                            <Form.Control type="text" maxLength="200" value={resultName} onChange={onResultNameInput} required />
+                            <Form.Control type="text" maxLength="200" value={resultName} onChange={onResultNameInput} required disabled={props.fixedName}/>
                             <Form.Control.Feedback type="invalid">
                                 Please provide a name.
                             </Form.Control.Feedback>

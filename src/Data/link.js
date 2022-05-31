@@ -32,7 +32,7 @@ export async function getAllRepositories() {
     return searchRepositories(null);
 }
 
-export async function getRepositorieById(paper_id) {
+export async function getRepositoryById(paper_id) {
     return searchRepositories({paper_id});
 }
 

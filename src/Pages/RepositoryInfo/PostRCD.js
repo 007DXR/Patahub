@@ -161,7 +161,9 @@ function PostRCDForm(props) {
                                         <Form.Select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required
                                             onChange={onResultIDInput}>
                                             <option value="">choose a result</option>
-                                            {resultList.map((result) => <option value={result.result_id}>{result.result_name}</option>)}
+                                            {resultList
+                                                .filter((result) => result.user_id == UserInfo.userId)
+                                                .map((result) => <option value={result.result_id}>{result.result_name}</option>)}
                                         </Form.Select>
                                     </React.Fragment>
                                 ) : (props.onEdit && resultID ? (

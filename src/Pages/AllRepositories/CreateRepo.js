@@ -8,7 +8,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { Row, Col } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useParams } from 'react-router-dom';
-import { getRepositorieById } from '../../Data/link.js';
+import { getRepositoryById } from '../../Data/link.js';
 import { UserInfo } from '../Utilities/auth.js';
 import SimpleForm from '../Utilities/SimpleForm.js';
 
@@ -54,7 +54,7 @@ export function CreateRepoForm(props) {
     const [createRepoFailure, setCreateRepoFailure] = useState(false)
     useEffect(() => {
         if (paper_id) {
-            getRepositorieById(paper_id).then((data, err) => {
+            getRepositoryById(paper_id).then((data, err) => {
                 setPaperInfo({
                     'paper_name': data[0].paper_name,
                     'paper_link': data[0].paper_link,

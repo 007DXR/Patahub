@@ -6,21 +6,15 @@ import { setUserInfo, UserInfo } from './Pages/Utilities/auth';
 
 
 export function UserAvatar(props) {
-    const toUserHomepage = async () => {
-        window.location.replace(`/UserHomepage/${props.userName}`);
-    }
     return (
         <img className="rounded-circle" src={avatar} alt="user"
-            width="30" height="30" onClick={toUserHomepage}></img>
+            width="30" height="30" href={`/UserHomepage/${UserInfo.userId}`}></img>
     )
 }
 
 function UserName(props) {
-    const toUserHomepage = async () => {
-        window.location.replace(`/UserHomepage/${UserInfo.userId}`);
-    }
     return (
-        <Button onClick={toUserHomepage} className='my-auto text-light fw-bold fs-6'>{UserInfo.userName}</Button>
+        <Button href={`/UserHomepage/${UserInfo.userId}`} className='my-auto text-light fw-bold fs-6'>{UserInfo.userName}</Button>
     )
 }
 
