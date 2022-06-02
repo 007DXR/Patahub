@@ -25,13 +25,9 @@ function CreateResultForm(props) {
         }
         else {
             setValidated(false)
-            const res = CreateResult(UserInfo.token, resultName, resultDescription, resultValue, props.paperID);
-            if (res) {
+            CreateResult(UserInfo.token, resultName, resultDescription, resultValue, props.paperID).then(() => {
                 props.onHide();
-            }
-            else {
-                alert("error");
-            }
+            }, error=>{alert(error.responseJSON.detail[0].msg)})
         }
     };
 

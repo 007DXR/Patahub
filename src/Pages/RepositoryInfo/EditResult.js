@@ -32,7 +32,7 @@ function EditResultForm(props) {
             EditResult(UserInfo.token, resultName, resultDescription, resultValue,props.result.paper_id, props.result.result_id).then((data, err) => {
                 if(data)window.location.reload();
                 else alert(err);
-            });
+            }, error=>{alert(error.responseJSON.detail[0].msg)});
         }
     };
 
