@@ -59,7 +59,7 @@ function RCDInfo(props) {
     const [resultList, setResultList] = useState(null);
     const [datasetInfo, setDatasetInfo] = useState(null);
     const [resultEditingId, setresultEditingId] = useState(null);
-    
+
     useEffect(() => {
         getRCDByID(rcd_id).then(data => {
             getResultByID(data[0].result_id).then(data => setRCDInfo(data[0]));
@@ -81,7 +81,7 @@ function RCDInfo(props) {
             <div className='mb-5 text-start'>
                 <p class='fs-1'>{paperInfo.paper_name}</p>
                 <p class='fs-3'>result: {RCDInfo.result_name}</p>
-                
+
                 <Stack direction="horizontal" gap={3}>
                     <Button variant="outline-primary" href={`/repositoryInfo/${paper_id}`}>Paper</Button>
                     <Button variant="outline-primary" href={datasetInfo.dataset_link}>Dataset</Button>
@@ -119,7 +119,7 @@ function RCDInfo(props) {
                                             <Button className="btn-sm" onClick={() => setresultEditingId(result.result_id)}><RiEditFill /></Button>
                                             <Button className="btn-sm btn-danger" onClick={() => deleteResult(result.result_id)}><BsFillTrashFill /></Button>
 
-                                            <EditResultForm show={resultEditingId == result.result_id} onHide={() => setresultEditingId(null)} result={result} fixedName={paperInfo.user_id !== UserInfo.userId}/>
+                                            <EditResultForm show={resultEditingId == result.result_id} onHide={() => setresultEditingId(null)} result={result} fixedName={paperInfo.user_id !== UserInfo.userId} />
                                         </React.Fragment>
                                     ) : <React.Fragment />}
                                 </td>
@@ -128,9 +128,9 @@ function RCDInfo(props) {
                     }
                 </tbody>
             </Table>
-            {UserInfo.userName && RCDInfo ?
-            <CreateResultForm paperID={paper_id} rcdID={rcd_id} resultName={RCDInfo.result_name} />
-            : null}
+            {UserInfo.userName && RCDInfo && !resultList.find((result) => result.user_id == UserInfo.userId) ?
+                <CreateResultForm paperID={paper_id} rcdID={rcd_id} resultName={RCDInfo.result_name} />
+                : null}
         </Container>
     ) : null
 }
