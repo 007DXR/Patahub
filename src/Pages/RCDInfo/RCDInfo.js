@@ -117,7 +117,7 @@ function RCDInfo(props) {
                                     {UserInfo !== null && result.user_id == UserInfo.userId ? (
                                         <React.Fragment>
                                             <Button className="btn-sm" onClick={() => setresultEditingId(result.result_id)}><RiEditFill /></Button>
-                                            <Button className="btn-sm btn-danger" onClick={() => deleteResult(result.result_id)}><BsFillTrashFill /></Button>
+                                            {result.user_id != paperInfo.user_id ? <Button className="btn-sm btn-danger" onClick={() => deleteResult(result.result_id)}><BsFillTrashFill /></Button> : null}
 
                                             <EditResultForm show={resultEditingId == result.result_id} onHide={() => setresultEditingId(null)} result={result} fixedName={paperInfo.user_id !== UserInfo.userId} />
                                         </React.Fragment>
