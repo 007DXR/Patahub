@@ -6,7 +6,7 @@ import SimpleForm from '../Utilities/SimpleForm';
 
 const keys = {
     paper: ['paper_name','paper_id'],
-    result: ['result_name','result_id','result_type'],
+    result: ['result_name','result_id'],
     dataset: ['dataset_name','dataset_id'],
     rcd: ['paper_id','result_id','dataset_id','rcd_id']
 };

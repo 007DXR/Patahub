@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import GithubRepoInfo from '../Utilities/GithubRepoInfo/GithubRepoInfo';
 import { searchAll } from '../../Data/link.js';
 import { Card, CardGroup, Container, Row } from 'react-bootstrap';
+import DatasetCard from '../RepositoryInfo/DatasetCard';
+import ResultCard from '../RepositoryInfo/ResultCard';
 
 
 function GithubRepos(props){
@@ -12,11 +14,12 @@ function GithubRepos(props){
             if(data)setLinks(data);
         });
     },[]);
-    const linkKeyName = props.op+"_link";
     return(<Container className="w-50 pt-5">
         {links.map((linkObj) => (
             <Row>
-                <GithubRepoInfo link={linkObj[linkKeyName]}/>
+                {props.op == 'dataset' ? 
+                <DatasetCard dataset={linkObj} edit={false}/>
+                : <ResultCard result={linkObj} edit={false}/>}
             </Row>
         ))}
     </Container>)

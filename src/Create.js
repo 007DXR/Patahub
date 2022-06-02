@@ -10,10 +10,10 @@ export function CreateButton() {
     return (<DropdownButton title="Create">
         <Dropdown.Item href="/createRepo/">Repository</Dropdown.Item>
         <Dropdown.Item onClick={() => setCreate('dataset')}>Data Set</Dropdown.Item>
-        <CreateResultForm show={create=='result'} onHide={() => setCreate(null)}/>
+        <CreateDatasetForm show={create=='dataset'} onHide={() => window.location.reload()}/>
         {/*
         <Dropdown.Item onClick={() => setCreate('result')}>Result</Dropdown.Item>
-        <CreateDatasetForm show={create=='dataset'} onHide={() => setCreate(null)}/>
+        <CreateResultForm show={create=='result'} onHide={() => setCreate(null)}/>
         */}
     </DropdownButton>)
 }

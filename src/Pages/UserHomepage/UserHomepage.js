@@ -5,8 +5,6 @@ import { DeleteDataset, getMyDatasets } from '../../Data/dataset';
 import './scroll.css';
 import CreateDatasetForm from '../RepositoryInfo/CreateDataset';
 import EditDatasetForm from '../RepositoryInfo/EditDataset';
-import { BsFillTrashFill, BsSaveFill } from 'react-icons/bs';
-import { UserAvatar } from '../../User.js'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import { UserInfo } from '../Utilities/auth';
@@ -16,41 +14,9 @@ import SimpleForm from '../Utilities/SimpleForm';
 import { getInfoByUserId, updateUser } from '../../Data/User';
 import { HiOutlineMail } from 'react-icons/hi'
 import CreateResultForm from '../RepositoryInfo/CreateResult';
-import { DeleteResult } from '../../Data/result';
 import EditResultForm from '../RepositoryInfo/EditResult';
-
-function DatasetCard(props) {
-    const [showEdit, setShowEdit] = useState(false);
-    const editDataset = () => {
-        if(props.dataset.user_id && props.dataset.user_id == UserInfo.userId){
-            props.onEdit();
-            setShowEdit(true);
-        }
-    };
-
-    return (
-        <>
-            <Card className="mt-3 pt-3" onClick={editDataset}>
-                <Card.Title>{props.dataset.dataset_name}</Card.Title>
-                <Card.Body>
-                    <p>
-                    {props.dataset.dataset_link}
-                    </p>
-                    { props.edit ? 
-                        <Button onClick={function (event) {
-                        event.stopPropagation()
-                        DeleteDataset(UserInfo.token, props.dataset.dataset_id).then((data, err) => {
-                            if(data)window.location.reload();
-                            else alert(err);
-                        });
-                        }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button>
-                    : null}
-                </Card.Body> 
-                
-            </Card>
-        </>
-    )
-}
+import ResultCard from '../RepositoryInfo/ResultCard';
+import DatasetCard from '../RepositoryInfo/DatasetCard';
 
 function PaperCardList(props) {
     const [paperList, setPaperList] = useState(null);
@@ -115,41 +81,6 @@ function ResultCardList(props) {
         </React.Fragment>
         : Object.is(resultList, null) ? null
         : 'This user does not have any results yet :('
-    )
-}
-
-function ResultCard(props) {
-    const [showEdit, setShowEdit] = useState(false);
-    const editResult = () => {
-        if(props.result.user_id && props.result.user_id == UserInfo.userId){
-            props.onEdit();
-            setShowEdit(true);
-        }
-    };
-
-    return (
-        <>
-            <Card className="mt-3 pt-3" onClick={editResult}>
-                <Card.Title>{props.result.result_name}</Card.Title>
-                <Card.Body>
-                    <p>
-                    value: {props.result.result_value}
-                    <br/>
-                    description: {props.result.result_description}
-                    </p>
-                    { props.edit ? 
-                        <Button onClick={function (event) {
-                        event.stopPropagation()
-                        DeleteResult(UserInfo.token, props.result.result_id).then((data, err) => {
-                            if(data)window.location.reload();
-                            else alert(err);
-                        });
-                        }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button>
-                    : null}
-                </Card.Body> 
-                
-            </Card>
-        </>
     )
 }
 
