@@ -26,7 +26,7 @@ function CreateResultForm(props) {
     let [onEdit, setOnEdit] = useState(false);
     function handleSubmit(event) {
         event.preventDefault();
-        CreateResult(UserInfo.token, props.resultName, resultInfo.description, resultInfo.value, props.paperID)
+        CreateResult(UserInfo.token, props.resultName, resultInfo.description, resultInfo.value, resultInfo.link, props.paperID)
             .then(data => CreateResultIntoRCD(UserInfo.token, props.rcdID, data.result_id))
             .then(data => window.location.reload())
             .catch(error => window.alert(error.responseJSON.detail))
@@ -40,7 +40,8 @@ function CreateResultForm(props) {
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                         <SimpleForm keys={[{ key: 'description', content: 'Description' },
-                        { key: 'value', content: 'Value' }]}
+                        { key: 'value', content: 'Value' },
+                        { key: 'link', content: 'Link' }]}
                             value={resultInfo} setValue={setResultInfo} />
                         <Button type="submit">Submit</Button>
                     </Form>
@@ -97,6 +98,7 @@ function RCDInfo(props) {
                         <th>User</th>
                         <th>Description</th>
                         <th>Value</th>
+                        <th>Link</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -113,6 +115,7 @@ function RCDInfo(props) {
                                 </td>
                                 <td>{result.result_description}</td>
                                 <td>{result.result_value}</td>
+                                <td><a href={result.result_link}>{result.result_link}</a></td>
                                 <td>
                                     {UserInfo !== null && result.user_id == UserInfo.userId ? (
                                         <React.Fragment>

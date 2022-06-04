@@ -28,6 +28,8 @@ function ResultCard(props) {
                     value: {props.result.result_value}
                     <br/>
                     description: {props.result.result_description}
+                    <br/>
+                    link: <a href={props.result.result_link}>{props.result.result_link}</a>
                     </p>
                     { props.edit ? 
                         <Button onClick={function (event) {

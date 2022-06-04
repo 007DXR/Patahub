@@ -25,13 +25,13 @@ export async function getResultListByRCD(rcdID) {
     return $.get('/api/result_in_rcd', data);
 }
 
-export async function CreateResult(token, resultName, resultDescription, resultValue, paperID) {
+export async function CreateResult(token, resultName, resultDescription, resultValue, resultLink, paperID) {
     const data = {
         // result_type: resultType,
         result_name: resultName,
         result_description: resultDescription,
         result_value: resultValue,
-        // result_link: "link",
+        result_link: resultLink,
         paper_id: paperID
     }
 
@@ -57,13 +57,13 @@ export async function CreateResultIntoRCD(token, rcdID, resultID) {
     });
 }
 
-export function EditResult(token, resultName, resultDescription, resultValue, paperID, resultID) {
+export function EditResult(token, resultName, resultDescription, resultValue, resultLink, paperID, resultID) {
     const data = {
         // result_type: resultType,
         result_name: resultName,
         result_description: resultDescription,
         result_value: resultValue,
-        // result_link: "link",
+        result_link: resultLink,
         paper_id: paperID,
         result_id: resultID,
     }

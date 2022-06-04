@@ -8,15 +8,18 @@ function EditResultForm(props) {
     const [resultName, setResultName] = useState();
     const [resultDescription, setResultDescription] = useState();
     const [resultValue, setResultValue] = useState();
+    const [resultLink, setResultLink] = useState();
     
     const onResultNameInput = event => setResultName(event.target.value);
     const onResultDescription = event => setResultDescription(event.target.value);
     const onResultValue = event => setResultValue(event.target.value);
+    const onResultLink = event => setResultLink(event.target.value);
 
     useEffect(()=>{
         setResultName(props.result.result_name);
         setResultDescription(props.result.result_description);
         setResultValue(props.result.result_value);
+        setResultLink(props.result.result_link);
     },[props.result])
 
     function handleSubmit(event) {
@@ -29,7 +32,7 @@ function EditResultForm(props) {
         }
         else {
             setValidated(false)
-            EditResult(UserInfo.token, resultName, resultDescription, resultValue,props.result.paper_id, props.result.result_id).then((data, err) => {
+            EditResult(UserInfo.token, resultName, resultDescription, resultValue, resultLink, props.result.paper_id, props.result.result_id).then((data, err) => {
                 if(data)window.location.reload();
                 else alert(err);
             }, error=>{alert(error.responseJSON.detail[0].msg)});
@@ -47,7 +50,7 @@ function EditResultForm(props) {
 
                         <Form.Group className="mb-3">
                             <Form.Label>result name</Form.Label>
-                            <Form.Control type="text" maxLength="200" value={resultName} onChange={onResultNameInput} required disabled={props.fixedName}/>
+                            <Form.Control type="text" maxLength="200" value={resultName} onChange={onResultNameInput} required disabled/>
                             <Form.Control.Feedback type="invalid">
                                 Please provide a name.
                             </Form.Control.Feedback>
@@ -57,7 +60,7 @@ function EditResultForm(props) {
                             <Form.Label>result description</Form.Label>
                             <Form.Control type="text" maxLength="200" value={resultDescription} onChange={onResultDescription} required />
                             <Form.Control.Feedback type="invalid">
-                                Please provide a link.
+                                Please provide a description.
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -66,6 +69,14 @@ function EditResultForm(props) {
                             <Form.Control type="text" maxLength="200" value={resultValue} onChange={onResultValue} required />
                             <Form.Control.Feedback type="invalid">
                                 Please provide a value.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" >
+                            <Form.Label>result link</Form.Label>
+                            <Form.Control type="text" maxLength="200" value={resultLink} onChange={onResultLink} required />
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a link.
                             </Form.Control.Feedback>
                         </Form.Group>
 
