@@ -341,9 +341,9 @@ async def get_others_result(
 #response_model可以设置为List[Paper]
 @app.get("/paper", tags=["paper"])
 async def get_paper_list(
-    paper_id: Optional[int] = None,
-    paper_name: Optional[str] = None,
-    user_id: Optional[int] = None,
+    paper_id: Union[int, None] = None,
+    paper_name: Union[str, None] = None,
+    user_id: Union[int, None] = None,
 ):
     paperlist = dbop.dbGetPaperList(db, paper_id=paper_id, paper_name=paper_name, user_id=user_id)
     return paperlist
@@ -352,9 +352,9 @@ async def get_paper_list(
 #response_model可以设置为List[Dataset]
 @app.get("/dataset", tags=["dataset"])
 async def get_dataset_list(
-    dataset_id: Optional[int] = None,
-    dataset_name: Optional[str] = None,
-    user_id: Optional[int] = None,
+    dataset_id: Union[int, None] = None,
+    dataset_name: Union[str, None] = None,
+    user_id: Union[int, None] = None,
 ):
     datasetlist = dbop.dbGetDatasetList(db, dataset_id=dataset_id, dataset_name=dataset_name, user_id=user_id)
     return datasetlist
@@ -372,11 +372,10 @@ async def get_dataset_list(
 # 结果列表
 @app.get("/result", tags=["result"])
 async def get_result_list(
-    result_id: Optional[int] = None,
-    # result_type: Optional[str] = None,
-    result_name: Optional[str] = None,
-    paper_id: Optional[int] = None,
-    user_id: Optional[int] = None,
+    result_id: Union[int, None] = None,
+    result_name: Union[str, None] = None,
+    paper_id: Union[int, None] = None,
+    user_id: Union[int, None] = None,
 ):
     resultlist = dbop.dbGetResultList(db, result_id=result_id, result_name=result_name, paper_id=paper_id, user_id=user_id)
     return resultlist
@@ -392,12 +391,11 @@ async def get_result_in_rcd(
 #RCD列表
 @app.get("/rcd", tags=["rcd"])
 async def get_rcd_list(
-    rcd_id: Optional[int] = None,
-    result_id: Optional[int] = None,
-    # codeset_id: Optional[int] = None,
-    dataset_id: Optional[int] = None,
-    paper_id: Optional[int] = None,
-    user_id: Optional[int] = None,
+    rcd_id: Union[int, None] = None,
+    result_id: Union[int, None] = None,
+    dataset_id: Union[int, None] = None,
+    paper_id: Union[int, None] = None,
+    user_id: Union[int, None] = None,
 ):
     rcd = dbop.dbGetRCDList(db, rcd_id=rcd_id, result_id=result_id, dataset_id=dataset_id, paper_id=paper_id, user_id=user_id)
     return rcd
@@ -570,9 +568,9 @@ async def post_rcd(
 @app.put("/rcd/{rcd_id}", response_model=bool, tags=["rcd"])
 async def put_rcd(
     # rcd_in: RCDFrontend,
-    rcd_id:int,
-    dataset_id :Optional[int]=None,
-    makefile:Optional[str]=None,
+    rcd_id: int,
+    dataset_id: Union[int, None] = None,
+    makefile: Union[str, None] = None,
     cur_user_id: int = Depends(get_current_userid),
 ):
 # # 用户只能使用自己创建的result 
@@ -713,10 +711,10 @@ async def delete_result(
 #删除RCD项
 @app.delete("/rcd", tags=["rcd"])
 async def delete_rcd(
-    rcd_id: Optional[int] = None,
-    result_id: Optional[int] = None,
-    dataset_id: Optional[int] = None,
-    paper_id: Optional[int] = None,
+    rcd_id: Union[int, None] = None,
+    result_id: Union[int, None] = None,
+    dataset_id: Union[int, None] = None,
+    paper_id: Union[int, None] = None,
     cur_user_id: int = Depends(get_current_userid),
 ):
     cur_rcd = dbop.dbGetRCDList(db, rcd_id)
