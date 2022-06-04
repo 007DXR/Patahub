@@ -10,8 +10,10 @@ from fastapi import FastAPI, Path, Query, Body, Depends
 from fastapi import HTTPException, Response, applications
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
 from pydantic import Field, BaseModel, BaseSettings
 
+import pymysql
 
 app = FastAPI(
     title="Patahub",
@@ -59,14 +61,9 @@ tags_metadata = [
     },
 ]
 
-# token类，默认token type是bearer
-
 class Token(BaseModel):
     access_token: str
     token_type: str = "Bearer"
-
-# 以下的类中，带Frontend的是前端应发送的，带Indb的是数据库中存储的，
-# 啥都不带的是用户第一次输入的（比如新增、注册等）
 
 class User(BaseModel):
     user_name: str # 用户名
@@ -83,7 +80,9 @@ class Result(BaseModel):
     result_value: float # 类型
     result_description: Optional[str] # 结果名 如figure1
     result_name: Optional[str]
+    result_link:Optional[str]
     paper_id: int # 论文id
+    
 
 class ResultFrontend(Result):
     result_id: int # 结果id
@@ -114,6 +113,12 @@ class DatasetFrontend(Dataset):
 class DatasetIndb(DatasetFrontend):
     user_id: int # 数据集的用户
 
+# class Codeset(BaseModel):
+#     # user_id: Optional[int] # 代码的用户
+#     codeset_name: Optional[str] # 代码名
+#     codeset_link: Optional[str] # 代码链接
+#     codeset_id: Optional[int] # 代码编号
+
 class RCD(BaseModel):
     paper_id: int # rcd中的paper编号
     result_id: int # rcd中的result编号
@@ -129,6 +134,8 @@ class RCDIndb(RCDFrontend):
 
 
 
+
+
 # ------------------------------基本操作---------------------------------
 
 # 启动
@@ -136,23 +143,16 @@ class RCDIndb(RCDFrontend):
 async def startup_event():
     print('startup_event','-'*20)
     global db, conn
-    (db, conn) = dbop.dbInit('20220523.db')
+    (db, conn) = dbop.dbInit(host='123.57.48.134',user='patahub', \
+        password='123456', database='patahub_db', port=3306)
 
 @app.on_event("shutdown")
 async def shutdown_event():
     print('shutdown_event','-'*20)
-    #dbop.dbClear('database.db')
     conn.commit()
     conn.close()
 
-# 主页
-@app.get("/")
-async def read_root():
-    return {"Title": "Patahub"}
-
 # ------------------------------身份认证---------------------------------
-
-# 验证密码
 def authenticate_user(user_name: str, password: str):
     user = dbop.dbGetUser(db, user_name=user_name)
     if len(user)==0:
@@ -162,7 +162,6 @@ def authenticate_user(user_name: str, password: str):
         return False
     return user
 
-# 创建token
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -173,16 +172,15 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encode_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encode_jwt
 
-# 获取当前用户
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    print('token_userid',token)
+    # print('token_userid',token)
     token_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token =token, key=SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token=token, key=SECRET_KEY, algorithms=[ALGORITHM])
         user_name: str = payload.get("sub")
         # print('token_userid3',token_userid)
         if user_name is None:
@@ -194,11 +192,14 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise token_exception
     return user
 
-# 获取当前用户id
 async def get_current_userid(user: dict = Depends(get_current_user)):
-    print(user)
+    #print(user)
     return user['user_id']
 
+# 主页
+@app.get("/")
+async def read_root():
+    return {"Title": "Patahub"}
 
 # -----------------------------用户操作------------------------------
 # 用户注册
@@ -206,7 +207,9 @@ async def get_current_userid(user: dict = Depends(get_current_user)):
 async def user_register(
     user_in: User
 ):
-    if len(dbop.dbGetUser(db, user_in.user_name)) != 0:
+    if not user_in.user_name or not user_in.user_email or not user_in.user_password:
+        raise HTTPException(400, detail="not complete")
+    if len(dbop.dbGetUser(db, user_name=user_in.user_name)) != 0:
         raise HTTPException(400, detail="name already used")
     # if len(dbop.dbGetUser(db, user_in.user_email)) != 0:
     #     raise HTTPException(400, detail="email already registered")
@@ -243,17 +246,33 @@ async def user_check_info(
 @app.put("/userinfo/{user_id}", response_model=UserIndb, tags=["user"])
 async def user_modify_info(
     user_in: User,
-    user_id: int = Depends(get_current_userid)
+    user_old_password: str,
+    user_id: int = Depends(get_current_userid),
 ):
-    if user_in.user_name!=None and len(dbop.dbGetUser(db, user_in.user_name)) != 0:
-        raise HTTPException(400, detail="name already used")
-    if len(dbop.dbGetUser(db, user_in.user_email)) != 0:
-        raise HTTPException(400, detail="email already registered")
-    password_hash = pwd_context.hash(user_in.user_password)
+    curuser = dbop.dbGetUser(db, user_id=user_id)[0]
+    # 验证原密码
+    if not pwd_context.verify(user_old_password, curuser['user_password_hash']):
+        raise HTTPException(status_code=400, detail="original password incorrect")
+    # 用户名和邮箱不能为空
+    if not user_in.user_name or not user_in.user_email:
+        raise HTTPException(statue_code=400, detail="information not complete")
+    # 不能重名
+    if user_in.user_name!=dbop.dbGetUser(db, user_id=user_id)[0]['user_name'] \
+    and len(dbop.dbGetUser(db,user_name= user_in.user_name)) != 0:
+        raise HTTPException(status_code=400, detail="name already used")
+    # 不能重复邮箱
+    if user_in.user_email!=dbop.dbGetUser(db, user_id=user_id)[0]['user_email'] \
+        and len(dbop.dbGetUser(db,user_email= user_in.user_email)) != 0:
+        raise HTTPException(status_code=400, detail="email already registered")
+    # 如果未填写新密码，则不修改密码
+    user_new_password = user_in.user_password
+    if user_new_password == '':
+        user_new_password = user_old_password
+    password_hash = pwd_context.hash(user_new_password)
     dbop.dbModifyUserInfo(db, user_id=user_id,new_name=user_in.user_name, new_email=user_in.user_email,new_password_hash= password_hash)
     return UserIndb(user_name=user_in.user_name,user_email=user_in.user_email, user_id=user_id, user_password_hash=password_hash)
 
-# 用户查看自己的仓库
+# 用户查看自己的论文
 @app.get("/userinfo/paper", tags=['user'])
 async def get_my_paper(
     cur_user_id: int = Depends(get_current_userid)
@@ -268,6 +287,53 @@ async def get_my_dataset(
 ):
     datasetlist = dbop.dbGetDatasetList(db, user_id=cur_user_id)
     return datasetlist
+
+# 用户查看自己的result
+@app.get("/userinfo/result", tags=['user'])
+async def get_my_result(
+    cur_user_id: int = Depends(get_current_userid)
+):
+    resultlist = dbop.dbGetResultList(db, user_id=cur_user_id)
+    return resultlist
+
+#获取所有用户信息
+@app.get("/allusers", tags=['user'])
+async def get_all_user(
+):
+    userlist = dbop.dbGetUser(db)
+    return userlist
+
+# 获取其他用户信息
+@app.get("/{user_id}/info", tags=['user'], response_model_exclude=['user_password_hash'])
+async def get_others_info(
+    user_id: int
+):
+    search_user = dbop.dbGetUser(db, user_id=user_id)
+    return search_user[0]
+
+# 获得其他用户的论文
+@app.get("/{user_id}/paper", tags=['user'])
+async def get_others_paper(
+    user_id: int
+):
+    paperlist = dbop.dbGetPaperList(db, user_id=user_id)
+    return paperlist
+
+# 获得其他用户的数据集
+@app.get("/{user_id}/dataset", tags=['user'])
+async def get_others_dataset(
+    user_id: int
+):
+    datasetlist = dbop.dbGetDatasetList(db, user_id=user_id)
+    return datasetlist
+
+# 获得其他用户的result
+@app.get("/{user_id}/result", tags=['user'])
+async def get_others_result(
+    user_id: int
+):
+    resultlist = dbop.dbGetResultList(db, user_id=user_id)
+    return resultlist
 
 # -----------------------------查询操作------------------------------
 
@@ -293,6 +359,16 @@ async def get_dataset_list(
     datasetlist = dbop.dbGetDatasetList(db, dataset_id=dataset_id, dataset_name=dataset_name, user_id=user_id)
     return datasetlist
 
+# # Code列表
+# @app.get("/codeset", tags=["codeset"])
+# async def get_codeset_list(
+#     codeset_id: Optional[int] = None,
+#     codeset_name: Optional[str] = None,
+#     user_id: Optional[int] = None,
+# ):
+#     code_list = dbop.dbGetCodesetList(db, codeset_id=codeset_id, codeset_name=codeset_name, user_id=user_id)
+#     return code_list
+
 # 结果列表
 @app.get("/result", tags=["result"])
 async def get_result_list(
@@ -305,11 +381,20 @@ async def get_result_list(
     resultlist = dbop.dbGetResultList(db, result_id=result_id, result_name=result_name, paper_id=paper_id, user_id=user_id)
     return resultlist
 
+# 指定rcd的结果列表
+@app.get("/result_in_rcd", tags=["result"])
+async def get_result_in_rcd(
+    rcd_id :int
+):
+    resultlist = dbop.dbGetResultInRCD(db, rcd_id=rcd_id)
+    return resultlist
+
 #RCD列表
 @app.get("/rcd", tags=["rcd"])
 async def get_rcd_list(
     rcd_id: Optional[int] = None,
     result_id: Optional[int] = None,
+    # codeset_id: Optional[int] = None,
     dataset_id: Optional[int] = None,
     paper_id: Optional[int] = None,
     user_id: Optional[int] = None,
@@ -332,14 +417,13 @@ async def post_paper(
     return PaperIndb(**paper_in.dict(), paper_id = newid, user_id=cur_user_id)
 
 #更新论文
-@app.put("/paper/{paper_id}", tags=["paper"])
+@app.put("/paper/{paper_id}",response_model=bool, tags=["paper"])
 async def put_paper(
     paper_in: PaperFrontend,
-    cur_user_id: int = Depends(get_current_user),
+    cur_user_id: int = Depends(get_current_userid),
 ):
     paper_user = dbop.dbGetPaperList(db,
         paper_id=paper_in.paper_id,
-        paper_name=paper_in.paper_name
     )[0]["user_id"]
     if paper_user != cur_user_id:
         raise HTTPException(status_code=403, detail="no permission")
@@ -349,7 +433,8 @@ async def put_paper(
         paper_name=paper_in.paper_name,
         paper_link=paper_in.paper_link,
         paper_abstract=paper_in.paper_abstract,
-        docker_link=paper_in.docker_link
+        docker_link=paper_in.docker_link,
+        codeset_link=paper_in.codeset_link
     )
     if result==None:
         raise HTTPException(status_code=403, detail="update failed")
@@ -368,7 +453,7 @@ async def post_dataset(
   
        
 #更新数据集
-@app.put("/dataset/{dataset_id}", response_model=DatasetIndb, tags=["dataset"])
+@app.put("/dataset/{dataset_id}", response_model=bool, tags=["dataset"])
 async def put_dataset(
     dataset_in: DatasetFrontend,
     cur_user_id: int = Depends(get_current_userid),
@@ -386,6 +471,32 @@ async def put_dataset(
         raise HTTPException(status_code=403, detail="update failed")
     return result    
 
+#更新code
+# @app.put("/codeset/{codeset_id}", response_model=Codeset, tags=["codeset"])
+# async def post_code(
+    
+#     codeset_in: Codeset,
+#     cur_user_id: int = Depends(get_current_userid),
+# ):
+#     dbop.dbUpdateCodeset(db, user_id=cur_user_id,codeset_id=codeset_in.codeset_id, codeset_name=codeset_in.codeset_name, codeset_link=codeset_in.codeset_link)
+#     if result==None:
+#         raise HTTPException(status_code=403, detail="update failed")
+#     return result    
+
+#新增code
+# @app.post("/codeset", response_model=Codeset, tags=["codeset"])
+# async def post_code(
+    
+#     codeset_in: Codeset,
+#     cur_user_id: int = Depends(get_current_user)
+# ):
+#     if (not codeset_in.codeset_name) or (not codeset_in.codeset_link):
+#         raise HTTPException(status_code=422)
+#     newid = dbop.dbInsertCodeset(db, codeset_name=codeset_in.codeset_name, codeset_link=codeset_in.codeset_link, user_id=cur_user_id)
+#     codeset_in.codeset_id = newid
+#     codeset_in.user_id=cur_user_id
+#     return codeset_in
+  
 
 #新增result
 @app.post("/result", response_model=ResultIndb, tags=["result"])
@@ -400,6 +511,7 @@ async def post_result(
         result_name=result_in.result_name, 
         result_description=result_in.result_description, 
         result_value=result_in.result_value, 
+        result_link=result_in.result_link,
         paper_id=result_in.paper_id, 
         user_id=cur_user_id)
     if not newid:
@@ -408,20 +520,23 @@ async def post_result(
    
 
 #更新result
-@app.put("/result/{result_id}", response_model=ResultIndb, tags=["result"])
+@app.put("/result/{result_id}", response_model=bool, tags=["result"])
 async def put_result(
     result_in: ResultFrontend,
     cur_user_id: int = Depends(get_current_userid),
 ):
+    if result_in.result_name:
+        raise HTTPException(status_code=403, detail="result_name can't change")
     result_user = dbop.dbGetResultList(db, result_id=result_in.result_id)[0]["user_id"]
     if result_user != cur_user_id:
         raise HTTPException(status_code=403, detail="no permission")
     result=dbop.dbUpdateResult(db,
         user_id=cur_user_id,
         result_id=result_in.result_id, 
-        result_name=result_in.result_name, 
+        # result_name=result_in.result_name, 
         result_description=result_in.result_description, 
-        result_value=result_in.result_value
+        result_value=result_in.result_value,
+        result_link=result_in.result_link
     )
     if not result:
         raise HTTPException(status_code=403, detail="update failed")
@@ -442,31 +557,99 @@ async def post_rcd(
         raise HTTPException(status_code=404, detail="dataset id invalid")
     if len(dbop.dbGetResultList(db, rcd_in.result_id)) == 0:
         raise HTTPException(status_code=404, detail="result id invalid")
+    # 用户只能使用自己创建的result 
+    if (dbop.dbGetResultList(db, rcd_in.result_id)[0]['user_id']!=cur_user_id):
+        raise HTTPException(status_code=404, detail="no permission to use this result")
+    
     newid = dbop.dbInsertRCD(db, rcd_in.result_id,  rcd_in.dataset_id, rcd_in.paper_id, cur_user_id, rcd_in.makefile)
+    dbop.dbInsertRCD_result(db,rcd_id=newid,result_id=rcd_in.result_id)
     return RCDIndb(**rcd_in.dict(), rcd_id=newid, user_id=cur_user_id)
   
 
 #更新RCD项
-@app.put("/rcd/{rcd_id}", response_model=RCDIndb, tags=["rcd"])
+@app.put("/rcd/{rcd_id}", response_model=bool, tags=["rcd"])
 async def put_rcd(
-    rcd_in: RCDFrontend,
+    # rcd_in: RCDFrontend,
+    rcd_id:int,
+    dataset_id :Optional[int]=None,
+    makefile:Optional[str]=None,
     cur_user_id: int = Depends(get_current_userid),
 ):
-    rcd_user = dbop.dbGetRCDList(db, rcd_id=rcd_in.rcd_id)[0]["user_id"]
+# # 用户只能使用自己创建的result 
+#     if rcd_in.result_id:
+#         rcd_users = dbop.dbGetResultList(db, result_id=rcd_in.result_id)
+#         if len (rcd_users)==0 or rcd_users[0]["user_id"] != cur_user_id:
+#             raise HTTPException(status_code=403, detail="no permission to use this result")
+# 用户只能修改自己创建的rcd 
+    # rcd_user = dbop.dbGetRCDList(db, rcd_id=rcd_in.rcd_id)[0]["user_id"]
+    # if rcd_user != cur_user_id:
+    #     raise HTTPException(status_code=403, detail="no permission")
+    # result=dbop.dbUpdateRCD(db,
+    #     user_id=cur_user_id,
+    #     rcd_id=rcd_in.rcd_id,
+    #     dataset_id=rcd_in.dataset_id, 
+    #     makefile=rcd_in.makefile
+    # )
+    rcd_user = dbop.dbGetRCDList(db, rcd_id=rcd_id)[0]["user_id"]
     if rcd_user != cur_user_id:
         raise HTTPException(status_code=403, detail="no permission")
+    if len(dbop.dbGetDatasetList(db,dataset_id=dataset_id))==0:
+        raise HTTPException(status_code=403, detail="can't find dataset")
     result=dbop.dbUpdateRCD(db,
         user_id=cur_user_id,
-        rcd_id=rcd_in.rcd_id,
-        result_id=rcd_in.result_id,
-        dataset_id=rcd_in.dataset_id, 
-        makefile=rcd_in.makefile
+        rcd_id=rcd_id,
+        dataset_id=dataset_id, 
+        makefile=makefile
     )
     if not result:
         raise HTTPException(status_code=403, detail="update failed")
     return result
+
+#将result填入RCD项
+@app.post("/rcd/{rcd_id}", response_model=bool, tags=["rcd"])
+async def add_result_into_rcd(
+    rcd_id: int,
+    result_id: int,
+    cur_user_id: int = Depends(get_current_userid),
+):
+    rcd_users=dbop.dbGetRCDList(db, rcd_id=rcd_id)
+    if len (rcd_users) and rcd_users[0]["user_id"] == cur_user_id:
+        raise HTTPException(status_code=403, detail="please modify directly")
+    # 用户只能使用自己创建的result 
+    rcd_users = dbop.dbGetResultList(db, result_id=result_id)
+    if len (rcd_users)==0 or rcd_users[0]["user_id"] != cur_user_id:
+        raise HTTPException(status_code=403, detail="no permission to use this result")
+
+    result=dbop.dbInsertRCD_result(db,
+        rcd_id=rcd_id,
+        result_id=result_id
+    )
+    if not result:
+        raise HTTPException(status_code=403, detail="update failed")
+    return result
+
+
 # --------------------------删除操作-----------------------------
 
+#将result从RCD项删除
+@app.delete("/rcd/{rcd_id}", response_model=bool, tags=["rcd"])
+async def delete_result_into_rcd(
+    rcd_id: int,
+    result_id: int,
+    cur_user_id: int = Depends(get_current_userid),
+):
+    # 用户只能删除自己创建的result 
+    rcd_user = dbop.dbGetResultList(db, result_id=result_id)[0]["user_id"]
+    if rcd_user != cur_user_id:
+        raise HTTPException(status_code=403, detail="no permission to use this result")
+
+    result=dbop.dbDeleteRCD_result(db,
+        rcd_id=rcd_id,
+        result_id=result_id
+    )
+    if not result:
+        raise HTTPException(status_code=403, detail="update failed")
+    return result
 #删除论文
 @app.delete("/paper", tags=["paper"])
 async def delete_paper(
@@ -496,6 +679,21 @@ async def delete_dataset(
     dbop.dbDeleteDataset(db, dataset_id)
     dbop.dbDeleteRCD(db, user_id=cur_user_id, dataset_id=dataset_id)
     return dataset_id
+    
+#删除代码
+# @app.delete("/codeset", tags=["codeset"])
+# async def delete_code(
+#     codeset_id: int,
+#     cur_user_id: int = Depends(get_current_userid),
+# ):
+#     cur_codeset = dbop.dbGetCodesetList(db, codeset_id=codeset_id)
+#     if len(cur_codeset) == 0:
+#         raise HTTPException(status_code=404, detail="code id not found")
+#     if cur_user_id != cur_codeset[0]['user_id']:
+#         raise HTTPException(status_code=403, detail="no permission")
+#     dbop.dbDeleteCodeset(db, codeset_id)
+#     dbop.dbDeleteRCD(db, codeset_id=codeset_id)
+#     return codeset_id
 
 #删除结果
 @app.delete("/result", tags=["result"])
@@ -517,12 +715,16 @@ async def delete_result(
 async def delete_rcd(
     rcd_id: Optional[int] = None,
     result_id: Optional[int] = None,
-    codeset_id: Optional[int] = None,
     dataset_id: Optional[int] = None,
     paper_id: Optional[int] = None,
     cur_user_id: int = Depends(get_current_userid),
 ):
-    # cur_rcd = dbop.dbGetRCDList(db, rcd_id)
+    cur_rcd = dbop.dbGetRCDList(db, rcd_id)
+    if len(cur_rcd) == 0:
+        raise HTTPException(status_code=404, detail="rcd id not found")
+    if cur_user_id != cur_rcd[0]['user_id']:
+        raise HTTPException(status_code=403, detail="no permission")
     dbop.dbDeleteRCD(db, user_id=cur_user_id,rcd_id=rcd_id, result_id=result_id,
         dataset_id=dataset_id,paper_id=paper_id)
     return {"status": "success"}
+
