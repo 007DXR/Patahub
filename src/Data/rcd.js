@@ -58,7 +58,7 @@ export async function CreateRCD(token, paperID, resultID, datasetID, makefile, r
 
     return $.ajax({
         type: rcdID ? "put" : "post",
-        url: `/api/rcd` + (rcdID ? '/' + rcdID : ''),
+        url: `/api/rcd` + (rcdID ? '/' + rcdID + '?dataset_id=' + datasetID + '&makefile=' + makefile : ''),
         data: JSON.stringify(data),
         contentType: "application/json",
         headers:{

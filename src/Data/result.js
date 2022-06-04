@@ -60,7 +60,7 @@ export async function CreateResultIntoRCD(token, rcdID, resultID) {
 export function EditResult(token, resultName, resultDescription, resultValue, resultLink, paperID, resultID) {
     const data = {
         // result_type: resultType,
-        result_name: resultName,
+        // result_name: resultName,
         result_description: resultDescription,
         result_value: resultValue,
         result_link: resultLink,
