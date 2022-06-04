@@ -71,7 +71,7 @@ function RepositoryInfo(props) {
                 </Stack>
             </div>
             <div className='mb-3 text-start'>
-                <p class="fs-4">RCD List</p>
+                <p class="fs-4">RMD List</p>
             </div>
             <hr />
             {RCDList.length > 0 ? (
@@ -92,7 +92,7 @@ function RepositoryInfo(props) {
             {/* <Row><EmptyRCDOverView sendValueToFa={getRCDItem.bind(this)}/></Row> */}
             {paperInfo.user_id && paperInfo.user_id == UserInfo.userId ?
                 <React.Fragment>
-                    <Button onClick={() => setIsCreating(true)}>Add New RCD</Button>
+                    <Button onClick={() => setIsCreating(true)}>Add New RMD</Button>
                     <UpdateRepoButton paper_id={paperInfo.paper_id} />
                     <DeleteRepoButton paper_id={paperInfo.paper_id} />
                 </React.Fragment>

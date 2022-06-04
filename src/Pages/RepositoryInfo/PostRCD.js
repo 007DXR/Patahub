@@ -140,7 +140,7 @@ function PostRCDForm(props) {
         <React.Fragment>
             <Modal show={props.onCreate || props.onEdit} onHide={() => { props.onHide(); setValidated(false); }}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{props.onCreate ? "新建RCD" : "修改RCD"}</Modal.Title>
+                    <Modal.Title>{props.onCreate ? "新建RMD" : "修改RMD"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>

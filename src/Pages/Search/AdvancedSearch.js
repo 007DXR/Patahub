@@ -37,7 +37,7 @@ function AdvancedSearch(props){
                 <option value="paper">paper</option>
                 <option value="result">result</option>
                 <option value="dataset">dataset</option>
-                <option value="rcd">RCD</option>
+                <option value="rcd">RMD</option>
             </Form.Select>
         </Container>
         {searchType?<SimpleForm keys={keys[searchType]} value={searchArgs} setValue={setSearchArgs}/>:null}
