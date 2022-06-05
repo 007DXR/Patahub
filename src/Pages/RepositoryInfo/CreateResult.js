@@ -67,10 +67,10 @@ function CreateResultForm(props) {
 
                         <Form.Group className="mb-3" >
                             <Form.Label>result link</Form.Label>
-                            <Form.Control type="text" maxLength="200" onChange={onResultLinkInput} required />
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Control type="text" maxLength="200" onChange={onResultLinkInput} />
+                            {/* <Form.Control.Feedback type="invalid">
                                 Please provide a link.
-                            </Form.Control.Feedback>
+                            </Form.Control.Feedback> */}
                         </Form.Group>
 
                         <Button type="submit">Submit form</Button>

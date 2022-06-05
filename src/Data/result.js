@@ -35,7 +35,6 @@ export async function CreateResult(token, resultName, resultDescription, resultV
         paper_id: paperID
     }
 
-
     return $.ajax({
         type: "post",
         url: `/api/result`,

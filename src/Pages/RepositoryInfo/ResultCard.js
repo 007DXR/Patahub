@@ -5,7 +5,7 @@ import { DeleteResult } from "../../Data/result";
 import { UserInfo } from "../Utilities/auth";
 import { RiFilePaper2Line } from 'react-icons/ri'
 import { Link } from "react-router-dom";
-
+import { RiEditFill } from 'react-icons/ri';
 
 function ResultCard(props) {
     const [showEdit, setShowEdit] = useState(false);
@@ -18,28 +18,28 @@ function ResultCard(props) {
 
     return (
         <>
-            <Card className="mt-3 pt-3" onClick={editResult}>
+            <Card className="mt-3 pt-3">
                 <Card.Title>
                     {props.result.result_name}
                     <Link className="ms-1" to={`/repositoryInfo/${props.result.paper_id}`}><RiFilePaper2Line/></Link>
                 </Card.Title>
                 <Card.Body>
                     <p>
-                    value: {props.result.result_value}
+                    value: {props.result.result_link?(<a href={props.result.result_link}>{props.result.result_value}</a>):(props.result.result_value)}
                     <br/>
                     description: {props.result.result_description}
-                    <br/>
-                    link: <a href={props.result.result_link}>{props.result.result_link}</a>
                     </p>
-                    { props.edit ? 
-                        <Button onClick={function (event) {
-                        event.stopPropagation()
-                        DeleteResult(UserInfo.token, props.result.result_id).then((data, err) => {
-                            if(data)window.location.reload();
-                            else alert(err);
-                        });
-                        }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button>
-                    : null}
+                    {props.edit ?
+                        <React.Fragment>
+                            <Button onClick={editResult} className="btn-sm"><RiEditFill /></Button>
+                            <Button onClick={function (event) {
+                                event.stopPropagation()
+                                DeleteResult(UserInfo.token, props.result.result_id).then((data, err) => {
+                                    if (data) window.location.reload();
+                                    else alert(err);
+                                });
+                            }} className="btn-sm btn-danger"> <BsFillTrashFill /></Button></React.Fragment>
+                        : null}
                 </Card.Body> 
                 
             </Card>

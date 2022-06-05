@@ -98,7 +98,6 @@ function RCDInfo(props) {
                         <th>User</th>
                         <th>Description</th>
                         <th>Value</th>
-                        <th>Link</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -114,8 +113,9 @@ function RCDInfo(props) {
                                     }
                                 </td>
                                 <td>{result.result_description}</td>
+                                {result.result_link?(<td><a href={result.result_link}>{result.result_value}</a></td>):(
                                 <td>{result.result_value}</td>
-                                <td><a href={result.result_link}>{result.result_link}</a></td>
+                                )}
                                 <td>
                                     {UserInfo !== null && result.user_id == UserInfo.userId ? (
                                         <React.Fragment>
