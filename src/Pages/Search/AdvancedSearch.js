@@ -5,10 +5,16 @@ import { useParams } from 'react-router-dom';
 import SimpleForm from '../Utilities/SimpleForm';
 
 const keys = {
-    paper: ['paper_name','paper_id'],
-    result: ['result_name','result_id'],
-    dataset: ['dataset_name','dataset_id'],
-    rcd: ['paper_id','result_id','dataset_id','rcd_id']
+    paper: [{key: 'paper_name', content: 'Paper Name'},
+        {key: 'paper_id', content: 'Paper ID'}],
+    result: [{key: 'result_name', content: 'Result Name'},
+        {key: 'result_id', content: 'Result ID'}],
+    dataset: [{key: 'dataset_name', content: 'Dataset Name'},
+        {key: 'dataset_id', content: 'Dataset ID'}],
+    rcd: [{key: 'paper_id', content: 'Paper ID'},
+        {key: 'result_id', content: 'Result ID'},
+        {key: 'dataset_id', content: 'Dataset ID'},
+        {key: 'rcd_id', content:'RMD ID'}],
 };
 
 function AdvancedSearch(props){

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { searchAll } from '../../Data/link.js';
 import RCDOverView from '../RepositoryInfo/RCDOverView.js';
 import { searchRCD } from '../../Data/rcd.js'
-import { Container, Row } from 'react-bootstrap';
+import { Card, Container, Row } from 'react-bootstrap';
 
 
 function SearchRCD(props){
@@ -18,7 +18,9 @@ function SearchRCD(props){
     return(<Container className="w-50 pt-5">
         {RCDs.map((RCD) => (
             <Row>
-                <RCDOverView RCD={RCD} repoName={RCD.paper_id}/>
+                <Card className="m-3 py-3">
+                    <RCDOverView RCD={RCD} repoName={RCD.paper_id}/>
+                </Card>
             </Row>
         ))}
     </Container>)

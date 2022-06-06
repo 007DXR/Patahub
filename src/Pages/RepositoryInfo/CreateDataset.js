@@ -21,8 +21,10 @@ function CreateDatasetForm(props) {
         else {
             setValidated(false);
             CreateDataset(UserInfo.token, DatasetName, DatasetLink).then((data, err) => {
-                if(data)props.onHide();
-                else alert(err);
+                if(data){
+                    props.onHide();
+                    if(props.onSuccess)props.onSuccess();
+                }else alert(err);
             }, error=>{alert(error.responseJSON.detail)});
         }
     };
